@@ -78,7 +78,7 @@ switch ($_SERVER['SERVER_NAME']) {
 		$active_group = '240';
 		break;
 	default:
-		$active_group = '240';
+		$active_group = 'default';
 		break;
 }
 

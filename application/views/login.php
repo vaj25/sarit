@@ -62,7 +62,15 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="navbar-collapse">
 
                     <ul class="navbar-nav my-lg-0">
-                            <li class="nav-item pull-right"><a id="initial_user" data-toggle="tooltip" title="" data-original-title="Acerca de TravelExp" class="nav-link waves-effect waves-dark" onclick="swal({ title: 'TravelExp V1.0', text: 'Su nombre proviene del inglés << Travel Expensive >> y significa << Viáticos >>. Esto se debe al propósito por el que se llevó a cabo su desarrollado, de modo que, es correcto referirse a la herramienta como: (Sistema de viáticos)', showConfirmButton: true });" href="javascript:void(0)"><span class="round round-inverse bg-inverse"><span class="mdi mdi-help" style="font-size: 35px;"></span></span></a> </li>
+                        <li class="nav-item pull-right">
+                            <a id="initial_user" data-toggle="tooltip" title="" data-original-title="Acerca de SARIT" class="nav-link waves-effect waves-dark"
+                                onclick="swal({ title: 'SARIT V1.0', text: 'Su nombre proviene de las siglas de Sistema de Aprobaci&oacute;n de Reglamentos Internos de Trabajo', showConfirmButton: true });"
+                                href="javascript:void(0)">
+                                <span class="round round-inverse bg-inverse">
+                                    <span class="mdi mdi-help" style="font-size: 35px;"></span>
+                                </span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
