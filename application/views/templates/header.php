@@ -6,7 +6,7 @@
     $inicialUser = strtoupper(substr($user,0,1).substr($user, $pos,1));
     setlocale(LC_ALL,"es_ES");
     date_default_timezone_set('America/El_Salvador');
-    $ruta_segmento = trim(obtener_segmentos(2));
+    $ruta_segmento = trim(obtener_segmentos(1));
 
 // Características del navegador
 $ua=$this->config->item("navegator");

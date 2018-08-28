@@ -183,7 +183,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                                <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
                                <button type="button" onclick="editar_actividad()" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
                            </div>
-
                        <?php echo form_close(); ?>
                    </div>
 

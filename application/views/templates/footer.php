@@ -1,4 +1,4 @@
-<?php $ruta_segmento = trim(obtener_segmentos(2)); ?>
+<?php $ruta_segmento = trim(obtener_segmentos(1)); ?>
 </div>
    
     <script src="<?php echo base_url(); ?>assets/plugins/jquery/jquery.min.js"></script>
