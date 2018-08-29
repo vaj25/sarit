@@ -39,7 +39,7 @@ class Reglamento_model extends CI_Model {
 
     }
 
-    public function editar_documento($data){
+    public function editar_reglamento($data){
 		$this->db->where("id_expedientert",$data["id_expedientert"]);
 		if($this->db->update(
             'sri_expedientert', 
@@ -83,7 +83,8 @@ class Reglamento_model extends CI_Model {
         
         $this->db->select('')
                ->from('sri_expedientert a')
-               ->join('lista_empleados_estado b','b.id_empleado = a.id_personal');
+               ->join('lista_empleados_estado b','b.id_empleado = a.id_personal')
+               ->join('sge_empresa c','c.id_empresa = a.id_empresart');
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
             return  $query;

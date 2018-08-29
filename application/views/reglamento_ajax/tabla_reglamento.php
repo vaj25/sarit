@@ -31,7 +31,7 @@
                         foreach ($reglamentos->result() as $fila) {
                           echo "<tr>";
                           echo "<td>".$fila->numexpediente_expedientert."</td>";
-                          echo "<td>".$fila->id_empresart."</td>";
+                          echo "<td>".$fila->nombre_empresa."</td>";
                           echo "<td>".$fila->nombre_empleado."</td>";
                           echo "<td>".$fila->tiposolicitud_expedientert."</td>";
                           echo "<td>".$fila->fecharesolucion_expedientert."</td>";
@@ -59,11 +59,3 @@
         </div>
     </div>
 </div>
-
-<script>
-$(function(){
-    $(document).ready(function() {
-        $('#myTable').DataTable();
-    });
-});
-</script>

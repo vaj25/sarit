@@ -9,24 +9,35 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <script type="text/javascript">
   function cambiar_editar(id_reglamento,bandera){
     $("#id_expedientert").val(id_reglamento);
-    //$("#nombre_vyp_actividades").val(nombre_vyp_actividades);
-    //$("#depende_vyp_actividades").val(depende_vyp_actividades).trigger('change.select2');
-
-    $.ajax({
-      url: "<?php echo site_url(); ?>/reglamento/registros_reglamentos_documentos",
-      type: "post",
-      dataType: "json",
-      data: {id : id_reglamento},
-      cache: false,
-      contentType: false,
-      processData: false
-    })
-    .done(function(res){
-      
-    });
-
 
     if(bandera == "edit"){
+
+      $.ajax({
+        url: "<?php echo site_url(); ?>/reglamento/registros_reglamentos_documentos",
+        type: "POST",
+        data: {id : id_reglamento}
+      })
+      .done(function(res){
+        result = JSON.parse(res)[0];
+
+        $("#id_expedientert").val(result.id_expedientert);
+        $("#tipo_solicitante").val(result.tiposolicitud_expedientert).trigger('change.select2');
+
+        $("#reglamento_interno").attr('checked',result.docreglamento_documentort);
+        $("#constitucion_sociedad").attr('checked',result.escritura_documentort);
+        $("#credencial_representante").attr('checked',result.credencial_documentort);
+        $("#poder").attr('checked',result.poder_documentort);
+        $("#dui").attr('checked',result.dui_documentort);
+        $("#matricula").attr('checked',result.matricula_documentort);
+        $("#estatutos").attr('checked',result.estatutos_documentort);
+        $("#acuerdo_creacion").attr('checked',result.acuerdoejec_documentort);
+        $("#nominacion").attr('checked',result.nominayfuncion_documentort);
+
+        $("#band").val("edit");
+        combo_establecimiento(result.id_empresart);
+        combo_delegado(result.id_personal);
+
+      });
 
       $("#ttl_form").removeClass("bg-success");
       $("#ttl_form").addClass("bg-info");
@@ -34,7 +45,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#btnedit").show(0);
       $("#cnt-tabla").hide(0);
       $("#cnt_form").show(0);
-      combo_actividades(depende_vyp_actividades);
       $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Actividad");
     }else{           
       eliminar_reglamento();
@@ -62,21 +72,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
   function cambiar_nuevo(){
     $("#id_expedientert").val("");
-    $("#depende_vyp_actividades").val("0").trigger('change.select2');
-    $("#id_vyp_actividades").val("");
+    $("#tipo_solicitante").val("0").trigger('change.select2');
 
-    $("#reglamento_interno").val("");
-    $("#constitucion_sociedad").val("");
-    $("#credencial_representante").val("");
-    $("#poder").val("");
-    $("#establecimiento").val("");
-    $("#matricula").val("");
-    $("#estatutos").val("");
-    $("#acuerdo_creacion").val("");
-    $("#nominacion").val("");
+    $("#reglamento_interno").attr('checked',false);
+    $("#constitucion_sociedad").attr('checked',false);
+    $("#credencial_representante").attr('checked',false);
+    $("#poder").attr('checked',false);
+    $("#dui").attr('checked',false);
+    $("#establecimiento").attr('checked',false);
+    $("#matricula").attr('checked',false);
+    $("#estatutos").attr('checked',false);
+    $("#acuerdo_creacion").attr('checked',false);
+    $("#nominacion").attr('checked',false);
 
     $("#band").val("save");
-    //combo_actividades('0');
+    combo_establecimiento('0');
+    combo_delegado('0');
     $("#ttl_form").addClass("bg-success");
     $("#ttl_form").removeClass("bg-info");
 
@@ -119,19 +130,34 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
-  function combo_actividades(seleccion){
-    id=seleccion;
-    if(window.XMLHttpRequest){ xmlhttp=new XMLHttpRequest();
-    }else{ xmlhttp=new ActiveXObject("Microsoft.XMLHTTPB"); }
+  function combo_establecimiento(seleccion){
     
-    xmlhttp.onreadystatechange=function(){
-      if (xmlhttp.readyState==4 && xmlhttp.status==200){
-        document.getElementById("div_combo_actividades").innerHTML=xmlhttp.responseText;
-        $(".select2").select2();
-      }
-    }
-    xmlhttp.open("GET","<?php echo site_url(); ?>/configuraciones/actividad/mostrarActividad/"+id,true);
-    xmlhttp.send();
+    $.ajax({
+      url: "<?php echo site_url(); ?>/reglamento/combo_establecimiento",
+      type: "post",
+      dataType: "html",
+      data: {id : seleccion}
+    })
+    .done(function(res){
+      $('#div_combo_establecimiento').html(res);
+      $(".select2").select2();
+    });
+
+  }
+
+  function combo_delegado(seleccion){
+    
+    $.ajax({
+      url: "<?php echo site_url(); ?>/reglamento/combo_delegado",
+      type: "post",
+      dataType: "html",
+      data: {id : seleccion}
+    })
+    .done(function(res){
+      $('#div_combo_delegado').html(res);
+      $(".select2").select2();
+    });
+
   }
 </script>
 
@@ -173,19 +199,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <div class="help-block"></div>
                 </div>
               </div>
-              <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento">
-                <div>
-                  <label for="establecimiento" class="font-weight-bold">Establecimiento:
-                    <span class="text-danger">*</span>
-                  </label>
-                  <select id="establecimiento" name="establecimiento" class="form-control" onchange="" required="" >
-                    <option value="0">[Seleccione]</option>
-                    <option value="1">Opcion 1</option>
-                    <option value="2">Opcion 2</option>
-                  </select>
-                  <div class="help-block"></div>
-                </div>
-              </div>
+              <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
             </div>
 
             <div class="row">
@@ -241,19 +255,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             </div>
             
             <div class="row">
-              <div class="col-lg-6 <?php if($navegatorless){ echo " pull-left "; } ?>">
-                <div class="form-group">
-                  <label for="colaborador" class="font-weight-bold">Asignar Delegado:
-                    <span class="text-danger">*</span>
-                  </label>
-                  <select id="colaborador" name="colaborador" class="form-control" onchange="">
-                    <option value="0">[Seleccione]</option>
-                    <option value="1">Opcion 1</option>
-                    <option value="2">Opcion 2</option>
-                  </select>
-                  <div class="help-block"></div>
-                </div>
-              </div>
+              <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado"></div>
             </div>
 
             <button id="submit" type="submit" style="display: none;"></button>
@@ -266,7 +268,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <div align="right" id="btnedit" style="display: none;">
               <button type="reset" class="btn waves-effect waves-light btn-success">
                 <i class="mdi mdi-recycle"></i> Limpiar</button>
-              <button type="button" onclick="editar_horario()" class="btn waves-effect waves-light btn-info">
+              <button type="submit" class="btn waves-effect waves-light btn-info">
                 <i class="mdi mdi-pencil"></i> Editar</button>
             </div>
             </div>

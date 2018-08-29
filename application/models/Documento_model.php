@@ -33,11 +33,10 @@ class Documento_model extends CI_Model {
     }
 
     public function editar_documento($data){
-		$this->db->where("id_documentort",$data["id_documentort"]);
+		$this->db->where('id_expedientert', $data['id_expedientert']);
 		if($this->db->update(
             'sri_documentort', 
-            array(
-                'id_expedientert' => $data['id_expedientert'], 
+            array( 
                 'docreglamento_documentort' => $data['docreglamento_documentort'],
                 'escritura_documentort' => $data['escritura_documentort'],
                 'credencial_documentort' => $data['credencial_documentort'],

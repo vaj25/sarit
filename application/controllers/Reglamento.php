@@ -61,17 +61,40 @@ class Reglamento extends CI_Controller {
 		}else if($this->input->post('band') == "edit"){
 
 			$data = array(
-			'idhorario' => $this->input->post('idhorario'), 
-			'descripcion' => $this->input->post('descripcion'), 
-			'hora_inicio' => date("Y-m-d ").$this->input->post('hora_inicio'),
-			'hora_fin' => date("Y-m-d ").$this->input->post('hora_fin'),
-			'monto' => number_format($this->input->post('monto'),2),
-			'id_tipo' => $this->input->post('id_tipo'),
-			'id_categoria' => $this->input->post('id_categoria'),
-			'id_viatico_restriccion' => $this->input->post('id_viatico_restriccion'),
-			'estado' => $this->input->post('estado')
+				'id_expedientert' => $this->input->post('id_expedientert'),
+				'id_empresart' => $this->input->post('establecimiento'),
+				'id_personal' => $this->input->post('colaborador'),
+				'id_estadort' => 'ninguno',
+				'numexpediente_expedientert' => '1/2018 SS',
+				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
+				'tiposolicitud_expedientert' => '',
+				'organizacionsocial_expedientert' => '',
+				'contratocolectivo_expedientert' => '',
+				'notificacion_expedientert' => '',
+				'fechanotificacion_expedientert' => '',
+				'resolucion_expedientert' => '',
+				'fecharesolucion_expedientert' => '',
+				'archivo_expedientert' => '',
+				'obsergenero_expedientrt' => '',
+				'contenidoTitulos_expedientert' => '',
+				'inhabilitado_expedientert' => '',
+				'archivo_expedientert' => ''
 			);
-			echo $this->horarios_model->editar_horario($data);
+
+			$data2 = array(
+				'id_expedientert' => $this->input->post('id_expedientert'), 
+				'docreglamento_documentort' => $this->input->post('reglamento_interno'),
+				'escritura_documentort' => $this->input->post('constitucion_sociedad'),
+				'credencial_documentort'  => $this->input->post('credencial_representante'),
+				'poder_documentort' => $this->input->post('poder'),
+				'dui_documentort' => $this->input->post('establecimiento'),
+				'matricula_documentort' => $this->input->post('matricula'),
+				'estatutos_documentort' => $this->input->post('estatutos'),
+				'acuerdoejec_documentort' => $this->input->post('acuerdo_creacion'),
+				'nominayfuncion_documentort' => $this->input->post('nominacion')
+			);
+
+			echo $this->documento_model->editar_documento($data2);
 
 		}else if($this->input->post('band') == "delete"){
 			$data = array(
@@ -89,6 +112,28 @@ class Reglamento extends CI_Controller {
 			$this->reglamento_model->obtener_reglamentos_documentos($this->input->post('id'))->result()
 		);
 		
+	}
+
+	public function combo_establecimiento() {
+		
+		$this->load->view('reglamento_ajax/combo_establecimiento', 
+			array(
+				'id' => $this->input->post('id'),
+				'establecimiento' => $this->db->get('sge_empresa')
+			)
+		);
+
+	}
+
+	public function combo_delegado() {
+		
+		$this->load->view('reglamento_ajax/combo_delegado', 
+			array(
+				'id' => $this->input->post('id'),
+				'colaborador' => $this->db->get('lista_empleados_estado')
+			)
+		);
+
 	}
 
 }
