@@ -105,7 +105,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <!-- ============================================================== -->
         <!-- Inicio del CUERPO DE LA SECCIÓN -->
         <!-- ============================================================== -->
-        <div class="row" <?php if($navegatorless){ echo "style='margin-right: 80px;'"; } ?>>
+        <div class="row" <?php if($navegatorless){ echo "style='margin-right: 80px;'" ; } ?>>
             <!-- ============================================================== -->
             <!-- Inicio del FORMULARIO de gestión -->
             <!-- ============================================================== -->
@@ -119,67 +119,73 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <h4 class="card-title m-b-0 text-white">Listado de estados</h4>
                     </div>
                     <div class="card-body b-t">
-                        
+
                         <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-                            <input type="hidden" id="band" name="band" value="save">
-                            <input type="hidden" id="id_estadort" name="id_estadort">
-                            <div class="row">
-                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Estado: <span class="text-danger">*</span></h5>
-                                    <div class="controls">
-                                        <input type="text" id="estado" name="estado" class="form-control" required="" placeholder="Habilitado, Deshabilitado" data-validation-required-message="Este campo es requerido">
-                                        <div class="help-block"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                                    <h5>Descripci&oacute;n: <span class="text-danger">*</span></h5>
-                                    <div class="controls">
-                                        <input type="text" id="descripcion" name="descripcion" class="form-control" required="" data-validation-required-message="Este campo es requerido" >
-                                        <div class="help-block"></div>
-                                    </div>
+                        <input type="hidden" id="band" name="band" value="save">
+                        <input type="hidden" id="id_estadort" name="id_estadort">
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                <h5>Estado: <span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" id="estado" name="estado" class="form-control" required=""
+                                        placeholder="Habilitado, Deshabilitado" data-validation-required-message="Este campo es requerido">
+                                    <div class="help-block"></div>
                                 </div>
                             </div>
-                                
+                            <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                                <h5>Descripci&oacute;n: <span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" id="descripcion" name="descripcion" class="form-control"
+                                        required="" data-validation-required-message="Este campo es requerido">
+                                    <div class="help-block"></div>
+                                </div>
                             </div>
+                        </div>
 
-
-                            <button id="submit" type="submit" style="display: none;"></button>
-                            <div align="right" id="btnadd">
-                                <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
-                                <button type="submit" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Guardar</button>
-                            </div>
-                            <div align="right" id="btnedit" style="display: none;">
-                                <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
-                                <button type="button" onclick="editar_estado()" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
-                            </div>
-
-                            </div>
-
-                        <?php echo form_close(); ?>
+                        <button id="submit" type="submit" style="display: none;"></button>
+                        <div align="right" id="btnadd">
+                            <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i>
+                                Limpiar</button>
+                            <button type="submit" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i>
+                                Guardar</button>
+                        </div>
+                        <div align="right" id="btnedit" style="display: none;">
+                            <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i>
+                                Limpiar</button>
+                            <button type="button" onclick="editar_estado()" class="btn waves-effect waves-light btn-info"><i
+                                    class="mdi mdi-pencil"></i> Editar</button>
+                        </div>
                     </div>
+
+
+
                 </div>
 
-            <div class="col-lg-1"></div>
-            <!-- ============================================================== -->
-            <!-- Fin del FORMULARIO de gestión -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Inicio de la TABLA -->
-            <!-- ============================================================== -->
-            <div class="col-lg-12" id="cnt_tabla">
-                     
+                <?php echo form_close(); ?>
             </div>
-            
-            </div>
-            
-            <!-- ============================================================== -->
-            <!-- Fin de la TABLA -->
-            <!-- ============================================================== -->
         </div>
+
+        <div class="col-lg-1"></div>
         <!-- ============================================================== -->
-        <!-- Fin CUERPO DE LA SECCIÓN -->
+        <!-- Fin del FORMULARIO de gestión -->
         <!-- ============================================================== -->
-    </div> 
+        <!-- ============================================================== -->
+        <!-- Inicio de la TABLA -->
+        <!-- ============================================================== -->
+        <div class="col-lg-12" id="cnt_tabla">
+
+        </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- Fin de la TABLA -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- Fin CUERPO DE LA SECCIÓN -->
+<!-- ============================================================== -->
+</div>
 </div>
 <!-- ============================================================== -->
 <!-- Fin de DIV de inicio (ENVOLTURA) -->

@@ -33,7 +33,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#acuerdo_creacion").attr('checked',result.acuerdoejec_documentort);
         $("#nominacion").attr('checked',result.nominayfuncion_documentort);
 
-        $("#band").val("edit");
+        $("#band1").val("edit");
+        $("#band2").val("edit");
         combo_establecimiento(result.id_empresart);
         combo_delegado(result.id_personal);
 
@@ -41,10 +42,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
       $("#ttl_form").removeClass("bg-success");
       $("#ttl_form").addClass("bg-info");
-      $("#btnadd").hide(0);
-      $("#btnedit").show(0);
+      $("#btnadd1").hide(0);
+      $("#btnedit1").show(0);
+      $("#btnadd2").hide(0);
+      $("#btnedit2").show(0);
       $("#cnt-tabla").hide(0);
-      $("#cnt_form").show(0);
+      $("#cnt_form_main").show(0);
       $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Actividad");
     }else{           
       eliminar_reglamento();
@@ -85,7 +88,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#acuerdo_creacion").attr('checked',false);
     $("#nominacion").attr('checked',false);
 
-    $("#band").val("save");
+    $("#band1").val("save");
+    $("#band2").val("save");
     combo_establecimiento('');
     combo_delegado('');
     $("#ttl_form").addClass("bg-success");
@@ -94,7 +98,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#btnadd").show(0);
     $("#btnedit").hide(0);
     $("#cnt-tabla").hide(0);
-    $("#cnt_form").show(0);
+    $("#cnt_form_main").show(0);
     $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Aprobaci&oacute;n de Reglamentos");
   }
 
@@ -104,7 +108,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#id_vyp_actividades").val("");
     $("#band").val("save");
     $("#cnt-tabla").show(0);
-    $("#cnt_form").hide(0);
+    $("#cnt_form_main").hide(0);
   }
 
   function iniciar(){
@@ -113,14 +117,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <?php }else{ ?>
       $("#cnt-tabla").html("Usted no tiene permiso para este formulario.");     
     <?php } ?>
-  }
-
-  function objetoAjax(){
-    var xmlhttp = false;
-    try { xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-    } catch (e) { try { xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); } catch (E) { xmlhttp = false; } }
-    if (!xmlhttp && typeof XMLHttpRequest!='undefined') { xmlhttp = new XMLHttpRequest(); }
-    return xmlhttp;
   }
 
   function tablaReglamentos(){
@@ -159,6 +155,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
 
   }
+
+  function open_form(num){
+    $(".cnt_form").hide(0);
+    $("#cnt_form"+num).show(0);
+
+    if($("#band").val() == "save"){
+        $("#btnadd"+num).show(0);
+        $("#btnedit"+num).hide(0);
+    }else{
+        $("#btnadd"+num).hide(0);
+        $("#btnedit"+num).show(0);
+    }
+  }
+
 </script>
 
 <div class="page-wrapper">
@@ -171,7 +181,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <div class="row">
 
       <div class="col-lg-1"></div>
-      <div class="col-lg-10" id="cnt_form" style="display: none;">
+      <div class="col-lg-10" id="cnt_form_main" style="display: none;">
         <div class="card">
           <div class="card-header bg-success2" id="ttl_form">
             <div class="card-actions text-white">
@@ -182,63 +192,181 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <h4 class="card-title m-b-0 text-white">Listado de Actividades</h4>
           </div>
           <div class="card-body b-t">
-            <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-            <input type="hidden" id="band" name="band" value="save">
-            <input type="hidden" id="id_expedientert" name="id_expedientert">
-            <div class="row">
-              <div class="col-lg-6 <?php if($navegatorless){ echo " pull-left "; } ?>">
-                <div class="form-group">
-                  <label for="tipo_solicitante" class="font-weight-bold">Tipo de Solicitante:
-                    <span class="text-danger">*</span>
-                  </label>
-                  <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" onchange="" required>
-                    <option value="">[Seleccione]</option>
-                    <option value="1">Opcion 1</option>
-                    <option value="2">Opcion 2</option>
-                  </select>
-                  <div class="help-block"></div>
+
+            <div id="cnt_form1" class="cnt_form">
+              <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+
+              <h3 class="box-title" style="margin: 0px;">
+                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso
+                  1</button>&emsp;
+                Datos del esblecimiento y del comisionado
+              </h3>
+              <hr class="m-t-0 m-b-30">
+
+              <input type="hidden" id="band1" name="band1" value="save">
+              <input type="hidden" id="id_expediente" name="id_expediente">
+              <div class="row">
+                <div class="col-lg-6 <?php if($navegatorless){ echo " pull-left "; } ?>">
+                  <div class="form-group">
+                    <label for="tipo_solicitante" class="font-weight-bold">Tipo de Solicitante:
+                      <span class="text-danger">*</span>
+                    </label>
+                    <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" onchange="" required>
+                      <option value="">[Seleccione]</option>
+                      <option value="1">Opcion 1</option>
+                      <option value="2">Opcion 2</option>
+                    </select>
+                    <div class="help-block"></div>
+                  </div>
+                </div>
+                <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Nombres: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" id="nombres" name="nombres" class="form-control" required="">
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Apellidos: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" id="apellidos" name="apellidos" class="form-control"
+                            required="" data-validation-required-message="Este campo es requerido">
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Sexo: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <select id="dui" name="dui" class="form-control" onchange="" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="1">Masculino</option>
+                        <option value="2">Femenino</option>
+                      </select>
+                    </div>
                 </div>
               </div>
-              <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
+
+              <div class="row">
+                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>DUI: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" id="dui" name="dui" class="form-control" required="">
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>NIT: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" id="nit" name="nit" class="form-control"
+                            required="" data-validation-required-message="Este campo es requerido">
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Telefono: </h5>
+                    <div class="controls">
+                        <input type="text" id="telefono" name="telefono" class="form-control">
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Correo: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" id="correo" name="correo" class="form-control" required="">
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Tipo representante: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <input type="text" id="tipo_representante" name="tipo_representante" class="form-control" required="">
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+              </div>
+
+              <button id="submit" type="submit" style="display: none;"></button>
+              <div align="right" id="btnadd1">
+                <button type="reset" class="btn waves-effect waves-light btn-success">
+                  <i class="mdi mdi-recycle"></i> Limpiar</button>
+                <button type="button" onclick="open_form(2)" class="btn waves-effect waves-light btn-success2">
+                  Siguiente <i class="mdi mdi-chevron-right"></i>
+                </button>
+              </div>
+              <div align="right" id="btnedit1" style="display: none;">
+                <button type="reset" class="btn waves-effect waves-light btn-success">
+                  <i class="mdi mdi-recycle"></i> Limpiar</button>
+                <button type="button" onclick="open_form(2)" class="btn waves-effect waves-light btn-info">
+                  Siguiente <i class="mdi mdi-chevron-right"></i>
+                </button>
+              </div>
+            <?php echo form_close(); ?>
             </div>
 
-            <div class="row">
-              <div class="col-lg-12 <?php if($navegatorless){ echo " pull-left "; } ?>">
-                <div class="form-group">
-                  <label for="tipo_solicitante" class="font-weight-bold">
-                    Documentaci&oacute;n:
-                  </label>
+            <div id="cnt_form2" class="cnt_form" style="display: none;">
+              <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
 
-                  <div class="row">
-                    <div class="col-lg-6">
+              <h3 class="box-title" style="margin: 0px;">
+                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso
+                  2</button>&emsp;
+                Documentaci&oacute;n y designados:
+              </h3>
+              <hr class="m-t-0 m-b-30">
 
-                      <input type="checkbox" id="reglamento_interno" class="filled-in chk-col-light-blue">
-                      <label for="reglamento_interno">Reglamento Interno de Trabajo</label>
-                    
-                      <input type="checkbox" id="constitucion_sociedad" class="filled-in chk-col-light-blue">
-                      <label for="constitucion_sociedad">Escritura de Constituci&oacute;n de la Sociedad</label>
+              <input type="hidden" id="band2" name="band2" value="save">
+              <input type="hidden" id="id_expedient" name="id_expedient">
+              <div class="row">
+                <div class="col-lg-6 <?php if($navegatorless){ echo " pull-left "; } ?>">
+                  <div class="form-group">
+                  </div>
+                </div>
+                <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
+              </div>
 
-                      <input type="checkbox" id="credencial_representante" class="filled-in chk-col-light-blue">
-                      <label for="credencial_representante">Credencial Vigente del Representante Legal</label>
-                      
-                      <br>                    
-                      <input type="checkbox" id="dui" class="filled-in chk-col-light-blue">
-                      <label for="dui">DUI:</label>
+              <div class="row">
+                <div class="col-lg-12 <?php if($navegatorless){ echo " pull-left "; } ?>">
+                  <div class="form-group">
+                    <label for="tipo_solicitante" class="font-weight-bold">
+                      Documentaci&oacute;n:
+                    </label>
 
-                      <br>                    
-                      <input type="checkbox" id="poder" class="filled-in chk-col-light-blue">
-                      <label for="poder">Poder:</label>
+                    <div class="row">
+                      <div class="col-lg-6">
 
-                    </div>
-                    
-                    <div class="col-lg-6" >
+                        <input type="checkbox" id="reglamento_interno" class="filled-in chk-col-light-blue">
+                        <label for="reglamento_interno">Reglamento Interno de Trabajo</label>
+
+                        <input type="checkbox" id="constitucion_sociedad" class="filled-in chk-col-light-blue">
+                        <label for="constitucion_sociedad">Escritura de Constituci&oacute;n de la Sociedad</label>
+
+                        <input type="checkbox" id="credencial_representante" class="filled-in chk-col-light-blue">
+                        <label for="credencial_representante">Credencial Vigente del Representante Legal</label>
+
+                        <br>
+                        <input type="checkbox" id="dui" class="filled-in chk-col-light-blue">
+                        <label for="dui">DUI:</label>
+
+                        <br>
+                        <input type="checkbox" id="poder" class="filled-in chk-col-light-blue">
+                        <label for="poder">Poder:</label>
+
+                      </div>
+
+                      <div class="col-lg-6">
                         <input type="checkbox" id="matricula" class="filled-in chk-col-light-blue">
                         <label for="matricula">Matricula de Comercio:</label>
-                        
+
                         <br>
                         <input type="checkbox" id="estatutos" class="filled-in chk-col-light-blue">
                         <label for="estatutos">Estatutos:</label>
-                        
+
                         <br>
                         <input type="checkbox" id="acuerdo_creacion" class="filled-in chk-col-light-blue">
                         <label for="acuerdo_creacion">Acuerdo Ejecutivo de Creaci&oacute;n:</label>
@@ -246,49 +374,57 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <br>
                         <input type="checkbox" id="nominacion" class="filled-in chk-col-light-blue">
                         <label for="nominacion">Nominaci&oacute;n y Funcionamiento del Centro Educativo:</label>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="help-block"></div>
+                    <div class="help-block"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            <div class="row">
-              <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado"></div>
-            </div>
 
-            <button id="submit" type="submit" style="display: none;"></button>
-            <div align="right" id="btnadd">
-              <button type="reset" class="btn waves-effect waves-light btn-success">
-                <i class="mdi mdi-recycle"></i> Limpiar</button>
-              <button type="submit" class="btn waves-effect waves-light btn-success2">
-                <i class="mdi mdi-plus"></i> Guardar</button>
-            </div>
-            <div align="right" id="btnedit" style="display: none;">
-              <button type="reset" class="btn waves-effect waves-light btn-success">
-                <i class="mdi mdi-recycle"></i> Limpiar</button>
-              <button type="submit" class="btn waves-effect waves-light btn-info">
-                <i class="mdi mdi-pencil"></i> Editar</button>
-            </div>
-            </div>
+              <div class="row">
+                <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado"></div>
+              </div>
+
+              <div class="pull-left">
+                <button type="button" class="btn waves-effect waves-light btn-default" onclick="open_form(1)"><i class="mdi mdi-chevron-left"></i>
+                  Volver</button>
+              </div>
+              <div align="right" id="btnadd2">
+                <button type="reset" class="btn waves-effect waves-light btn-success">
+                  <i class="mdi mdi-recycle"></i> Limpiar
+                </button>
+                <button type="button" onclick="cerrar_mantenimiento();" class="btn waves-effect waves-light btn-success2">Finalizar
+                  <i class="mdi mdi-chevron-right"></i></button>
+              </div>
+              <div align="right" id="btnedit2" style="display: none;">
+                <button type="reset" class="btn waves-effect waves-light btn-success">
+                  <i class="mdi mdi-recycle"></i> Limpiar</button>
+                <button type="button" onclick="cerrar_mantenimiento();" class="btn waves-effect waves-light btn-info">Finalizar
+                  <i class="mdi mdi-chevron-right"></i></button>
+              </div>
             <?php echo form_close(); ?>
+            </div>
           </div>
 
         </div>
-      </div>
-      <div class="col-lg-1"></div>
-      <div class="col-lg-12" id="cnt-tabla">
 
       </div>
 
     </div>
   </div>
+  <div class="col-lg-1"></div>
+  <div class="col-lg-12" id="cnt-tabla">
+
+  </div>
+
+</div>
+</div>
 </div>
 
 <script>
 
-$(function(){     
+$(function(){
     $("#formajax").on("submit", function(e){
         e.preventDefault();
         var f = $(this);
@@ -306,7 +442,7 @@ $(function(){
         })
         .done(function(res){
             if(res == "exito"){
-                cerrar_mantenimiento();
+                //cerrar_mantenimiento();
                 if($("#band").val() == "save"){
                     swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
                 }else if($("#band").val() == "edit"){
@@ -314,7 +450,7 @@ $(function(){
                 }else{
                     swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
                 }
-                tablaReglamentos();
+                //tablaReglamentos();
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
