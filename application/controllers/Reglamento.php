@@ -85,7 +85,9 @@ class Reglamento extends CI_Controller {
 
 	public function registros_reglamentos_documentos() {
 
-		print json_encode($this->reglamento_model->eliminar_documento($this->input->post('id_categoria')));
+		print json_encode(
+			$this->reglamento_model->obtener_reglamentos_documentos($this->input->post('id'))->result()
+		);
 		
 	}
 

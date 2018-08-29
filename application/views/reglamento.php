@@ -61,9 +61,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
    }
 
   function cambiar_nuevo(){
-    $("#nombre_vyp_actividades").val("");
+    $("#id_expedientert").val("");
     $("#depende_vyp_actividades").val("0").trigger('change.select2');
     $("#id_vyp_actividades").val("");
+
+    $("#reglamento_interno").val("");
+    $("#constitucion_sociedad").val("");
+    $("#credencial_representante").val("");
+    $("#poder").val("");
+    $("#establecimiento").val("");
+    $("#matricula").val("");
+    $("#estatutos").val("");
+    $("#acuerdo_creacion").val("");
+    $("#nominacion").val("");
+
     $("#band").val("save");
     //combo_actividades('0');
     $("#ttl_form").addClass("bg-success");
