@@ -1,5 +1,5 @@
 <label for="colaborador" class="font-weight-bold">Asignar Delegado: <span class="text-danger"></span></label>
-<select id="colaborador" name="colaborador" class="select2" onchange=""  style="width: 100%">
+<select id="colaborador" name="colaborador" class="select2" onchange="" required style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php
             if(!empty($colaborador)){

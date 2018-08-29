@@ -86,8 +86,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#nominacion").attr('checked',false);
 
     $("#band").val("save");
-    combo_establecimiento('0');
-    combo_delegado('0');
+    combo_establecimiento('');
+    combo_delegado('');
     $("#ttl_form").addClass("bg-success");
     $("#ttl_form").removeClass("bg-info");
 
@@ -182,7 +182,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <h4 class="card-title m-b-0 text-white">Listado de Actividades</h4>
           </div>
           <div class="card-body b-t">
-            <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40', 'novalidate' => '')); ?>
+            <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
             <input type="hidden" id="band" name="band" value="save">
             <input type="hidden" id="id_expedientert" name="id_expedientert">
             <div class="row">
@@ -191,8 +191,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <label for="tipo_solicitante" class="font-weight-bold">Tipo de Solicitante:
                     <span class="text-danger">*</span>
                   </label>
-                  <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" onchange="" required="">
-                    <option value="0">[Seleccione]</option>
+                  <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" onchange="" required>
+                    <option value="">[Seleccione]</option>
                     <option value="1">Opcion 1</option>
                     <option value="2">Opcion 2</option>
                   </select>

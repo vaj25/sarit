@@ -1,5 +1,5 @@
-<label for="establecimiento" class="font-weight-bold">Establecimiento: <span class="text-danger"></span></label>
-<select id="establecimiento" name="establecimiento" class="select2" onchange=""  style="width: 100%">
+<label for="establecimiento" class="font-weight-bold">Establecimiento: <span class="text-danger">*</span></label>
+<select id="establecimiento" name="establecimiento" required class="select2" onchange=""  style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php
             if(!empty($establecimiento)){
