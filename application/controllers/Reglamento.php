@@ -26,7 +26,7 @@ class Reglamento extends CI_Controller {
 			$data = array(
 				'id_empresart' => $this->input->post('establecimiento'),
 				'id_personal' => '',
-				'id_estadort' => 'ninguno',
+				'id_estadort' => 1,
 				'numexpediente_expedientert' => '1/2018 SS',
 				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
 				'tiposolicitud_expedientert' => '',
@@ -55,9 +55,11 @@ class Reglamento extends CI_Controller {
 				'sexo_representantert' => $this->input->post('sexo')
 			);
 
-			$this->comisionado_model->insertar_comisionado($data2);
-
-			echo $this->reglamento_model->insertar_reglamento($data);
+			if ("exito" == $this->comisionado_model->insertar_comisionado($data2)) {
+				echo $this->reglamento_model->insertar_reglamento($data);
+			} else {
+				echo "fracaso";
+			}
 
 			/*$data = array(
 				'id_empresart' => $this->input->post('establecimiento'),

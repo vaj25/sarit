@@ -79,11 +79,26 @@ class Reglamento_model extends CI_Model {
         }
     }
 
+    public function obtener_reglamento($id) {
+        
+        $this->db->select('')
+               ->from('sri_expedientert a')
+               ->where('id_expedientert', $id);
+        $query=$this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query;
+        }
+        else {
+            return FALSE;
+        }
+
+    }
+
     public function obtener_reglamentos() {
         
         $this->db->select('')
                ->from('sri_expedientert a')
-               ->join('lista_empleados_estado b','b.id_empleado = a.id_personal')
+               ->join('lista_empleados_estado b','b.id_empleado = a.id_personal', 'left')
                ->join('sge_empresa c','c.id_empresa = a.id_empresart');
         $query=$this->db->get();
         if ($query->num_rows() > 0) {

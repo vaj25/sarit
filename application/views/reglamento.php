@@ -32,7 +32,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#estatutos").attr('checked',result.estatutos_documentort);
         $("#acuerdo_creacion").attr('checked',result.acuerdoejec_documentort);
         $("#nominacion").attr('checked',result.nominayfuncion_documentort);
-
+        
+        $("#band").val("save");
         $("#band1").val("edit");
         $("#band2").val("edit");
         combo_establecimiento(result.id_empresart);
@@ -74,7 +75,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
    }
 
   function cambiar_nuevo(){
-    $("#id_expedientert").val("");
+    $("#id_expediente").val("");
+    $("#id_expedient").val("");
     $("#tipo_solicitante").val("0").trigger('change.select2');
 
     $("#reglamento_interno").attr('checked',false);
@@ -88,25 +90,35 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#acuerdo_creacion").attr('checked',false);
     $("#nominacion").attr('checked',false);
 
+    $("#nombres").val("");
+    $("#apellidos").val("");
+    $("#dui_comisionado").val("");
+    $("#nit").val("");
+    $("#telefono").val("");
+    $("#correo").val("");
+    $("#tipo_representante").val("");
+    $("#sexo").val("").trigger('change.select2');
+
+    $("#band").val("save");
     $("#band1").val("save");
     $("#band2").val("save");
+
     combo_establecimiento('');
     combo_delegado('');
+    
     $("#ttl_form").addClass("bg-success");
     $("#ttl_form").removeClass("bg-info");
 
     $("#btnadd").show(0);
     $("#btnedit").hide(0);
     $("#cnt-tabla").hide(0);
+    $(".cnt_form").hide(0);
+    $("#cnt_form1").show(0);
     $("#cnt_form_main").show(0);
     $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Aprobaci&oacute;n de Reglamentos");
   }
 
   function cerrar_mantenimiento(){
-    $("#nombre_vyp_actividades").val("");
-    $("#depende_vyp_actividades").val("0").trigger('change.select2');
-    $("#id_vyp_actividades").val("");
-    $("#band").val("save");
     $("#cnt-tabla").show(0);
     $("#cnt_form_main").hide(0);
   }
@@ -169,6 +181,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
   }
 
+  function volver(num) {
+    open_form(num);
+    $("#band"+num).val("edit")
+  }
+
 </script>
 
 <div class="page-wrapper">
@@ -203,37 +220,37 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               </h3>
               <hr class="m-t-0 m-b-30">
 
-              <input type="hidden" id="band1" name="band1" value="save">
+              <input type="hidden" id="band" name="band">
+
+              <input type="hidden" id="band1" name="band1">
               <input type="hidden" id="id_expediente" name="id_expediente">
               <div class="row">
-                <div class="col-lg-6 <?php if($navegatorless){ echo " pull-left "; } ?>">
-                  <div class="form-group">
-                    <label for="tipo_solicitante" class="font-weight-bold">Tipo de Solicitante:
-                      <span class="text-danger">*</span>
-                    </label>
-                    <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" onchange="" required>
-                      <option value="">[Seleccione]</option>
-                      <option value="1">Opcion 1</option>
-                      <option value="2">Opcion 2</option>
-                    </select>
-                    <div class="help-block"></div>
-                  </div>
+
+                <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Tipo de Solicitante: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="1">Opcion 1</option>
+                        <option value="2">Opcion 2</option>
+                      </select>
+                    </div>
                 </div>
-                <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
+                <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
               </div>
 
               <div class="row">
                 <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Nombres: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input type="text" id="nombres" name="nombres" class="form-control" required="">
+                        <input type="text" id="nombres" name="nombres" class="form-control" required="" placeholder="Nombres">
                         <div class="help-block"></div>
                     </div>
                 </div>
                 <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Apellidos: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input type="text" id="apellidos" name="apellidos" class="form-control"
+                        <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos"
                             required="" data-validation-required-message="Este campo es requerido">
                         <div class="help-block"></div>
                     </div>
@@ -241,7 +258,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Sexo: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                      <select id="sexo" name="sexo" class="form-control" onchange="" required>
+                      <select id="sexo" name="sexo" class="form-control" required>
                         <option value="">[Seleccione]</option>
                         <option value="1">Masculino</option>
                         <option value="2">Femenino</option>
@@ -254,22 +271,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>DUI: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input type="text" id="dui_comisionado" name="dui_comisionado" class="form-control" required="">
+                        <input type="text" placeholder="Documento Unico de Identidad" id="dui_comisionado" name="dui_comisionado" class="form-control" required="" data-mask="99999999-9" >
                         <div class="help-block"></div>
                     </div>
                 </div>
                 <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>NIT: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input type="text" id="nit" name="nit" class="form-control"
-                            required="" data-validation-required-message="Este campo es requerido">
+                        <input type="text" id="nit" name="nit" class="form-control" placeholder="No. De Idententificaci&oacute;n Tributaria"
+                            required="" data-mask="9999-999999-999-9">
                         <div class="help-block"></div>
                     </div>
                 </div>
                 <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Telefono: </h5>
                     <div class="controls">
-                        <input type="text" id="telefono" name="telefono" class="form-control">
+                        <input type="text" placeholder="Telefono" id="telefono" name="telefono" class="form-control" data-mask="9999-9999">
                         <div class="help-block"></div>
                     </div>
                 </div>
@@ -279,14 +296,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Correo:</h5>
                     <div class="controls">
-                        <input type="text" id="correo" name="correo" class="form-control" required="">
+                        <input type="text" id="correo" name="correo" class="form-control" placeholder="Correo">
                         <div class="help-block"></div>
                     </div>
                 </div>
                 <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Tipo representante:</h5>
                     <div class="controls">
-                        <input type="text" id="tipo_representante" name="tipo_representante" class="form-control" required="">
+                        <input type="text" id="tipo_representante" name="tipo_representante" class="form-control" placeholder="Tipo de Representante">
                         <div class="help-block"></div>
                     </div>
                 </div>
@@ -386,20 +403,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               </div>
 
               <div class="pull-left">
-                <button type="button" class="btn waves-effect waves-light btn-default" onclick="open_form(1)"><i class="mdi mdi-chevron-left"></i>
+                <button type="button" class="btn waves-effect waves-light btn-default" onclick="volver(1)"><i class="mdi mdi-chevron-left"></i>
                   Volver</button>
               </div>
               <div align="right" id="btnadd2">
                 <button type="reset" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar
                 </button>
-                <button type="button" onclick="cerrar_mantenimiento();" class="btn waves-effect waves-light btn-success2">Finalizar
+                <button type="submit" class="btn waves-effect waves-light btn-success2">Finalizar
                   <i class="mdi mdi-chevron-right"></i></button>
               </div>
               <div align="right" id="btnedit2" style="display: none;">
                 <button type="reset" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar</button>
-                <button type="button" onclick="cerrar_mantenimiento();" class="btn waves-effect waves-light btn-info">Finalizar
+                <button type="submit" class="btn waves-effect waves-light btn-info">Finalizar
                   <i class="mdi mdi-chevron-right"></i></button>
               </div>
             <?php echo form_close(); ?>
@@ -444,14 +461,48 @@ $(function(){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
               open_form(2);
+              $("#id_expediente").val(res);
               $("#id_expedient").val(res);
-              if($("#band").val() == "save"){
+              $("#band1").val( $("#band").val() );
+              $("#band2").val( $("#band").val() );
+              if($("#band").val() == "delete"){
+                swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
+              }
+            }
+        });
+            
+    });
+});
+
+$(function(){
+    $("#formajax2").on("submit", function(e){
+        e.preventDefault();
+        var f = $(this);
+        var formData = new FormData(document.getElementById("formajax2"));
+        formData.append("dato", "valor");
+        
+        $.ajax({
+          url: "<?php echo site_url(); ?>/documentacion/gestionar_documentacion",
+          type: "post",
+          dataType: "html",
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false
+        })
+        .done(function(res){
+            if(res == "fracaso"){
+              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }else{
+              cerrar_mantenimiento();
+              if($("#band2").val() == "save"){
                   swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-              }else if($("#band").val() == "edit"){
+              }else if($("#band2").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
+              tablaReglamentos();
             }
         });
             
