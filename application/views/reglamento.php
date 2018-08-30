@@ -21,6 +21,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         result = JSON.parse(res)[0];
 
         $("#id_expedientert").val(result.id_expedientert);
+        $("#id_expediente").val(result.id_expedientert);
         $("#tipo_solicitante").val(result.tiposolicitud_expedientert).trigger('change.select2');
 
         $("#reglamento_interno").attr('checked',result.docreglamento_documentort);
@@ -32,8 +33,19 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         $("#estatutos").attr('checked',result.estatutos_documentort);
         $("#acuerdo_creacion").attr('checked',result.acuerdoejec_documentort);
         $("#nominacion").attr('checked',result.nominayfuncion_documentort);
+
+        $("#id_comisionado").val(result.id_representantert);
+        $("#nombres").val(result.nombres_representantert);
+        $("#apellidos").val(result.apellidos_representantert);
+        $("#dui_comisionado").val(result.dui_representantert);
+        $("#nit").val(result.nit_representantert);
+        $("#telefono").val(result.telefono_representantert);
+        $("#correo").val(result.correo_representantert);
+        $("#tipo_representante").val(result.cargo_representantert);
+        $("#sexo").val(result.sexo_representantert).trigger('change.select2');
+
         
-        $("#band").val("save");
+        $("#band").val("edit");
         $("#band1").val("edit");
         $("#band2").val("edit");
         combo_establecimiento(result.id_empresart);
@@ -224,91 +236,101 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
               <input type="hidden" id="band1" name="band1">
               <input type="hidden" id="id_expediente" name="id_expediente">
-              <div class="row">
+              <input type="hidden" id="id_comisionado" name="id_comisionado">
 
-                <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Tipo de Solicitante: <span class="text-danger">*</span></h5>
-                    <div class="controls">
-                      <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" required>
-                        <option value="">[Seleccione]</option>
-                        <option value="1">Opcion 1</option>
-                        <option value="2">Opcion 2</option>
-                      </select>
-                    </div>
-                </div>
-                <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
-              </div>
+              <span class="etiqueta">Establecimiento</span>
 
-              <div class="row">
-                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Nombres: <span class="text-danger">*</span></h5>
-                    <div class="controls">
-                        <input type="text" id="nombres" name="nombres" class="form-control" required="" placeholder="Nombres">
-                        <div class="help-block"></div>
-                    </div>
+              <blockquote class="m-t-0">
+                <div class="row">
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Tipo de Solicitante: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                        <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" required>
+                          <option value="">[Seleccione]</option>
+                          <option value="1">Opcion 1</option>
+                          <option value="2">Opcion 2</option>
+                        </select>
+                      </div>
+                  </div>
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
                 </div>
-                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Apellidos: <span class="text-danger">*</span></h5>
-                    <div class="controls">
-                        <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos"
-                            required="" data-validation-required-message="Este campo es requerido">
-                        <div class="help-block"></div>
-                    </div>
-                </div>
-                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Sexo: <span class="text-danger">*</span></h5>
-                    <div class="controls">
-                      <select id="sexo" name="sexo" class="form-control" required>
-                        <option value="">[Seleccione]</option>
-                        <option value="1">Masculino</option>
-                        <option value="2">Femenino</option>
-                      </select>
-                    </div>
-                </div>
-              </div>
+              </blockquote>
 
-              <div class="row">
-                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>DUI: <span class="text-danger">*</span></h5>
-                    <div class="controls">
-                        <input type="text" placeholder="Documento Unico de Identidad" id="dui_comisionado" name="dui_comisionado" class="form-control" required="" data-mask="99999999-9" >
-                        <div class="help-block"></div>
-                    </div>
-                </div>
-                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>NIT: <span class="text-danger">*</span></h5>
-                    <div class="controls">
-                        <input type="text" id="nit" name="nit" class="form-control" placeholder="No. De Idententificaci&oacute;n Tributaria"
-                            required="" data-mask="9999-999999-999-9">
-                        <div class="help-block"></div>
-                    </div>
-                </div>
-                <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Telefono: </h5>
-                    <div class="controls">
-                        <input type="text" placeholder="Telefono" id="telefono" name="telefono" class="form-control" data-mask="9999-9999">
-                        <div class="help-block"></div>
-                    </div>
-                </div>
-              </div>
+              <span class="etiqueta">Comisionado</span>
 
-              <div class="row">
-                <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Correo:</h5>
-                    <div class="controls">
-                        <input type="text" id="correo" name="correo" class="form-control" placeholder="Correo">
-                        <div class="help-block"></div>
-                    </div>
+              <blockquote class="m-t-0">
+                <div class="row">
+                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Nombres: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="nombres" name="nombres" class="form-control" required="" placeholder="Nombres">
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
+                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Apellidos: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos"
+                              required="" data-validation-required-message="Este campo es requerido">
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
+                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Sexo: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                        <select id="sexo" name="sexo" class="form-control" required>
+                          <option value="">[Seleccione]</option>
+                          <option value="1">Masculino</option>
+                          <option value="2">Femenino</option>
+                        </select>
+                      </div>
+                  </div>
                 </div>
-                <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Tipo representante:</h5>
-                    <div class="controls">
-                        <input type="text" id="tipo_representante" name="tipo_representante" class="form-control" placeholder="Tipo de Representante">
-                        <div class="help-block"></div>
-                    </div>
-                </div>
-              </div>
 
+                <div class="row">
+                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>DUI: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Documento Unico de Identidad" id="dui_comisionado" name="dui_comisionado" class="form-control" required="" data-mask="99999999-9" >
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
+                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>NIT: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="nit" name="nit" class="form-control" placeholder="No. De Idententificaci&oacute;n Tributaria"
+                              required="" data-mask="9999-999999-999-9">
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
+                  <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Telefono: </h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Telefono" id="telefono" name="telefono" class="form-control" data-mask="9999-9999">
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Correo:</h5>
+                      <div class="controls">
+                          <input type="text" id="correo" name="correo" class="form-control" placeholder="Correo">
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Tipo representante:</h5>
+                      <div class="controls">
+                          <input type="text" id="tipo_representante" name="tipo_representante" class="form-control" placeholder="Tipo de Representante">
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
+                </div>
+
+              </blockquote>
+              
               <div align="right" id="btnadd1">
                 <button type="reset" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar</button>
@@ -319,7 +341,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <div align="right" id="btnedit1" style="display: none;">
                 <button type="reset" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar</button>
-                <button type="button" onclick="open_form(2)" class="btn waves-effect waves-light btn-info">
+                <button type="submit" class="btn waves-effect waves-light btn-info">
                   Siguiente <i class="mdi mdi-chevron-right"></i>
                 </button>
               </div>
@@ -338,69 +360,72 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
               <input type="hidden" id="band2" name="band2" value="save">
               <input type="hidden" id="id_expedient" name="id_expedient">
-              <div class="row">
-                <div class="col-lg-6 <?php if($navegatorless){ echo " pull-left "; } ?>">
-                  <div class="form-group">
-                  </div>
-                </div>
-                <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
-              </div>
+              
+              <span class="etiqueta">Documentaci&oacute;n</span>
 
-              <div class="row">
-                <div class="col-lg-12 <?php if($navegatorless){ echo " pull-left "; } ?>">
-                  <div class="form-group">
-                    <label for="tipo_solicitante" class="font-weight-bold">
-                      Documentaci&oacute;n:
-                    </label>
+              <blockquote class="m-t-0">
+                <div class="row">
+                  <div class="col-lg-12 <?php if($navegatorless){ echo " pull-left "; } ?>">
+                    <div class="form-group">
+                      <label for="tipo_solicitante" class="font-weight-bold">
+                        Documentaci&oacute;n:
+                      </label>
 
-                    <div class="row">
-                      <div class="col-lg-6">
+                      <div class="row">
+                        <div class="col-lg-6">
 
-                        <input type="checkbox" id="reglamento_interno" class="filled-in chk-col-light-blue">
-                        <label for="reglamento_interno">Reglamento Interno de Trabajo</label>
+                          <input type="checkbox" id="reglamento_interno" name="reglamento_interno" class="filled-in chk-col-light-blue">
+                          <label for="reglamento_interno">Reglamento Interno de Trabajo</label>
 
-                        <input type="checkbox" id="constitucion_sociedad" class="filled-in chk-col-light-blue">
-                        <label for="constitucion_sociedad">Escritura de Constituci&oacute;n de la Sociedad</label>
+                          <input type="checkbox" id="constitucion_sociedad" name="constitucion_sociedad" class="filled-in chk-col-light-blue">
+                          <label for="constitucion_sociedad">Escritura de Constituci&oacute;n de la Sociedad</label>
 
-                        <input type="checkbox" id="credencial_representante" class="filled-in chk-col-light-blue">
-                        <label for="credencial_representante">Credencial Vigente del Representante Legal</label>
+                          <input type="checkbox" id="credencial_representante" name="credencial_representante" class="filled-in chk-col-light-blue">
+                          <label for="credencial_representante">Credencial Vigente del Representante Legal</label>
 
-                        <br>
-                        <input type="checkbox" id="dui" class="filled-in chk-col-light-blue">
-                        <label for="dui">DUI</label>
+                          <br>
+                          <input type="checkbox" id="dui" name="dui" class="filled-in chk-col-light-blue">
+                          <label for="dui">DUI</label>
 
-                        <br>
-                        <input type="checkbox" id="poder" class="filled-in chk-col-light-blue">
-                        <label for="poder">Poder</label>
+                          <br>
+                          <input type="checkbox" id="poder" name="poder" class="filled-in chk-col-light-blue">
+                          <label for="poder">Poder</label>
 
+                        </div>
+
+                        <div class="col-lg-6">
+                          <input type="checkbox" id="matricula" name="matricula" class="filled-in chk-col-light-blue">
+                          <label for="matricula">Matricula de Comercio</label>
+
+                          <br>
+                          <input type="checkbox" id="estatutos" name="estatutos" class="filled-in chk-col-light-blue">
+                          <label for="estatutos">Estatutos</label>
+
+                          <br>
+                          <input type="checkbox" id="acuerdo_creacion" name="acuerdo_creacion" class="filled-in chk-col-light-blue">
+                          <label for="acuerdo_creacion">Acuerdo Ejecutivo de Creaci&oacute;n</label>
+
+                          <br>
+                          <input type="checkbox" id="nominacion" name="nominacion" class="filled-in chk-col-light-blue">
+                          <label for="nominacion">Nominaci&oacute;n y Funcionamiento del Centro Educativo</label>
+                        </div>
                       </div>
 
-                      <div class="col-lg-6">
-                        <input type="checkbox" id="matricula" class="filled-in chk-col-light-blue">
-                        <label for="matricula">Matricula de Comercio</label>
-
-                        <br>
-                        <input type="checkbox" id="estatutos" class="filled-in chk-col-light-blue">
-                        <label for="estatutos">Estatutos</label>
-
-                        <br>
-                        <input type="checkbox" id="acuerdo_creacion" class="filled-in chk-col-light-blue">
-                        <label for="acuerdo_creacion">Acuerdo Ejecutivo de Creaci&oacute;n</label>
-
-                        <br>
-                        <input type="checkbox" id="nominacion" class="filled-in chk-col-light-blue">
-                        <label for="nominacion">Nominaci&oacute;n y Funcionamiento del Centro Educativo</label>
-                      </div>
+                      <div class="help-block"></div>
                     </div>
-
-                    <div class="help-block"></div>
                   </div>
                 </div>
-              </div>
+              </blockquote>
 
-              <div class="row">
-                <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado"></div>
-              </div>
+              <span class="etiqueta">Delegado</span>
+
+              <blockquote class="m-t-0">
+
+                <div class="row">
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado"></div>
+                </div>
+
+              </blockquote>
 
               <div class="pull-left">
                 <button type="button" class="btn waves-effect waves-light btn-default" onclick="volver(1)"><i class="mdi mdi-chevron-left"></i>
@@ -479,7 +504,6 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax2"));
-        formData.append("dato", "valor");
         
         $.ajax({
           url: "<?php echo site_url(); ?>/documentacion/gestionar_documentacion",

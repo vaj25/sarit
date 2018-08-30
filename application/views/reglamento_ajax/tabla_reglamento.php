@@ -27,30 +27,32 @@
                 </thead>
                 <tbody>
                 <?php
-                    if($reglamentos->num_rows() > 0){
-                        foreach ($reglamentos->result() as $fila) {
-                          echo "<tr>";
-                          echo "<td>".$fila->numexpediente_expedientert."</td>";
-                          echo "<td>".$fila->nombre_empresa."</td>";
-                          echo "<td>".$fila->nombre_empleado."</td>";
-                          echo "<td>".$fila->tiposolicitud_expedientert."</td>";
-                          echo "<td>".$fila->fecharesolucion_expedientert."</td>";
-
-                          echo "<td>";
-                          $array = array($fila->id_expedientert);
-                           
-                          if(tiene_permiso($segmentos=1,$permiso=4)){
-                            array_push($array, "edit");
-                            echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
-                          }
-                           
-                          if(tiene_permiso($segmentos=1,$permiso=3)){
-                            unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
-                            array_push($array, "delete");
-                            echo generar_boton($array,"cambiar_editar","btn-danger","fa fa-close","Eliminar");
-                          }
-                          echo "</td>";
-                          echo "</tr>";
+                    if ($reglamentos) {
+                        if($reglamentos->num_rows() > 0){
+                            foreach ($reglamentos->result() as $fila) {
+                              echo "<tr>";
+                              echo "<td>".$fila->numexpediente_expedientert."</td>";
+                              echo "<td>".$fila->nombre_empresa."</td>";
+                              echo "<td>".$fila->nombre_empleado."</td>";
+                              echo "<td>".$fila->tiposolicitud_expedientert."</td>";
+                              echo "<td>".$fila->fecharesolucion_expedientert."</td>";
+    
+                              echo "<td>";
+                              $array = array($fila->id_expedientert);
+                               
+                              if(tiene_permiso($segmentos=1,$permiso=4)){
+                                array_push($array, "edit");
+                                echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
+                              }
+                               
+                              if(tiene_permiso($segmentos=1,$permiso=3)){
+                                unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
+                                array_push($array, "delete");
+                                echo generar_boton($array,"cambiar_editar","btn-danger","fa fa-close","Eliminar");
+                              }
+                              echo "</td>";
+                              echo "</tr>";
+                            }
                         }
                     }
                 ?>

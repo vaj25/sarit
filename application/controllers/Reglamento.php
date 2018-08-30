@@ -61,78 +61,31 @@ class Reglamento extends CI_Controller {
 				echo "fracaso";
 			}
 
-			/*$data = array(
-				'id_empresart' => $this->input->post('establecimiento'),
-				'id_personal' => $this->input->post('colaborador'),
-				'id_estadort' => 'ninguno',
-				'numexpediente_expedientert' => '1/2018 SS',
-				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
-				'tiposolicitud_expedientert' => '',
-				'organizacionsocial_expedientert' => '',
-				'contratocolectivo_expedientert' => '',
-				'notificacion_expedientert' => '',
-				'fechanotificacion_expedientert' => '',
-				'resolucion_expedientert' => '',
-				'fecharesolucion_expedientert' => '',
-				'archivo_expedientert' => '',
-				'obsergenero_expedientrt' => '',
-				'contenidoTitulos_expedientert' => '',
-				'inhabilitado_expedientert' => '',
-				'archivo_expedientert' => ''
-			);
+		}else if($this->input->post('band1') == "edit"){
+
+			$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_expediente'))->result_array()[0];
+
+			$data['id_empresart'] = $this->input->post('establecimiento');
+			$data['tipopersona_expedientert'] = $this->input->post('tipo_solicitante');
 
 			$data2 = array(
-				'id_expedientert' => $this->reglamento_model->insertar_reglamento($data), 
-				'docreglamento_documentort' => $this->input->post('reglamento_interno'),
-				'escritura_documentort' => $this->input->post('constitucion_sociedad'),
-				'credencial_documentort'  => $this->input->post('credencial_representante'),
-				'poder_documentort' => $this->input->post('poder'),
-				'dui_documentort' => $this->input->post('establecimiento'),
-				'matricula_documentort' => $this->input->post('matricula'),
-				'estatutos_documentort' => $this->input->post('estatutos'),
-				'acuerdoejec_documentort' => $this->input->post('acuerdo_creacion'),
-				'nominayfuncion_documentort' => $this->input->post('nominacion')
+				'id_representantert' => $this->input->post('id_comisionado'),
+				'id_empresart' =>$this->input->post('establecimiento'), 
+				'nombres_representantert' => $this->input->post('nombres'),
+				'apellidos_representantert' => $this->input->post('apellidos'),
+				'dui_representantert'  => $this->input->post('dui_comisionado'),
+				'nit_representantert' => $this->input->post('nit'),
+				'telefono_representantert' => $this->input->post('telefono'),
+				'correo_representantert' => $this->input->post('correo'),
+				'cargo_representantert' => $this->input->post('tipo_representante'),
+				'sexo_representantert' => $this->input->post('sexo')
 			);
 
-			echo $this->documento_model->insertar_documento($data2);*/
-
-		}else if($this->input->post('band') == "edit"){
-
-			$data = array(
-				'id_expedientert' => $this->input->post('id_expedientert'),
-				'id_empresart' => $this->input->post('establecimiento'),
-				'id_personal' => $this->input->post('colaborador'),
-				'id_estadort' => 'ninguno',
-				'numexpediente_expedientert' => '1/2018 SS',
-				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
-				'tiposolicitud_expedientert' => '',
-				'organizacionsocial_expedientert' => '',
-				'contratocolectivo_expedientert' => '',
-				'notificacion_expedientert' => '',
-				'fechanotificacion_expedientert' => '',
-				'resolucion_expedientert' => '',
-				'fecharesolucion_expedientert' => '',
-				'archivo_expedientert' => '',
-				'obsergenero_expedientrt' => '',
-				'contenidoTitulos_expedientert' => '',
-				'inhabilitado_expedientert' => '',
-				'archivo_expedientert' => ''
-			);
-
-			$data2 = array(
-				'id_expedientert' => $this->input->post('id_expedientert'), 
-				'docreglamento_documentort' => $this->input->post('reglamento_interno'),
-				'escritura_documentort' => $this->input->post('constitucion_sociedad'),
-				'credencial_documentort'  => $this->input->post('credencial_representante'),
-				'poder_documentort' => $this->input->post('poder'),
-				'dui_documentort' => $this->input->post('establecimiento'),
-				'matricula_documentort' => $this->input->post('matricula'),
-				'estatutos_documentort' => $this->input->post('estatutos'),
-				'acuerdoejec_documentort' => $this->input->post('acuerdo_creacion'),
-				'nominayfuncion_documentort' => $this->input->post('nominacion')
-			);
-
-			echo $this->documento_model->editar_documento($data2);
+			if ("exito" == $this->comisionado_model->editar_comisionado($data2)) {
+				echo $this->reglamento_model->editar_reglamento($data);
+			} else {
+				echo "fracaso";
+			}
 
 		}else if($this->input->post('band') == "delete"){
 			$data = array(

@@ -63,7 +63,7 @@ class Reglamento_model extends CI_Model {
                 'archivo_expedientert' => $data['archivo_expedientert']
                 )
             )){
-			return "exito";
+			return $data["id_expedientert"];
 		}else{
 			return "fracaso";
 		}
@@ -115,6 +115,8 @@ class Reglamento_model extends CI_Model {
         $this->db->select('')
                ->from('sri_expedientert a')
                ->join('sri_documentort b ', ' b.id_expedientert = a.id_expedientert')
+               ->join('sge_empresa c','c.id_empresa = a.id_empresart')
+               ->join('sri_representantert d ', ' c.id_empresa = a.id_empresart')
                ->where('a.id_expedientert', $id);
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
