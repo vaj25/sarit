@@ -5,7 +5,7 @@ class Reglamento extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("reglamento_model", "documento_model" ));
+		$this->load->model(array("reglamento_model", "documento_model", "comisionado_model" ));
 	}
 
 	public function index(){
@@ -21,9 +21,45 @@ class Reglamento extends CI_Controller {
 
 	public function gestionar_reglamento() {
 
-		if($this->input->post('band') == "save"){
+		if($this->input->post('band1') == "save"){
 
 			$data = array(
+				'id_empresart' => $this->input->post('establecimiento'),
+				'id_personal' => '',
+				'id_estadort' => 'ninguno',
+				'numexpediente_expedientert' => '1/2018 SS',
+				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
+				'tiposolicitud_expedientert' => '',
+				'organizacionsocial_expedientert' => '',
+				'contratocolectivo_expedientert' => '',
+				'notificacion_expedientert' => '',
+				'fechanotificacion_expedientert' => '',
+				'resolucion_expedientert' => '',
+				'fecharesolucion_expedientert' => '',
+				'archivo_expedientert' => '',
+				'obsergenero_expedientrt' => '',
+				'contenidoTitulos_expedientert' => '',
+				'inhabilitado_expedientert' => '',
+				'archivo_expedientert' => ''
+			);
+
+			$data2 = array(
+				'id_empresart' =>$this->input->post('establecimiento'), 
+				'nombres_representantert' => $this->input->post('nombres'),
+				'apellidos_representantert' => $this->input->post('apellidos'),
+				'dui_representantert'  => $this->input->post('dui_comisionado'),
+				'nit_representantert' => $this->input->post('nit'),
+				'telefono_representantert' => $this->input->post('telefono'),
+				'correo_representantert' => $this->input->post('correo'),
+				'cargo_representantert' => $this->input->post('tipo_representante'),
+				'sexo_representantert' => $this->input->post('sexo')
+			);
+
+			$this->comisionado_model->insertar_comisionado($data2);
+
+			echo $this->reglamento_model->insertar_reglamento($data);
+
+			/*$data = array(
 				'id_empresart' => $this->input->post('establecimiento'),
 				'id_personal' => $this->input->post('colaborador'),
 				'id_estadort' => 'ninguno',
@@ -56,7 +92,7 @@ class Reglamento extends CI_Controller {
 				'nominayfuncion_documentort' => $this->input->post('nominacion')
 			);
 
-			echo $this->documento_model->insertar_documento($data2);
+			echo $this->documento_model->insertar_documento($data2);*/
 
 		}else if($this->input->post('band') == "edit"){
 

@@ -160,7 +160,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $(".cnt_form").hide(0);
     $("#cnt_form"+num).show(0);
 
-    if($("#band").val() == "save"){
+    if($("#band"+num).val() == "save"){
         $("#btnadd"+num).show(0);
         $("#btnedit"+num).hide(0);
     }else{
@@ -241,7 +241,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Sexo: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                      <select id="dui" name="dui" class="form-control" onchange="" required>
+                      <select id="sexo" name="sexo" class="form-control" onchange="" required>
                         <option value="">[Seleccione]</option>
                         <option value="1">Masculino</option>
                         <option value="2">Femenino</option>
@@ -254,7 +254,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>DUI: <span class="text-danger">*</span></h5>
                     <div class="controls">
-                        <input type="text" id="dui" name="dui" class="form-control" required="">
+                        <input type="text" id="dui_comisionado" name="dui_comisionado" class="form-control" required="">
                         <div class="help-block"></div>
                     </div>
                 </div>
@@ -277,14 +277,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
               <div class="row">
                 <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Correo: <span class="text-danger">*</span></h5>
+                    <h5>Correo:</h5>
                     <div class="controls">
                         <input type="text" id="correo" name="correo" class="form-control" required="">
                         <div class="help-block"></div>
                     </div>
                 </div>
                 <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Tipo representante: <span class="text-danger">*</span></h5>
+                    <h5>Tipo representante:</h5>
                     <div class="controls">
                         <input type="text" id="tipo_representante" name="tipo_representante" class="form-control" required="">
                         <div class="help-block"></div>
@@ -292,11 +292,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
               </div>
 
-              <button id="submit" type="submit" style="display: none;"></button>
               <div align="right" id="btnadd1">
                 <button type="reset" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar</button>
-                <button type="button" onclick="open_form(2)" class="btn waves-effect waves-light btn-success2">
+                <button type="submit" class="btn waves-effect waves-light btn-success2">
                   Siguiente <i class="mdi mdi-chevron-right"></i>
                 </button>
               </div>
@@ -351,29 +350,29 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                         <br>
                         <input type="checkbox" id="dui" class="filled-in chk-col-light-blue">
-                        <label for="dui">DUI:</label>
+                        <label for="dui">DUI</label>
 
                         <br>
                         <input type="checkbox" id="poder" class="filled-in chk-col-light-blue">
-                        <label for="poder">Poder:</label>
+                        <label for="poder">Poder</label>
 
                       </div>
 
                       <div class="col-lg-6">
                         <input type="checkbox" id="matricula" class="filled-in chk-col-light-blue">
-                        <label for="matricula">Matricula de Comercio:</label>
+                        <label for="matricula">Matricula de Comercio</label>
 
                         <br>
                         <input type="checkbox" id="estatutos" class="filled-in chk-col-light-blue">
-                        <label for="estatutos">Estatutos:</label>
+                        <label for="estatutos">Estatutos</label>
 
                         <br>
                         <input type="checkbox" id="acuerdo_creacion" class="filled-in chk-col-light-blue">
-                        <label for="acuerdo_creacion">Acuerdo Ejecutivo de Creaci&oacute;n:</label>
+                        <label for="acuerdo_creacion">Acuerdo Ejecutivo de Creaci&oacute;n</label>
 
                         <br>
                         <input type="checkbox" id="nominacion" class="filled-in chk-col-light-blue">
-                        <label for="nominacion">Nominaci&oacute;n y Funcionamiento del Centro Educativo:</label>
+                        <label for="nominacion">Nominaci&oacute;n y Funcionamiento del Centro Educativo</label>
                       </div>
                     </div>
 
@@ -441,18 +440,18 @@ $(function(){
             processData: false
         })
         .done(function(res){
-            if(res == "exito"){
-                //cerrar_mantenimiento();
-                if($("#band").val() == "save"){
-                    swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-                }else if($("#band").val() == "edit"){
-                    swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-                }else{
-                    swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
-                }
-                //tablaReglamentos();
+            if(res == "fracaso"){
+              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
-                swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+              open_form(2);
+              $("#id_expedient").val(res);
+              if($("#band").val() == "save"){
+                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+              }else if($("#band").val() == "edit"){
+                  swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+              }else{
+                  swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
+              }
             }
         });
             
