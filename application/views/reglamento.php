@@ -117,6 +117,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     combo_establecimiento('');
     combo_delegado('');
+    combo_actividad_economica();
+    combo_municipio();
     
     $("#ttl_form").addClass("bg-success");
     $("#ttl_form").removeClass("bg-info");
@@ -160,6 +162,48 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     })
     .done(function(res){
       $('#div_combo_establecimiento').html(res);
+      $(".select2").select2({
+        'minimumInputLength': 3,
+        'language': {
+          noResults: function () {
+            return '<a href="javascript:;" data-toggle="modal" data-target="#modal_establecimiento" title="Agregar nuevos establecimientos" onClick="cerrar_combo_establecimiento()">Agregar uno nuevo</a>';
+          }
+        },
+        'escapeMarkup': function (markup) {
+            return markup;
+        }
+      });
+    });
+
+  }
+
+  function cerrar_combo_establecimiento() {
+    $(".select2").select2('close');
+  }
+
+  function combo_actividad_economica(){
+    
+    $.ajax({
+      url: "<?php echo site_url(); ?>/establecimiento/combo_actividad_economica",
+      type: "post",
+      dataType: "html"
+    })
+    .done(function(res){
+      $('#div_combo_actividad_economica').html(res);
+      $(".select2").select2();
+    });
+
+  }
+
+  function combo_municipio(){
+    
+    $.ajax({
+      url: "<?php echo site_url(); ?>/establecimiento/combo_municipio",
+      type: "post",
+      dataType: "html"
+    })
+    .done(function(res){
+      $('#div_combo_municipio').html(res);
       $(".select2").select2();
     });
 
@@ -461,6 +505,80 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 </div>
 </div>
+</div>
+
+<div class="modal fade" id="modal_establecimiento" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <?php echo form_open('', array('id' => 'formajax3', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+          <input type="hidden" id="band2" name="band2" value="save">
+          <input type="hidden" id="id_representante" name="id_representante" value="">
+            <div class="modal-header">
+                <h4 class="modal-title">Gestión de representantes</h4>
+            </div>
+            <div class="modal-body" id="">
+                
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Nombre del establecimiento: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Nombre" id="nombre_establecimiento" name="nombre_establecimiento" class="form-control" required="">
+                      </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Abreviatura del establecimiento: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Abreviatura" id="abre_establecimiento" name="abre_establecimiento" class="form-control" required="">
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Direcci&oacute;n: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <textarea type="text" id="dir_establecimiento" name="dir_establecimiento" class="form-control" required=""></textarea>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                      <h5>Telefono: </h5>
+                      <div class="controls">
+                          <input type="text" placeholder="Telefono" id="telefono_establecimiento" name="telefono_establecimiento" class="form-control" data-mask="9999-9999">
+                          <div class="help-block"></div>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_actividad_economica"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-12 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_municipio"></div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
+                      <h5>Nombre del representante: <span class="text-danger">*</span></h5>
+                      <div class="controls">
+                          <input type="text" id="nombre_representante" name="nombre_representante" class="form-control" required="">
+                      </div>
+                  </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>
+                <button type="submit" id="submit2" class="btn btn-info waves-effect text-white">Aceptar</button>
+            </div>
+          <?php echo form_close(); ?>
+    </div>
+  </div>
 </div>
 
 <script>
