@@ -136,5 +136,24 @@ class Reglamento extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
+	public function resolucion_reglamento() {
+		$this->load->view('templates/header');
+		$this->load->view('reglamento_ajax/resolucion_reglamento');
+		$this->load->view('templates/footer');
+	}
+
+	public function gestionar_resolucion_reglamento() {
+		$data = $this->reglamento_model->obtener_reglamento(25)->result_array()[0];
+		$data['resolucion_expedientert'] = $this->input->post('resolucion');
+		$data['obsergenero_expedientrt'] = $this->input->post('ob_genero');
+
+		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+			echo "fracaso";
+		} else {
+			echo "exito";
+		}
+		
+	}
+
 }
 ?>

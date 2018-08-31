@@ -157,8 +157,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         </div>
                     </div>
 
-
-
                 </div>
 
                 <?php echo form_close(); ?>
