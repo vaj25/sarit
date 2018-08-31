@@ -115,11 +115,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#band1").val("save");
     $("#band2").val("save");
 
-    combo_establecimiento('');
     combo_delegado('');
     combo_actividad_economica();
     combo_municipio();
-    
+
     $("#ttl_form").addClass("bg-success");
     $("#ttl_form").removeClass("bg-info");
 
@@ -130,6 +129,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#cnt_form1").show(0);
     $("#cnt_form_main").show(0);
     $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Aprobaci&oacute;n de Reglamentos");
+    
+    combo_establecimiento('');
   }
 
   function cerrar_mantenimiento(){
@@ -162,7 +163,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     })
     .done(function(res){
       $('#div_combo_establecimiento').html(res);
-      $(".select2").select2({
+      $("#establecimiento").select2({
         'minimumInputLength': 3,
         'language': {
           noResults: function () {
@@ -170,7 +171,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           }
         },
         'escapeMarkup': function (markup) {
-            return markup;
+          return markup;
         }
       });
     });
@@ -507,11 +508,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 </div>
 </div>
 
-<div class="modal fade" id="modal_establecimiento" tabindex="-1" role="dialog">
+<div class="modal fade" id="modal_establecimiento" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
     <?php echo form_open('', array('id' => 'formajax3', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-          <input type="hidden" id="band2" name="band2" value="save">
+          <input type="hidden" id="band3" name="band3" value="save">
           <input type="hidden" id="id_representante" name="id_representante" value="">
             <div class="modal-header">
                 <h4 class="modal-title">Gestión de representantes</h4>
@@ -567,7 +568,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Nombre del representante: <span class="text-danger">*</span></h5>
                       <div class="controls">
-                          <input type="text" id="nombre_representante" name="nombre_representante" class="form-control" required="">
+                          <input type="text" id="nombre_representante" name="nombre_representante" class="form-control">
                       </div>
                   </div>
                 </div>
@@ -645,6 +646,43 @@ $(function(){
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
               tablaReglamentos();
+            }
+        });
+            
+    });
+});
+
+
+$(function(){
+    $("#formajax3").on("submit", function(e){
+        e.preventDefault();
+        var f = $(this);
+        var formData = new FormData(document.getElementById("formajax3"));
+        
+        $.ajax({
+          url: "<?php echo site_url(); ?>/establecimiento/gestionar_establecimiento",
+          type: "post",
+          dataType: "html",
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false
+        })
+        .done(function(res){
+            if(res == "fracaso"){
+              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }else{
+              swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+
+              var data = {
+                  id: res,
+                  text: $("#nombre_establecimiento").val()
+              };
+
+              var newOption = new Option(data.text, data.id, false, false);
+              $('#establecimiento').append(newOption).trigger('change');
+              $('#establecimiento').val(data.id).trigger("change");
+              $('#modal_establecimiento').modal('toggle');
             }
         });
             
