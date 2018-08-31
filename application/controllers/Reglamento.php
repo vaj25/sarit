@@ -129,7 +129,7 @@ class Reglamento extends CI_Controller {
 
 	public function ver_reglamento() {
 
-		$data['reglamento'] = $this->reglamento_model->obtener_reglamento_empresa(25);
+		$data['reglamento'] = $this->reglamento_model->obtener_reglamento_empresa(27);
 
 		$this->load->view('templates/header');
 		$this->load->view('reglamento_ajax/vista_reglamento', $data);
@@ -153,6 +153,27 @@ class Reglamento extends CI_Controller {
 			echo "exito";
 		}
 		
+	}
+
+	public function notificacion_reglamento() {
+		$this->load->view('templates/header');
+		$this->load->view('reglamento_ajax/notificacion_reglamento');
+		$this->load->view('templates/footer');
+	}
+
+	public function gestionar_notificacion_reglamento() {
+
+		var_dump($this->input->post('notificacion_fecha'));
+
+		$data = $this->reglamento_model->obtener_reglamento(25)->result_array()[0];
+		$data['notificacion_expedientert'] = $this->input->post('notificacion');
+		$data['fechanotificacion_expedientert'] = date("Y-m-d H:i:s", strtotime($this->input->post('notificacion_fecha')));
+
+		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+			echo "fracaso";
+		} else {
+			echo "exito";
+		}
 	}
 
 }

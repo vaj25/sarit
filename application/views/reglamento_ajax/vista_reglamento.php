@@ -84,7 +84,7 @@
                                     </tr>
                                     <tr>
                                         <td>Fecha y Hora de Creaci&oacute;n del expediente:</td>
-                                        <td class="font-medium"><?= $reglamento->fechacrea_expedientert ?></td>
+                                        <td class="font-medium"><?= date("d-M-Y g:i:s A", strtotime($reglamento->fechacrea_expedientert)) ?></td>
                                     </tr>
                                 </tbody>
                             </table>

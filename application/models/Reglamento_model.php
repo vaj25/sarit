@@ -29,7 +29,8 @@ class Reglamento_model extends CI_Model {
                     'obsergenero_expedientrt' => $data['obsergenero_expedientrt'],
                     'contenidoTitulos_expedientert' => $data['contenidoTitulos_expedientert'],
                     'inhabilitado_expedientert' => $data['inhabilitado_expedientert'],
-                    'archivo_expedientert' => $data['archivo_expedientert']
+                    'archivo_expedientert' => $data['archivo_expedientert'],
+                    'fechacrea_expedientert' => date("Y-m-d H:i:s")
                 )
             )) {
             return $this->db->insert_id();
