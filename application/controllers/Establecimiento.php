@@ -5,7 +5,7 @@ class Establecimiento extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model("establecimiento_model");
+		$this->load->model(array("establecimiento_model", "representante_model"));
 	}
 
 	public function combo_actividad_economica() {
@@ -43,7 +43,16 @@ class Establecimiento extends CI_Controller {
                 'id_municipio' => $this->input->post('municipio')
             );
 
-            echo $this->establecimiento_model->insertar_empresa($data);
+			$id_establecimiento = $this->establecimiento_model->insertar_empresa($data);
+			
+			$data = array(
+				'nombres_representante' => $this->input->post('nombre_representante'),
+				'id_empresa' => $id_establecimiento
+			);
+			
+			$this->representante_model->insertar_representante($data);
+
+			echo $id_establecimiento;
 
 		}
 	}

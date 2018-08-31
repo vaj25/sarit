@@ -22,7 +22,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
         $("#id_expedientert").val(result.id_expedientert);
         $("#id_expediente").val(result.id_expedientert);
-        $("#tipo_solicitante").val(result.tiposolicitud_expedientert).trigger('change.select2');
+        $("#tipo_solicitante").val(result.tipopersona_expedientert).trigger('change.select2');
 
         $("#reglamento_interno").attr('checked',result.docreglamento_documentort);
         $("#constitucion_sociedad").attr('checked',result.escritura_documentort);
@@ -568,7 +568,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
                       <h5>Nombre del representante: <span class="text-danger">*</span></h5>
                       <div class="controls">
-                          <input type="text" id="nombre_representante" name="nombre_representante" class="form-control">
+                          <input type="text" id="nombre_representante" name="nombre_representante" class="form-control" required>
                       </div>
                   </div>
                 </div>

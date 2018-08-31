@@ -29,7 +29,7 @@ class Reglamento extends CI_Controller {
 				'id_estadort' => 1,
 				'numexpediente_expedientert' => '1/2018 SS',
 				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
-				'tiposolicitud_expedientert' => '',
+				'tiposolicitud_expedientert' => 'Registro',
 				'organizacionsocial_expedientert' => '',
 				'contratocolectivo_expedientert' => '',
 				'notificacion_expedientert' => '',
