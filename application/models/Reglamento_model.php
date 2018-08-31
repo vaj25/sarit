@@ -96,9 +96,17 @@ class Reglamento_model extends CI_Model {
 
     public function obtener_reglamentos() {
         
-        $this->db->select('')
+        $this->db->select("
+                a.id_expedientert,
+                numexpediente_expedientert,
+                nombre_empresa,
+                tiposolicitud_expedientert,
+                fecharesolucion_expedientert,
+                d.id_estadort,
+                estado_estadort,
+                concat_ws(' ',b.primer_nombre,b.segundo_nombre,b.tercer_nombre,b.primer_apellido,b.segundo_apellido,b.apellido_casada) AS nombre_empleado")
                ->from('sri_expedientert a')
-               ->join('lista_empleados_estado b','b.id_empleado = a.id_personal', 'left')
+               ->join('sir_empleado b','b.id_empleado = a.id_personal', 'left')
                ->join('sge_empresa c','c.id_empresa = a.id_empresart')
                ->join('sri_estadort d','a.id_estadort = d.id_estadort');
         $query=$this->db->get();
@@ -122,6 +130,25 @@ class Reglamento_model extends CI_Model {
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
             return  $query;
+        }
+        else {
+            return FALSE;
+        }
+
+    }
+
+    public function obtener_reglamento_empresa($id) {
+        
+        $this->db->select('')
+               ->from('sri_expedientert a')
+               ->join('sge_empresa b', 'b.id_empresa = a.id_empresart')
+               ->join('sge_catalogociiu c', 'c.id_catalogociiu = b.id_catalogociiu')
+               ->join('org_municipio d', 'd.id_municipio = b.id_municipio')
+               ->join('sge_representante e', 'e.id_empresa = b.id_empresa')
+               ->where('a.id_expedientert', $id);
+        $query=$this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query;
         }
         else {
             return FALSE;

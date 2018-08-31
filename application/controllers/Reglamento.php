@@ -127,5 +127,14 @@ class Reglamento extends CI_Controller {
 
 	}
 
+	public function ver_reglamento() {
+
+		$data['reglamento'] = $this->reglamento_model->obtener_reglamento_empresa(25);
+
+		$this->load->view('templates/header');
+		$this->load->view('reglamento_ajax/vista_reglamento', $data);
+		$this->load->view('templates/footer');
+	}
+
 }
 ?>
