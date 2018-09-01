@@ -51,7 +51,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                         <h5>Fecha y Hora de Notificaci&oacute;n: <span class="text-danger">*</span></h5>
                         <div class="controls">
-                        <input type="datetime-local"  id="notificacion_fecha" nombre="notificacion_fecha" required>
+                        <input type="datetime-local" class="form-control" id="notificacion_fecha" nombre="notificacion_fecha" required>
                         </div>
                     </div>
                 </div>
