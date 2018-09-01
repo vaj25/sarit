@@ -165,9 +165,9 @@ class Reglamento extends CI_Controller {
 
 		var_dump($this->input->post('notificacion_fecha'));
 
-		$data = $this->reglamento_model->obtener_reglamento(25)->result_array()[0];
+		$data = $this->reglamento_model->obtener_reglamento(1)->result_array()[0];
 		$data['notificacion_expedientert'] = $this->input->post('notificacion');
-		$data['fechanotificacion_expedientert'] = date("Y-m-d H:i:s", strtotime($this->input->post('notificacion_fecha')));
+		$data['fechanotificacion_expedientert'] = date("Y-m-d H:i:s", strtotime($this->input->post('fecha')));
 
 		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
 			echo "fracaso";

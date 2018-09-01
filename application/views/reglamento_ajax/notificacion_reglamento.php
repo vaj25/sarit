@@ -83,8 +83,7 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax5"));
-
-        alert($("#notificacion_fecha").val());
+        formData.append("fecha", $("#notificacion_fecha").val());
         
         $.ajax({
             url: "<?php echo site_url(); ?>/reglamento/gestionar_notificacion_reglamento",
