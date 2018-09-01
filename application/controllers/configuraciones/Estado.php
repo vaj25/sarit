@@ -50,35 +50,5 @@ class Estado extends CI_Controller {
 
 	}
 
-	public function registros_reglamentos_documentos() {
-
-		print json_encode(
-			$this->reglamento_model->obtener_reglamentos_documentos($this->input->post('id'))->result()
-		);
-		
-	}
-
-	public function combo_establecimiento() {
-		
-		$this->load->view('reglamento_ajax/combo_establecimiento', 
-			array(
-				'id' => $this->input->post('id'),
-				'establecimiento' => $this->db->get('sge_empresa')
-			)
-		);
-
-	}
-
-	public function combo_delegado() {
-		
-		$this->load->view('reglamento_ajax/combo_delegado', 
-			array(
-				'id' => $this->input->post('id'),
-				'colaborador' => $this->db->get('lista_empleados_estado')
-			)
-		);
-
-	}
-
 }
 ?>

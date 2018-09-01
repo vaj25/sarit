@@ -163,11 +163,66 @@ class Reglamento extends CI_Controller {
 
 	public function gestionar_notificacion_reglamento() {
 
-		var_dump($this->input->post('notificacion_fecha'));
-
 		$data = $this->reglamento_model->obtener_reglamento(1)->result_array()[0];
 		$data['notificacion_expedientert'] = $this->input->post('notificacion');
 		$data['fechanotificacion_expedientert'] = date("Y-m-d H:i:s", strtotime($this->input->post('fecha')));
+
+		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+			echo "fracaso";
+		} else {
+			echo "exito";
+		}
+	}
+
+	public function inhabilitar_reglamento() {
+		$this->load->view('templates/header');
+		$this->load->view('reglamento_ajax/inhabilitar_reglamento');
+		$this->load->view('templates/footer');
+	}
+
+	public function gestionar_inhabilitar_reglamento() {
+
+		$data = $this->reglamento_model->obtener_reglamento(1)->result_array()[0];
+		$data['id_estadort'] = 2;
+		$data['inhabilitado_expedientert'] = $this->input->post('mov_inhabilitar');
+
+		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+			echo "fracaso";
+		} else {
+			echo "exito";
+		}
+	}
+
+	public function gestionar_habilitar_reglamento() {
+
+		$data = $this->reglamento_model->obtener_reglamento(1)->result_array()[0];
+		$data['id_estadort'] = 1;
+		$data['inhabilitado_expedientert'] = null;
+
+		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+			echo "fracaso";
+		} else {
+			echo "exito";
+		}
+	}
+
+	public function estado_reglamento() {
+		
+		$this->load->view('templates/header');
+		$this->load->view('reglamento_ajax/estado_reglamento',
+			array(
+				'id' => 0,
+				'estado' => $this->db->get('sri_estadort')
+			)
+		);
+		$this->load->view('templates/footer');
+
+	}
+
+	public function gestionar_estado_reglamento() {
+
+		$data = $this->reglamento_model->obtener_reglamento(1)->result_array()[0];
+		$data['id_estadort'] = $this->input->post('estado');
 
 		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
 			echo "fracaso";
