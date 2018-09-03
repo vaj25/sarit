@@ -23,7 +23,7 @@
                         <th>Tipo Solicitud </th>
                         <th>Fecha Resoluci&oacute;n </th>
                         <th>Estado </th>
-                        <th style="min-width: 85px;">(*)</th>
+                        <th style="min-width: 120px;">(*)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,16 +41,26 @@
 
                                 echo "<td>";
                                 $array = array($fila->id_expedientert);
-                                
+
                                 if(tiene_permiso($segmentos=1,$permiso=4)){
-                                array_push($array, "edit");
-                                echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
-                                }
-                                
-                                if(tiene_permiso($segmentos=1,$permiso=3)){
-                                unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
-                                array_push($array, "delete");
-                                echo generar_boton($array,"cambiar_editar","btn-danger","fa fa-close","Eliminar");
+
+                                    array_push($array, "edit");
+                                    echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
+
+                                    echo '
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <i class="ti-settings"></i>
+                                        </button>
+                                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                            <a class="dropdown-item" href="javascript:;" onClick="visualizar('.$fila->id_expedientert.')">Visualizar</a>
+                                            <a class="dropdown-item" href="'.base_url('index.php/reglamento/descargar_reglamento/'.$fila->id_expedientert.'/').'" >Descargar Reglamento</a>
+                                            <a class="dropdown-item" href="javascript:;">Something else here</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="javascript:;">Separated link</a>
+                                        </div>
+                                    </div>';
                                 }
                                 echo "</td>";
                                 echo "</tr>";
