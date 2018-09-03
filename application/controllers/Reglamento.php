@@ -135,9 +135,7 @@ class Reglamento extends CI_Controller {
 	}
 
 	public function resolucion_reglamento() {
-		$this->load->view('templates/header');
-		$this->load->view('reglamento_ajax/resolucion_reglamento');
-		$this->load->view('templates/footer');
+		$this->load->view('reglamento_ajax/resolucion_reglamento', array('id' => $this->input->post('id') ));
 	}
 
 	public function gestionar_resolucion_reglamento() {
@@ -293,7 +291,11 @@ class Reglamento extends CI_Controller {
 		}
 		
 		return "./files/pdfs/" . $expediente;
-    }
+	}
+	
+	public function modal_establecimiento() {
+		$this->load->view('reglamento_ajax/modal_establecimiento');
+	}
 
 }
 ?>
