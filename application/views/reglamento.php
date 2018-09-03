@@ -136,6 +136,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   function cerrar_mantenimiento(){
     $("#cnt-tabla").show(0);
     $("#cnt_form_main").hide(0);
+    $("#cnt_actions").hide(0);
+    $("#cnt_actions").remove('.card');
   }
 
   function iniciar(){
@@ -208,6 +210,21 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $(".select2").select2();
     });
 
+  }
+
+  function visualizar(id_reglamento) {
+    $.ajax({
+      url: "<?php echo site_url(); ?>/reglamento/ver_reglamento",
+      type: "post",
+      dataType: "html",
+      data: {id : id_reglamento}
+    })
+    .done(function(res){
+      $('#cnt_actions').html(res);
+      $("#cnt_actions").show(0);
+      $("#cnt-tabla").hide(0);
+      $("#cnt_form_main").hide(0);
+    });
   }
 
   function combo_delegado(seleccion){
@@ -288,14 +305,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <blockquote class="m-t-0">
                 <div class="row">
                   <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Tipo de Solicitante: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                        <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" required>
-                          <option value="">[Seleccione]</option>
-                          <option value="1">Opcion 1</option>
-                          <option value="2">Opcion 2</option>
-                        </select>
-                      </div>
+                    <h5>Tipo de Solicitante: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="1">Opcion 1</option>
+                        <option value="2">Opcion 2</option>
+                      </select>
+                    </div>
                   </div>
                   <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
                 </div>
@@ -306,76 +323,79 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <blockquote class="m-t-0">
                 <div class="row">
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Nombres: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" id="nombres" name="nombres" class="form-control" required="" placeholder="Nombres">
-                          <div class="help-block"></div>
-                      </div>
+                    <h5>Nombres: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <input type="text" id="nombres" name="nombres" class="form-control" required="" placeholder="Nombres">
+                      <div class="help-block"></div>
+                    </div>
                   </div>
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Apellidos: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos"
-                              required="" data-validation-required-message="Este campo es requerido">
-                          <div class="help-block"></div>
-                      </div>
+                    <h5>Apellidos: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos"
+                        required="" data-validation-required-message="Este campo es requerido">
+                      <div class="help-block"></div>
+                    </div>
                   </div>
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Sexo: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                        <select id="sexo" name="sexo" class="form-control" required>
-                          <option value="">[Seleccione]</option>
-                          <option value="1">Masculino</option>
-                          <option value="2">Femenino</option>
-                        </select>
-                      </div>
+                    <h5>Sexo: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <select id="sexo" name="sexo" class="form-control" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="1">Masculino</option>
+                        <option value="2">Femenino</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>DUI: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" placeholder="Documento Unico de Identidad" id="dui_comisionado" name="dui_comisionado" class="form-control" required="" data-mask="99999999-9" >
-                          <div class="help-block"></div>
-                      </div>
+                    <h5>DUI: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <input type="text" placeholder="Documento Unico de Identidad" id="dui_comisionado" name="dui_comisionado"
+                        class="form-control" required="" data-mask="99999999-9">
+                      <div class="help-block"></div>
+                    </div>
                   </div>
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>NIT: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" id="nit" name="nit" class="form-control" placeholder="No. De Idententificaci&oacute;n Tributaria"
-                              required="" data-mask="9999-999999-999-9">
-                          <div class="help-block"></div>
-                      </div>
+                    <h5>NIT: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <input type="text" id="nit" name="nit" class="form-control" placeholder="No. De Idententificaci&oacute;n Tributaria"
+                        required="" data-mask="9999-999999-999-9">
+                      <div class="help-block"></div>
+                    </div>
                   </div>
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Telefono: </h5>
-                      <div class="controls">
-                          <input type="text" placeholder="Telefono" id="telefono" name="telefono" class="form-control" data-mask="9999-9999">
-                          <div class="help-block"></div>
-                      </div>
+                    <h5>Telefono: </h5>
+                    <div class="controls">
+                      <input type="text" placeholder="Telefono" id="telefono" name="telefono" class="form-control"
+                        data-mask="9999-9999">
+                      <div class="help-block"></div>
+                    </div>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Correo:</h5>
-                      <div class="controls">
-                          <input type="text" id="correo" name="correo" class="form-control" placeholder="Correo">
-                          <div class="help-block"></div>
-                      </div>
+                    <h5>Correo:</h5>
+                    <div class="controls">
+                      <input type="text" id="correo" name="correo" class="form-control" placeholder="Correo">
+                      <div class="help-block"></div>
+                    </div>
                   </div>
                   <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                      <h5>Tipo representante:</h5>
-                      <div class="controls">
-                          <input type="text" id="tipo_representante" name="tipo_representante" class="form-control" placeholder="Tipo de Representante">
-                          <div class="help-block"></div>
-                      </div>
+                    <h5>Tipo representante:</h5>
+                    <div class="controls">
+                      <input type="text" id="tipo_representante" name="tipo_representante" class="form-control"
+                        placeholder="Tipo de Representante">
+                      <div class="help-block"></div>
+                    </div>
                   </div>
                 </div>
 
               </blockquote>
-              
+
               <div align="right" id="btnadd1">
                 <button type="reset" class="btn waves-effect waves-light btn-success">
                   <i class="mdi mdi-recycle"></i> Limpiar</button>
@@ -390,7 +410,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   Siguiente <i class="mdi mdi-chevron-right"></i>
                 </button>
               </div>
-            <?php echo form_close(); ?>
+              <?php echo form_close(); ?>
             </div>
 
             <div id="cnt_form2" class="cnt_form" style="display: none;">
@@ -405,7 +425,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
               <input type="hidden" id="band2" name="band2" value="save">
               <input type="hidden" id="id_expedient" name="id_expedient">
-              
+
               <span class="etiqueta">Documentaci&oacute;n</span>
 
               <blockquote class="m-t-0">
@@ -489,7 +509,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <button type="submit" class="btn waves-effect waves-light btn-info">Finalizar
                   <i class="mdi mdi-chevron-right"></i></button>
               </div>
-            <?php echo form_close(); ?>
+              <?php echo form_close(); ?>
             </div>
           </div>
 
@@ -500,11 +520,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     </div>
   </div>
   <div class="col-lg-1"></div>
-  <div class="col-lg-12" id="cnt-tabla">
-
-  </div>
-
-</div>
+  <div class="col-lg-12" id="cnt-tabla"></div>
+  <div class="col-lg-1"></div>
+  <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
 </div>
 </div>
 

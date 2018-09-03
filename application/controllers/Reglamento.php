@@ -129,11 +129,9 @@ class Reglamento extends CI_Controller {
 
 	public function ver_reglamento() {
 
-		$data['reglamento'] = $this->reglamento_model->obtener_reglamento_empresa(27);
-
-		$this->load->view('templates/header');
+		$data['reglamento'] = $this->reglamento_model->obtener_reglamento_empresa( $this->input->post('id') );
+		
 		$this->load->view('reglamento_ajax/vista_reglamento', $data);
-		$this->load->view('templates/footer');
 	}
 
 	public function resolucion_reglamento() {
@@ -269,9 +267,9 @@ class Reglamento extends CI_Controller {
 
 	}
 
-	public function descargar_reglamento() {
+	public function descargar_reglamento($id_reglamento_resolucion) {
 
-		$data = $this->reglamento_model->obtener_reglamento( $this->input->post('id_reglamento_resolucion') )->result_array()[0];
+		$data = $this->reglamento_model->obtener_reglamento( $id_reglamento_resolucion )->result_array()[0];
 
 		if(file_exists( $data['archivo_expedientert'] )) {
 			header("Cache-Control: public");
@@ -280,8 +278,9 @@ class Reglamento extends CI_Controller {
 			header("Content-Type: application/pdf");
 			header("Content-Transfer-Encoding: binary");
 			readfile($data['archivo_expedientert']);
+		} else {
+			return redirect('/reglamento');
 		}
-
 	}
 
 	private function directorio($expediente) {
