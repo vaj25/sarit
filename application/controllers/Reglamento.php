@@ -231,5 +231,70 @@ class Reglamento extends CI_Controller {
 		}
 	}
 
+	public function adjuntar_reglamento() {
+		$this->load->view('templates/header');
+		$this->load->view('reglamento_ajax/adjuntar_reglamento');
+		$this->load->view('templates/footer');
+	}
+
+	public function gestionar_adjuntar_reglamento() {
+		
+		$data = $this->reglamento_model->obtener_reglamento(25)->result_array()[0];
+		$data['id_estadort'] = $this->input->post('estado');
+		
+		$config['upload_path'] = $this->directorio( str_replace( "/", "_", $data['numexpediente_expedientert'] ) );
+		$config['allowed_types'] = "pdf";
+		$config['max_size'] = "20480";
+
+		$this->load->library('upload', $config);
+
+		if (!$this->upload->do_upload('archivo_reglamento')) {
+			
+			$data['uploadError'] = $this->upload->display_errors();
+			//echo $this->upload->display_errors();
+			echo "fracaso";
+
+		} else {
+
+			$data['archivo_expedientert'] = $this->upload->data('full_path');
+	
+			if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+				echo "fracaso";
+			} else {
+				echo "exito";
+			}
+
+		}
+
+
+	}
+
+	public function descargar_reglamento() {
+
+		$data = $this->reglamento_model->obtener_reglamento( $this->input->post('id_reglamento_resolucion') )->result_array()[0];
+
+		if(file_exists( $data['archivo_expedientert'] )) {
+			header("Cache-Control: public");
+			header("Content-Description: File Transfer");
+			header('Content-disposition: attachment; filename='.basename($data['archivo_expedientert']));
+			header("Content-Type: application/pdf");
+			header("Content-Transfer-Encoding: binary");
+			readfile($data['archivo_expedientert']);
+		}
+
+	}
+
+	private function directorio($expediente) {
+
+        if(!is_dir("./files/pdfs/" . $expediente)) {
+
+            mkdir("./files", 0777);
+            mkdir("./files/pdfs", 0777);
+            mkdir("./files/pdfs/" . $expediente, 0777);
+		}
+		
+		return "./files/pdfs/" . $expediente;
+    }
+
 }
 ?>
