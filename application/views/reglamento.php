@@ -250,6 +250,19 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
+  function notificacion_resolucion(id_reglamento) {
+    $.ajax({
+      url: "<?php echo site_url(); ?>/reglamento/notificacion_reglamento",
+      type: "post",
+      dataType: "html",
+      data: {id : id_reglamento}
+    })
+    .done(function(res){
+      $('#cnt_modal_acciones').html(res);
+      $('#modal_notificacion').modal('show');
+    });
+  }
+
   function combo_delegado(seleccion){
     
     $.ajax({

@@ -153,14 +153,12 @@ class Reglamento extends CI_Controller {
 	}
 
 	public function notificacion_reglamento() {
-		$this->load->view('templates/header');
-		$this->load->view('reglamento_ajax/notificacion_reglamento');
-		$this->load->view('templates/footer');
+		$this->load->view('reglamento_ajax/notificacion_reglamento', array('id' => $this->input->post('id') ));
 	}
 
 	public function gestionar_notificacion_reglamento() {
 
-		$data = $this->reglamento_model->obtener_reglamento(1)->result_array()[0];
+		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
 		$data['notificacion_expedientert'] = $this->input->post('notificacion');
 		$data['fechanotificacion_expedientert'] = date("Y-m-d H:i:s", strtotime($this->input->post('fecha')));
 
