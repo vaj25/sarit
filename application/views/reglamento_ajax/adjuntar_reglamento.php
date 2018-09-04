@@ -11,7 +11,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Registrar Resultado del Expediente</h4>
+        <h4 class="modal-title">Ajuntar Expediente</h4>
       </div>
 
       <div class="modal-body" id="">
@@ -21,7 +21,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
           <hr class="m-t-0 m-b-30">
 
-          <input type="hidden" id="id_reglamento_resolucion" name="id_reglamento_resolucion">
+          <input type="hidden" id="id_reglamento_resolucion" name="id_reglamento_resolucion" value="<?= $id?>">
 
           <div class="row">
             <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">

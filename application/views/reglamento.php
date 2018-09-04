@@ -291,6 +291,70 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
+  function inhabilitar(id_reglamento) {
+    swal({
+      title: "Inhabilitar Expediente",
+      text: "Motivo de Inhabilitar Expediente: *",
+      type: "input",
+      showCancelButton: true,
+      closeOnConfirm: false,
+      inputPlaceholder: "Motivo para inhabilitar"
+    }, function (inputValue) {
+      if (inputValue === false) return false;
+      if (inputValue === "") {
+        swal.showInputError("Se necesita un motivo para inhabilitar.");
+        return false
+      }
+      $.ajax({
+          url: "<?php echo site_url(); ?>/reglamento/gestionar_inhabilitar_reglamento",
+          type: "post",
+          dataType: "html",
+          data: {
+            id_reglamento_resolucion: id_reglamento,
+            mov_inhabilitar: inputValue
+          }
+        })
+        .done(function (res) {
+          if(res == "exito"){
+            tablaReglamentos();
+            swal({ title: "¡Expediente inhabilitado exitosamente!", type: "success", showConfirmButton: true });
+          }else{
+                swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }
+        });
+    });
+  }
+
+  function habilitar(id_reglamento) {
+    swal({
+        title: "Confirmar Habilitación",
+        text: "¿Está seguro que desea habilitar el expediente?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-success2",
+        confirmButtonText: "Si",
+        closeOnConfirm: false
+      },
+      function () {
+        $.ajax({
+            url: "<?php echo site_url(); ?>/reglamento/gestionar_habilitar_reglamento",
+            type: "post",
+            dataType: "html",
+            data: {
+              id_reglamento_resolucion: id_reglamento,
+            }
+          })
+          .done(function (res) {
+            if(res == "exito"){
+              tablaReglamentos();
+              swal({ title: "¡Expediente habilitado exitosamente!", type: "success", showConfirmButton: true });
+            }else{
+                swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }
+          });
+      });
+  }
+
   function combo_delegado(seleccion){
     
     $.ajax({

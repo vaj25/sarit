@@ -66,6 +66,18 @@
                                                 }
                                             ?>
                                             <a class="dropdown-item" href="javascript:;" onClick="adjuntar_reglamento(<?=$fila->id_expedientert?>)">Adjuntar Reglamento</a>
+
+                                            <?php
+                                                if ($fila->id_estadort == "1") {
+                                            ?>
+                                                    <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedientert?>)">Inhabilitar Expediente</a>
+                                            <?php
+                                                } else {
+                                            ?>
+                                                <a class="dropdown-item" href="javascript:;" onClick="habilitar(<?=$fila->id_expedientert?>)">Habilitar Expediente</a>
+                                            <?php
+                                                }
+                                            ?>
                                         </div>
                                     </div>
                                 <?php

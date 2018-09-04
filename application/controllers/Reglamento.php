@@ -139,7 +139,7 @@ class Reglamento extends CI_Controller {
 	}
 
 	public function gestionar_resolucion_reglamento() {
-		$data = $this->reglamento_model->obtener_reglamento(25)->result_array()[0];
+		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
 		$data['resolucion_expedientert'] = $this->input->post('resolucion');
 		$data['obsergenero_expedientrt'] = $this->input->post('ob_genero');
 		$data['fecharesolucion_expedientert'] = date("Y-m-d H:i:s");
@@ -169,15 +169,9 @@ class Reglamento extends CI_Controller {
 		}
 	}
 
-	public function inhabilitar_reglamento() {
-		$this->load->view('templates/header');
-		$this->load->view('reglamento_ajax/inhabilitar_reglamento');
-		$this->load->view('templates/footer');
-	}
-
 	public function gestionar_inhabilitar_reglamento() {
 
-		$data = $this->reglamento_model->obtener_reglamento(1)->result_array()[0];
+		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
 		$data['id_estadort'] = 2;
 		$data['inhabilitado_expedientert'] = $this->input->post('mov_inhabilitar');
 
@@ -190,7 +184,7 @@ class Reglamento extends CI_Controller {
 
 	public function gestionar_habilitar_reglamento() {
 
-		$data = $this->reglamento_model->obtener_reglamento(1)->result_array()[0];
+		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
 		$data['id_estadort'] = 1;
 		$data['inhabilitado_expedientert'] = null;
 
@@ -231,7 +225,7 @@ class Reglamento extends CI_Controller {
 
 	public function gestionar_adjuntar_reglamento() {
 		
-		$data = $this->reglamento_model->obtener_reglamento(25)->result_array()[0];
+		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
 		$data['id_estadort'] = $this->input->post('estado');
 		
 		$config['upload_path'] = $this->directorio( str_replace( "/", "_", $data['numexpediente_expedientert'] ) );
