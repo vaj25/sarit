@@ -277,6 +277,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
+  function adjuntar_reglamento(id_reglamento) {
+    $.ajax({
+      url: "<?php echo site_url(); ?>/reglamento/adjuntar_reglamento",
+      type: "post",
+      dataType: "html",
+      data: {id : id_reglamento}
+    })
+    .done(function(res){
+      $('#cnt_modal_acciones').html(res);
+      $('.dropify').dropify();
+      $('#modal_adjuntar').modal('show');
+    });
+  }
+
   function combo_delegado(seleccion){
     
     $.ajax({

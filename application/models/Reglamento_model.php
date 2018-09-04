@@ -105,6 +105,7 @@ class Reglamento_model extends CI_Model {
                 fecharesolucion_expedientert,
                 d.id_estadort,
                 estado_estadort,
+                a.archivo_expedientert,
                 concat_ws(' ',b.primer_nombre,b.segundo_nombre,b.tercer_nombre,b.primer_apellido,b.segundo_apellido,b.apellido_casada) AS nombre_empleado")
                ->from('sri_expedientert a')
                ->join('sir_empleado b','b.id_empleado = a.id_personal', 'left')

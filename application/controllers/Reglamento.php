@@ -226,9 +226,7 @@ class Reglamento extends CI_Controller {
 	}
 
 	public function adjuntar_reglamento() {
-		$this->load->view('templates/header');
-		$this->load->view('reglamento_ajax/adjuntar_reglamento');
-		$this->load->view('templates/footer');
+		$this->load->view('reglamento_ajax/adjuntar_reglamento', array('id' => $this->input->post('id') ));
 	}
 
 	public function gestionar_adjuntar_reglamento() {
