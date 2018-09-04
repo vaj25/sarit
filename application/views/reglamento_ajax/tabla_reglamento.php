@@ -57,6 +57,7 @@
                                             <a class="dropdown-item" href="javascript:;" onClick="visualizar('.$fila->id_expedientert.')">Visualizar</a>
                                             <a class="dropdown-item" href="javascript:;" onClick="resolucion('.$fila->id_expedientert.')">Registrar Resolución</a>
                                             <a class="dropdown-item" href="javascript:;" onClick="notificacion_resolucion('.$fila->id_expedientert.')">Registrar Notificaci&oacute;n Resolución</a>
+                                            <a class="dropdown-item" href="javascript:;" onClick="actualizar_estado('.$fila->id_expedientert.')">Actualizar Estado del Expediente</a>
                                             <a class="dropdown-item" href="'.base_url('index.php/reglamento/descargar_reglamento/'.$fila->id_expedientert.'/').'" >Descargar Reglamento</a>
                                             <a class="dropdown-item" href="javascript:;">Something else here</a>
                                             <div class="dropdown-divider"></div>

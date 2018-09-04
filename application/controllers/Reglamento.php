@@ -203,20 +203,19 @@ class Reglamento extends CI_Controller {
 
 	public function estado_reglamento() {
 		
-		$this->load->view('templates/header');
 		$this->load->view('reglamento_ajax/estado_reglamento',
 			array(
 				'id' => 0,
+				'id_expediente' => $this->input->post('id'),
 				'estado' => $this->db->get('sri_estadort')
 			)
 		);
-		$this->load->view('templates/footer');
 
 	}
 
 	public function gestionar_estado_reglamento() {
 
-		$data = $this->reglamento_model->obtener_reglamento(1)->result_array()[0];
+		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
 		$data['id_estadort'] = $this->input->post('estado');
 
 		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
