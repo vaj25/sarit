@@ -142,6 +142,7 @@ class Reglamento extends CI_Controller {
 		$data = $this->reglamento_model->obtener_reglamento(25)->result_array()[0];
 		$data['resolucion_expedientert'] = $this->input->post('resolucion');
 		$data['obsergenero_expedientrt'] = $this->input->post('ob_genero');
+		$data['fecharesolucion_expedientert'] = date("Y-m-d H:i:s");
 
 		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
 			echo "fracaso";

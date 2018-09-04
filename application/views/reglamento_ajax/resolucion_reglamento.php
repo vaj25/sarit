@@ -59,11 +59,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 <script>
 
-$(function(){     
+$(function(){
     $("#formajax4").on("submit", function(e){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax4"));
+        $('#modal_resolucion').modal('hide');
         
         $.ajax({
             url: "<?php echo site_url(); ?>/reglamento/gestionar_resolucion_reglamento",
@@ -83,7 +84,9 @@ $(function(){
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
         });
-            
+      $('#modal_resolucion').remove();
+      $('.modal-backdrop').remove();
+      tablaReglamentos();
     });
 });
 
