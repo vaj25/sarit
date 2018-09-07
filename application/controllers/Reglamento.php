@@ -29,7 +29,7 @@ class Reglamento extends CI_Controller {
 				'id_estadort' => 1,
 				'numexpediente_expedientert' => '1/2018 SS',
 				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
-				'tiposolicitud_expedientert' => 'Registro',
+				'tiposolicitud_expedientert' => $this->input->post('tipo_solicitud'),
 				'organizacionsocial_expedientert' => '',
 				'contratocolectivo_expedientert' => '',
 				'notificacion_expedientert' => '',
@@ -67,6 +67,7 @@ class Reglamento extends CI_Controller {
 
 			$data['id_empresart'] = $this->input->post('establecimiento');
 			$data['tipopersona_expedientert'] = $this->input->post('tipo_solicitante');
+			$data['tiposolicitud_expedientert'] = $this->input->post('tipo_solicitud');
 
 			$data2 = array(
 				'id_representantert' => $this->input->post('id_comisionado'),
@@ -172,7 +173,7 @@ class Reglamento extends CI_Controller {
 	public function gestionar_inhabilitar_reglamento() {
 
 		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
-		$data['id_estadort'] = 2;
+		$data['id_estadort'] = 9;
 		$data['inhabilitado_expedientert'] = $this->input->post('mov_inhabilitar');
 
 		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {

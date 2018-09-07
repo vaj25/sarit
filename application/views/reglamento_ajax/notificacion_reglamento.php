@@ -62,7 +62,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 <script>
 
-$(function(){     
+$(function(){
     $("#formajax5").on("submit", function(e){
         e.preventDefault();
         var f = $(this);

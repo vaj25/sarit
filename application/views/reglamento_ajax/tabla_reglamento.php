@@ -37,50 +37,61 @@
                                 echo "<td>".$fila->nombre_empleado."</td>";
                                 echo "<td>".$fila->tiposolicitud_expedientert."</td>";
                                 echo "<td>".$fila->fecharesolucion_expedientert."</td>";
-                                echo ($fila->id_estadort == "1") ? '<td><span class="label label-success">'.$fila->estado_estadort.'</span></td>' : '<td><span class="label label-danger">'.$fila->estado_estadort.'</span></td>';
+                                echo ($fila->id_estadort != "9") ? '<td><span class="label label-success">'.$fila->estado_estadort.'</span></td>' : '<td><span class="label label-danger">'.$fila->estado_estadort.'</span></td>';
 
                                 echo "<td>";
                                 $array = array($fila->id_expedientert);
 
                                 if(tiene_permiso($segmentos=1,$permiso=4)){
 
-                                    array_push($array, "edit");
-                                    echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
+                                    if ($fila->id_estadort != "9") {
+                                        array_push($array, "edit");
+                                        echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
+                                        
+                                        /*array_pop($array);
+                                        array_push($array, "reforma_parcial");
+                                        echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Reforma Parcial");
 
-                                    ?>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                            <i class="ti-settings"></i>
-                                        </button>
-                                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                            <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedientert?>)">Visualizar</a>
-                                            <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedientert?>)">Registrar Resolución</a>
-                                            <a class="dropdown-item" href="javascript:;" onClick="notificacion_resolucion(<?=$fila->id_expedientert?>)">Registrar Notificaci&oacute;n Resolución</a>
-                                            <a class="dropdown-item" href="javascript:;" onClick="actualizar_estado(<?=$fila->id_expedientert?>)">Actualizar Estado del Expediente</a>
-                                            <?php
-                                                if ($fila->archivo_expedientert != "") {
-                                            ?>
-                                                    <a class="dropdown-item" href="<?=base_url('index.php/reglamento/descargar_reglamento/'.$fila->id_expedientert)?>" >Descargar Reglamento</a>
-                                            <?php
-                                                }
-                                            ?>
-                                            <a class="dropdown-item" href="javascript:;" onClick="adjuntar_reglamento(<?=$fila->id_expedientert?>)">Adjuntar Reglamento</a>
+                                        array_pop($array);
+                                        array_push($array, "reforma_total");
+                                        echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Reforma Total");*/
 
-                                            <?php
-                                                if ($fila->id_estadort == "1") {
-                                            ?>
-                                                    <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedientert?>)">Inhabilitar Expediente</a>
-                                            <?php
-                                                } else {
-                                            ?>
-                                                <a class="dropdown-item" href="javascript:;" onClick="habilitar(<?=$fila->id_expedientert?>)">Habilitar Expediente</a>
-                                            <?php
-                                                }
-                                            ?>
+                                        ?>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                <i class="ti-settings"></i>
+                                            </button>
+                                            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedientert?>)">Visualizar</a>
+                                                <a class="dropdown-item" href="javascript:;" onClick="cambiar_editar(<?=$fila->id_expedientert?>, 'reforma_parcial')">Reforma Parcial</a>
+                                                <a class="dropdown-item" href="javascript:;" onClick="cambiar_editar(<?=$fila->id_expedientert?>, 'reforma_total')">Reforma Total</a>
+                                                <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedientert?>)">Registrar Resolución</a>
+                                                <a class="dropdown-item" href="javascript:;" onClick="notificacion_resolucion(<?=$fila->id_expedientert?>)">Registrar Notificaci&oacute;n Resolución</a>
+                                                <a class="dropdown-item" href="javascript:;" onClick="actualizar_estado(<?=$fila->id_expedientert?>)">Actualizar Estado del Expediente</a>
+                                                <?php
+                                                    if ($fila->archivo_expedientert != "") {
+                                                ?>
+                                                        <a class="dropdown-item" href="<?=base_url('index.php/reglamento/descargar_reglamento/'.$fila->id_expedientert)?>" >Descargar Reglamento</a>
+                                                <?php
+                                                    }
+                                                ?>
+                                                <a class="dropdown-item" href="javascript:;" onClick="adjuntar_reglamento(<?=$fila->id_expedientert?>)">Adjuntar Reglamento</a>
+                                                <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedientert?>)">Inhabilitar Expediente</a>
+                                            </div>
                                         </div>
-                                    </div>
                                 <?php
+                                    } else {
+                                ?>
+                                        <button type = "button" class = "btn waves-effect waves-light btn-rounded btn-sm btn-info"
+                                        onclick = "habilitar(<?=$fila->id_expedientert?>)" data-toggle = "tooltip" title = ""
+                                        data-original-title = "Habilitar"> <span class = "fa fa-check"></span></button >
+                                        &nbsp;                                       
+                                        <button type = "button" class = "btn waves-effect waves-light btn-rounded btn-sm btn-info"
+                                        onclick = "visualizar(<?=$fila->id_expedientert?>)" data-toggle = "tooltip" title = ""
+                                        data-original-title = "Visualizar"> <span class = "fa fa-file"></span></button >
+                                <?php
+                                    }
                                 }
                                 echo "</td>";
                                 echo "</tr>";

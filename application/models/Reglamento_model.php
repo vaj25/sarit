@@ -148,7 +148,8 @@ class Reglamento_model extends CI_Model {
                ->join('org_municipio d', 'd.id_municipio = b.id_municipio')
                ->join('sge_representante e', 'e.id_empresa = b.id_empresa')
                ->where('a.id_expedientert', $id);
-        $query=$this->db->get();
+        $query=0;//$this->db->get();
+        print $this->db->get_compiled_select();
         if ($query->num_rows() > 0) {
             return $query;
         }

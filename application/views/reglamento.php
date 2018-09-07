@@ -7,64 +7,78 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 }
 ?>
 <script type="text/javascript">
-  function cambiar_editar(id_reglamento,bandera){
+  function cambiar_editar(id_reglamento, bandera){
     $("#id_expedientert").val(id_reglamento);
+
+    $.ajax({
+      url: "<?php echo site_url(); ?>/reglamento/registros_reglamentos_documentos",
+      type: "POST",
+      data: {id : id_reglamento}
+    })
+    .done(function(res){
+      result = JSON.parse(res)[0];
+
+      $("#id_expedientert").val(result.id_expedientert);
+      $("#id_expediente").val(result.id_expedientert);
+      $("#tipo_solicitante").val(result.tipopersona_expedientert).trigger('change.select2');
+      $("#tipo_solicitud").val(result.tiposolicitud_expedientert);
+
+      $("#reglamento_interno").attr('checked',result.docreglamento_documentort);
+      $("#constitucion_sociedad").attr('checked',result.escritura_documentort);
+      $("#credencial_representante").attr('checked',result.credencial_documentort);
+      $("#poder").attr('checked',result.poder_documentort);
+      $("#dui").attr('checked',result.dui_documentort);
+      $("#matricula").attr('checked',result.matricula_documentort);
+      $("#estatutos").attr('checked',result.estatutos_documentort);
+      $("#acuerdo_creacion").attr('checked',result.acuerdoejec_documentort);
+      $("#nominacion").attr('checked',result.nominayfuncion_documentort);
+
+      $("#id_comisionado").val(result.id_representantert);
+      $("#nombres").val(result.nombres_representantert);
+      $("#apellidos").val(result.apellidos_representantert);
+      $("#dui_comisionado").val(result.dui_representantert);
+      $("#nit").val(result.nit_representantert);
+      $("#telefono").val(result.telefono_representantert);
+      $("#correo").val(result.correo_representantert);
+      $("#tipo_representante").val(result.cargo_representantert);
+      $("#sexo").val(result.sexo_representantert).trigger('change.select2');
+
+      
+      $("#band").val("edit");
+      $("#band1").val("edit");
+      $("#band2").val("edit");
+      combo_establecimiento(result.id_empresart);
+      combo_delegado(result.id_personal);
+
+    });
+
+    $("#ttl_form").removeClass("bg-success");
+    $("#ttl_form").addClass("bg-info");
+    $("#btnadd1").hide(0);
+    $("#btnedit1").show(0);
+    $("#btnadd2").hide(0);
+    $("#btnedit2").show(0);
+    $("#cnt-tabla").hide(0);
+    $("#cnt_form_main").show(0);
 
     if(bandera == "edit"){
 
-      $.ajax({
-        url: "<?php echo site_url(); ?>/reglamento/registros_reglamentos_documentos",
-        type: "POST",
-        data: {id : id_reglamento}
-      })
-      .done(function(res){
-        result = JSON.parse(res)[0];
+      $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Expediente");
 
-        $("#id_expedientert").val(result.id_expedientert);
-        $("#id_expediente").val(result.id_expedientert);
-        $("#tipo_solicitante").val(result.tipopersona_expedientert).trigger('change.select2');
+    } else if(bandera == "reforma_parcial") {
 
-        $("#reglamento_interno").attr('checked',result.docreglamento_documentort);
-        $("#constitucion_sociedad").attr('checked',result.escritura_documentort);
-        $("#credencial_representante").attr('checked',result.credencial_documentort);
-        $("#poder").attr('checked',result.poder_documentort);
-        $("#dui").attr('checked',result.dui_documentort);
-        $("#matricula").attr('checked',result.matricula_documentort);
-        $("#estatutos").attr('checked',result.estatutos_documentort);
-        $("#acuerdo_creacion").attr('checked',result.acuerdoejec_documentort);
-        $("#nominacion").attr('checked',result.nominayfuncion_documentort);
+      $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Reforma Parcial");
+      $("#tipo_solicitud").val('Reforma Parcial');
 
-        $("#id_comisionado").val(result.id_representantert);
-        $("#nombres").val(result.nombres_representantert);
-        $("#apellidos").val(result.apellidos_representantert);
-        $("#dui_comisionado").val(result.dui_representantert);
-        $("#nit").val(result.nit_representantert);
-        $("#telefono").val(result.telefono_representantert);
-        $("#correo").val(result.correo_representantert);
-        $("#tipo_representante").val(result.cargo_representantert);
-        $("#sexo").val(result.sexo_representantert).trigger('change.select2');
+    } else if(bandera == "reforma_total") {
 
-        
-        $("#band").val("edit");
-        $("#band1").val("edit");
-        $("#band2").val("edit");
-        combo_establecimiento(result.id_empresart);
-        combo_delegado(result.id_personal);
+      $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Reforma Total");
+      $("#tipo_solicitud").val('Reforma Total');
 
-      });
-
-      $("#ttl_form").removeClass("bg-success");
-      $("#ttl_form").addClass("bg-info");
-      $("#btnadd1").hide(0);
-      $("#btnedit1").show(0);
-      $("#btnadd2").hide(0);
-      $("#btnedit2").show(0);
-      $("#cnt-tabla").hide(0);
-      $("#cnt_form_main").show(0);
-      $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Actividad");
-    }else{           
-      eliminar_reglamento();
+    } else {
+      cambiar_nuevo();
     }
+
   }
 
   function editar_actividad(){ $("#band").val("edit"); enviarDatos(); }
@@ -90,6 +104,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#id_expediente").val("");
     $("#id_expedient").val("");
     $("#tipo_solicitante").val("0").trigger('change.select2');
+    $("#tipo_solicitud").val('Registro');
 
     $("#reglamento_interno").attr('checked',false);
     $("#constitucion_sociedad").attr('checked',false);
@@ -136,6 +151,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#cnt_form_main").hide(0);
     $("#cnt_actions").hide(0);
     $("#cnt_actions").remove('.card');
+    open_form(1);
   }
 
   function iniciar(){
@@ -427,6 +443,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <input type="hidden" id="band1" name="band1">
               <input type="hidden" id="id_expediente" name="id_expediente">
               <input type="hidden" id="id_comisionado" name="id_comisionado">
+              <input type="hidden" id="tipo_solicitud" name="tipo_solicitud">
 
               <span class="etiqueta">Establecimiento</span>
 
