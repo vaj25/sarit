@@ -454,8 +454,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <div class="controls">
                       <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" required>
                         <option value="">[Seleccione]</option>
-                        <option value="1">Opcion 1</option>
-                        <option value="2">Opcion 2</option>
+                        <option value="Sociedad">Sociedad</option>
+                        <option value="Persona Natural">Persona Natural</option>
+                        <option value="Asociación">Asociación</option>
                       </select>
                     </div>
                   </div>

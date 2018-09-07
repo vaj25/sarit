@@ -77,7 +77,7 @@
                     <tr>
                         <td>Representante Legal:</td>
                         <td class="font-medium">
-                            <?= $reglamento->nombres_representante ?>
+                            <?= $reglamento->nombres_representantert . ' ' . $reglamento->apellidos_representantert ?>
                         </td>
                     </tr>
                 </tbody>

@@ -229,6 +229,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			</table>';
 
 		return $pie;
-    }
+	}
+	
+	function mes($mes){$mesesarray = array('ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'); return strtolower($mesesarray[($mes-1)]); }
 
 ?>
