@@ -9,7 +9,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <script type="text/javascript">
   function cambiar_editar(id_reglamento, bandera){
     $("#id_expedientert").val(id_reglamento);
-    tipo_solicitud = '';
 
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/registros_reglamentos_documentos",
@@ -22,7 +21,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#id_expedientert").val(result.id_expedientert);
       $("#id_expediente").val(result.id_expedientert);
       $("#tipo_solicitante").val(result.tipopersona_expedientert).trigger('change.select2');
-      tipo_solicitud = result.tiposolicitud_expedientert;
+
+      if(bandera == "edit"){
+
+        $("#tipo_solicitud").val(result.tiposolicitud_expedientert);
+
+      }
 
       $("#reglamento_interno").attr('checked',result.docreglamento_documentort);
       $("#constitucion_sociedad").attr('checked',result.escritura_documentort);
@@ -65,7 +69,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     if(bandera == "edit"){
 
       $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Expediente");
-      $("#tipo_solicitud").val(tipo_solicitud);
 
     } else if(bandera == "reforma_parcial") {
 
@@ -82,8 +85,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     }
 
   }
-
-  function editar_actividad(){ $("#band").val("edit"); enviarDatos(); }
    
   function eliminar_reglamento(){
     $("#band").val("delete");
