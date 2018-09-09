@@ -147,6 +147,7 @@ class Reglamento_model extends CI_Model {
                ->join('sge_catalogociiu c', 'c.id_catalogociiu = b.id_catalogociiu')
                ->join('org_municipio d', 'd.id_municipio = b.id_municipio')
                ->join('sri_representantert e', 'e.id_empresart = b.id_empresa')
+               ->join('sir_empleado f','f.id_empleado = a.id_personal', 'left')
                ->where('a.id_expedientert', $id);
         $query=$this->db->get();
         //print $this->db->get_compiled_select();
@@ -157,6 +158,48 @@ class Reglamento_model extends CI_Model {
             return FALSE;
         }
 
+    }
+
+    public function jefe_direccion_trabajo() {
+        $query = $this->db->query("SELECT
+                CONCAT_WS(' ',e.primer_nombre,e.segundo_nombre,e.primer_apellido,e.segundo_apellido,e.apellido_casada) nombre_completo_jefa,
+                s.nombre_seccion,
+                CASE
+                    WHEN na.NIVEL_ACADEMICO = 'LICENCIATURAS' THEN
+                        CASE 
+                            WHEN e.ID_GENERO = 2 THEN 'Licda.'
+                            ELSE 'Lic.'
+                        END
+                    WHEN na.NIVEL_ACADEMICO = 'INGENIERÍAS' THEN
+                        CASE
+                            WHEN e.ID_GENERO = 2 THEN 'Inga.'
+                            ELSE 'Ing.'
+                        END
+                    WHEN na.NIVEL_ACADEMICO = 'DOCTORADOS' THEN
+                        CASE
+                            WHEN e.ID_GENERO = 2 THEN 'Dra.'
+                            ELSE 'Dr.'
+                        END
+                    ELSE ''
+                END abr_nivel_academico,
+                na.nivel_academico
+            FROM org_seccion s
+            JOIN sir_empleado_informacion_laboral il on il.id_seccion=s.id_seccion
+            JOIN sir_empleado e on e.id_empleado=il.id_empleado
+            JOIN sir_cargo_funcional cf on cf.id_cargo_funcional=il.id_cargo_funcional
+            JOIN SIR_EMPLEADO_TITULO et ON et.ID_EMPLEADO = e.ID_EMPLEADO
+            JOIN SIR_TITULO_ACADEMICO ta ON ta.ID_TITULO_ACADEMICO = et.ID_TITULO_ACADEMICO
+            JOIN SIR_NIVEL_ACADEMICO na ON na.ID_NIVEL_ACADEMICO = ta.ID_NIVEL_ACADEMICO
+            WHERE s.id_seccion=43 AND cf.id_nivel=1 AND e.id_estado=1
+            ORDER BY il.ID_EMPLEADO_INFORMACION_LABORAL DESC
+            LIMIT 1;");
+
+        if ($query->num_rows() > 0) {
+            return $query;
+        }
+        else {
+            return FALSE;
+        }
     }
     
 }

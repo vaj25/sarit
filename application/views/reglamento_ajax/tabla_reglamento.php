@@ -69,7 +69,7 @@
                                                 <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedientert?>)">Registrar Resolución</a>
                                                 <a class="dropdown-item" href="javascript:;" onClick="notificacion_resolucion(<?=$fila->id_expedientert?>)">Registrar Notificaci&oacute;n Resolución</a>
                                                 <a class="dropdown-item" href="javascript:;" onClick="actualizar_estado(<?=$fila->id_expedientert?>)">Actualizar Estado del Expediente</a>
-                                                <a class="dropdown-item"href="<?=base_url('index.php/acta/generar_acta/'.$fila->id_expedientert)?>">Generar Acta</a>
+                                                <a class="dropdown-item"href="<?=base_url('index.php/acta/generar_acta/'.$fila->id_expedientert.'/asdfa')?>">Generar Acta</a>
                                                 <?php
                                                     if ($fila->archivo_expedientert != "") {
                                                 ?>

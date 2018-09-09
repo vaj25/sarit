@@ -233,4 +233,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	
 	function mes($mes){$mesesarray = array('ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'); return strtolower($mesesarray[($mes-1)]); }
 
+	function hora($hora) {
+		$arrayHoras = array('CERO','UNA','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE',
+							'QUINCE','DIESCISEIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VENTIUNO','VEINTIDOS','VEINTITRES','VEINTICUATRO');
+		return $arrayHoras[$hora];
+	}
+
+	function dia($dia) {
+		$arrayDias = array('UNO','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE',
+							'QUINCE','DIESCISEIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VENTIUNO','VEINTIDOS','VEINTITRES','VEINTICUATRO',
+							'VEINTICINCO','VEINTISEIS','VEINTESIETE','VEINTIOCHO','VEINTINUEVE','TREINTA','TREINTA Y UNO');
+		return $arrayDias[$dia-1];
+	}
+
+	function anio($anio) {
+		$arrayAnio = array(
+			2015 => 'DOS MIL QUINCE', 
+			2016 => 'DOS MIL DIESCISEIS', 
+			2017 => 'DOS MIL DIECISIETE',
+			2018 => 'DOS MIL DIECIOCHO',
+			2019 => 'DOS MIL DIECINUEVE',
+			2020 => 'DOS MIL VEINTE'
+		);
+		return $arrayAnio[$anio];
+	}
 ?>
