@@ -303,5 +303,20 @@ class Reglamento extends CI_Controller {
 		}
 	}
 
+	public function modal_acta_aprobada() {
+		$this->load->view('reglamento_ajax/modal_acta_aprobado', array('id' => $this->input->post('id') ));
+	}
+
+	public function gestionar_acta_aprobada() {
+		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento'))->result_array()[0];
+		$data['contenidoTitulos_expedientert'] = $this->input->post('contenido');
+
+		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+			echo "fracaso";
+		} else {
+			echo "exito";
+		}
+	}
+
 }
 ?>

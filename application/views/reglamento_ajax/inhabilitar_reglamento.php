@@ -46,8 +46,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
               
               <div align="right" id="btnadd1">
-                <button type="reset" class="btn waves-effect waves-light btn-success">
-                  <i class="mdi mdi-recycle"></i> Limpiar</button>
+                <button type="reset" class="btn waves-effect waves-light btn-success" onClick="cerrar_mantenimiento()">Cerrar</button>
                 <button type="submit" class="btn waves-effect waves-light btn-success2">
                   Guardar <i class="mdi mdi-chevron-right"></i>
                 </button>

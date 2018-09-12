@@ -311,6 +311,19 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
+  function modal_acta_aprobada(id_reglamento) {
+    $.ajax({
+      url: "<?php echo site_url(); ?>/reglamento/modal_acta_aprobada",
+      type: "post",
+      dataType: "html",
+      data: {id : id_reglamento}
+    })
+    .done(function(res){
+      $('#cnt_modal_acciones').html(res);
+      $('#modal_acta_aprobada').modal('show');
+    });
+  }
+
   function adjuntar_reglamento(id_reglamento) {
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/adjuntar_reglamento",
