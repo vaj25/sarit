@@ -104,6 +104,7 @@ class Reglamento_model extends CI_Model {
                 tiposolicitud_expedientert,
                 fecharesolucion_expedientert,
                 d.id_estadort,
+                a.id_personal,
                 estado_estadort,
                 a.archivo_expedientert,
                 concat_ws(' ',b.primer_nombre,b.segundo_nombre,b.tercer_nombre,b.primer_apellido,b.segundo_apellido,b.apellido_casada) AS nombre_empleado")

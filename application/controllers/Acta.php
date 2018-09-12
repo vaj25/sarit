@@ -46,7 +46,7 @@ class Acta extends CI_Controller {
                 $this->generar_acta_prevenido($id);
                 break;
             default:
-                # code...
+                redirect('/reglamento');
                 break;
         }
 

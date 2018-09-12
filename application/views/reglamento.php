@@ -296,6 +296,21 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
+  function modal_delegado(id_reglamento, id_delegado) {
+    $.ajax({
+      url: "<?php echo site_url(); ?>/reglamento/delegado_reglamento",
+      type: "post",
+      dataType: "html",
+      data: {id : id_reglamento}
+    })
+    .done(function(res){
+      $('#cnt_modal_acciones').html(res);
+      $('.select2').select2();
+      $("#id_personal_copia").val(id_delegado).trigger('change.select2');
+      $('#modal_delegado').modal('show');
+    });
+  }
+
   function adjuntar_reglamento(id_reglamento) {
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/adjuntar_reglamento",

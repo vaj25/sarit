@@ -27,7 +27,7 @@ class Reglamento extends CI_Controller {
 				'id_empresart' => $this->input->post('establecimiento'),
 				'id_personal' => '',
 				'id_estadort' => 1,
-				'numexpediente_expedientert' => '1/2018 SS',
+				'numexpediente_expedientert' => 'N/A',
 				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
 				'tiposolicitud_expedientert' => $this->input->post('tipo_solicitud'),
 				'organizacionsocial_expedientert' => '',
@@ -286,6 +286,21 @@ class Reglamento extends CI_Controller {
 	
 	public function modal_establecimiento() {
 		$this->load->view('reglamento_ajax/modal_establecimiento');
+	}
+
+	public function delegado_reglamento() {
+		$this->load->view('reglamento_ajax/modal_delegado', array('id' => $this->input->post('id') ));
+	}
+
+	public function gestionar_reglamento_delegado() {
+		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento'))->result_array()[0];
+		$data['id_personal'] = $this->input->post('id_personal_copia');
+
+		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+			echo "fracaso";
+		} else {
+			echo "exito";
+		}
 	}
 
 }
