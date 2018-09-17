@@ -81,7 +81,7 @@ $color2 = array('#1e88e5', '#c8d5dc', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
 		                        <div class="card">
 		                            <div class="card-body" style="position: relative;">
 		                                <h3 class="card-title">Estadística resueltos</h3>
-		                                <h3 align="center" class="text-muted" style="left:50%; top: 60%; position: absolute; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);">Resueltos <br><?php $porcent = $tipo_asociacion->result()[1]; $porcentaje = number_format( (($porcent->cantidad/$porcent->total)*100), 2, '.', '');
+		                                <h3 align="center" class="text-muted" style="left:50%; top: 60%; position: absolute; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);">Resueltos <br><?php $porcent = $tipo_asociacion->result()[0]; $porcentaje = number_format( (($porcent->cantidad/$porcent->total)*100), 2, '.', '');
 		                                		$split = explode('.',$porcentaje);
 		                                	if($split[1] == "00"){
 		                                		echo $split[0]."%";
@@ -127,19 +127,20 @@ $color2 = array('#1e88e5', '#c8d5dc', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
         										}
         									}
 
-
+        									$texto = ""; $i=0;
         									if($sector_asociacion->num_rows() > 0){
         										foreach ($sector_asociacion->result() as $fila_sa) {
         											$porcentaje = number_format( (($fila_sa->cantidad/$total)*100), 2, '.', '');
 		                                			$split = explode('.',$porcentaje);
 				                                	if($split[1] == "00"){
-				                                		echo $split[0]."%/";
+				                                		$texto .= "<small style='color:".$color[$i]."'>".$split[0]."%</small>/";
 				                                	}else{
-				                                		echo $porcentaje."%/";
+				                                		$texto .= "<small style='color:".$color[$i]."'>".$porcentaje."%</small>/";
 				                                	}
+				                                	$i++;
         										}
         									}
-
+        									echo substr($texto, 0, -1);
 
 		                                ?></h3>
 	                                    <div style="margin-left: 10px; margin-right: 10px;">
