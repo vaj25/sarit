@@ -4,7 +4,7 @@ $color2 = array('#1e88e5', '#c8d5dc', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
 <script type="text/javascript">
 
     function iniciar(){
-        
+         
 	}
 
 </script>

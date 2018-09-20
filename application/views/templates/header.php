@@ -22,6 +22,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content=""><meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url(); ?>assets/images/Logo-min.png">
     <title>SARIT</title>
+
+    
+    <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
+    <script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyCk8cIZBPJFpT6LHJ9t4FZ1X6yz2cxTjCE",
+        authDomain: "notificaciones-4afa0.firebaseapp.com",
+        databaseURL: "https://notificaciones-4afa0.firebaseio.com",
+        projectId: "notificaciones-4afa0",
+        storageBucket: "notificaciones-4afa0.appspot.com",
+        messagingSenderId: "128097213495"
+    };
+    firebase.initializeApp(config);
+    </script>
+
     <!-- CSS Requerido -->
     <script src="<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/jquery/jquery.min.js"></script>
@@ -52,6 +68,26 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <link href="<?php echo base_url(); ?>assets/plugins/ion-rangeslider/css/ion.rangeSlider.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/ion-rangeslider/css/ion.rangeSlider.skinModern.css" rel="stylesheet">
 <?php } ?>
+
+    <!-- Firebase App is always required and must be first -->
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
+
+    <!-- Add additional services you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-functions.js"></script>
+
+    <!-- Comment out (or don't include) services you don't want to use -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-storage.js"></script> -->
+
+    <script>
+    var config = {
+        // ...
+    };
+    firebase.initializeApp(config);
+    </script>
 
 </head>
 <script>
