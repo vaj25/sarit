@@ -10,7 +10,9 @@ class Documentacion extends CI_Controller {
 
 	public function gestionar_documentacion() {
 
-		if($this->input->post('band2') == "save"){
+        if($this->input->post('band2') == "save" 
+            || $this->input->post('band2') == "reforma_parcial"
+            || $this->input->post('band2') == "reforma_total"){
 
             $data = $this->reglamento_model->obtener_reglamento($this->input->post('id_expedient'))->result_array()[0];
 

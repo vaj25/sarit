@@ -22,7 +22,9 @@ class Documento_model extends CI_Model {
                     'matricula_documentort' => $data['matricula_documentort'],
                     'estatutos_documentort' => $data['estatutos_documentort'],
                     'acuerdoejec_documentort' => $data['acuerdoejec_documentort'],
-                    'nominayfuncion_documentort' => $data['nominayfuncion_documentort']
+                    'nominayfuncion_documentort' => $data['nominayfuncion_documentort'],
+                    'leycreacionescritura_documentort' => $data['leycreacionescritura_documentort'],
+                    'acuerdoejecutivo_documentort' => $data['acuerdoejecutivo_documentort']
                 )
             )) {
             return "exito";
@@ -45,7 +47,9 @@ class Documento_model extends CI_Model {
                 'matricula_documentort' => $data['matricula_documentort'],
                 'estatutos_documentort' => $data['estatutos_documentort'],
                 'acuerdoejec_documentort' => $data['acuerdoejec_documentort'],
-                'nominayfuncion_documentort' => $data['nominayfuncion_documentort']
+                'nominayfuncion_documentort' => $data['nominayfuncion_documentort'],
+                'leycreacionescritura_documentort' => $data['leycreacionescritura_documentort'],
+                'acuerdoejecutivo_documentort' => $data['acuerdoejecutivo_documentort']
                 )
            )){
 			return "exito";

@@ -61,7 +61,7 @@ class Reglamento extends CI_Controller {
 				echo "fracaso";
 			}
 
-		}else if($this->input->post('band1') == "edit"){
+		} else if($this->input->post('band1') == "edit"){
 
 			$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_expediente'))->result_array()[0];
 
@@ -88,11 +88,53 @@ class Reglamento extends CI_Controller {
 				echo "fracaso";
 			}
 
-		}else if($this->input->post('band') == "delete"){
+		} else if($this->input->post('band') == "delete"){
 			$data = array(
 				'id_expedientert' => $this->input->post('id_expedientert')
 			);
 			echo $this->reglamento_model->eliminar_documento($data);
+
+		} else if($this->input->post('band1') == "reforma_parcial" || $this->input->post('band1') == "reforma_total"){
+			
+			$dui = $this->reglamento_model->obtener_reglamentos_documentos($this->input->post('id_expediente'))
+																							->result()[0]->dui_representantert;
+
+			$data2 = array(
+				'id_representantert' => $this->input->post('id_comisionado'),
+				'id_empresart' =>$this->input->post('establecimiento'), 
+				'nombres_representantert' => $this->input->post('nombres'),
+				'apellidos_representantert' => $this->input->post('apellidos'),
+				'dui_representantert'  => $this->input->post('dui_comisionado'),
+				'nit_representantert' => $this->input->post('nit'),
+				'telefono_representantert' => $this->input->post('telefono'),
+				'correo_representantert' => $this->input->post('correo'),
+				'cargo_representantert' => $this->input->post('tipo_representante'),
+				'sexo_representantert' => $this->input->post('sexo')
+			);
+
+			$res = "fracaso";
+
+			if ($dui == $this->input->post('dui_comisionado')) {
+				$res = $this->comisionado_model->editar_comisionado($data2);
+			} else {
+				$data2['id_representantert'] = null;
+				$res = $this->comisionado_model->insertar_comisionado($data2);				
+			}
+			
+			if ("exito" == $res) {
+				$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_expediente'))->result_array()[0];
+
+				if ($data['tiposolicitud_expedientert'] != $this->input->post('tipo_solicitud')) {
+					$data['id_expedientert'] = null;
+					$data['tiposolicitud_expedientert'] = $this->input->post('tipo_solicitud');
+					echo $this->reglamento_model->insertar_reglamento($data);
+				} else {
+					echo $this->input->post('id_expediente');
+				}
+
+			} else {
+				echo "fracaso";
+			}
 
 		}
 
@@ -111,7 +153,8 @@ class Reglamento extends CI_Controller {
 		$this->load->view('reglamento_ajax/combo_establecimiento', 
 			array(
 				'id' => $this->input->post('id'),
-				'establecimiento' => $this->db->get('sge_empresa')
+				'establecimiento' => $this->db->get('sge_empresa'),
+				'disable' => $this->input->post('disable')
 			)
 		);
 

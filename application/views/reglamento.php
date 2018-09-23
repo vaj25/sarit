@@ -20,13 +20,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
       $("#id_expedientert").val(result.id_expedientert);
       $("#id_expediente").val(result.id_expedientert);
-
-      if(bandera == "edit"){
-
-        $("#tipo_solicitud").val(result.tiposolicitud_expedientert);
-        $("#tipo_solicitante").val(result.tipopersona_expedientert).trigger('change.select2');
-
-      }
+      $("#tipo_solicitante").val(result.tipopersona_expedientert).trigger('change.select2');
 
       $("#reglamento_interno").attr('checked',result.docreglamento_documentort);
       $("#constitucion_sociedad").attr('checked',result.escritura_documentort);
@@ -37,6 +31,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#estatutos").attr('checked',result.estatutos_documentort);
       $("#acuerdo_creacion").attr('checked',result.acuerdoejec_documentort);
       $("#nominacion").attr('checked',result.nominayfuncion_documentort);
+      $("#creacion_escritura").attr('checked',result.leycreacionescritura_documentort);
+      $("#acuerdo_ejecutivo").attr('checked',result.acuerdoejecutivo_documentort);
 
       $("#id_comisionado").val(result.id_representantert);
       $("#nombres").val(result.nombres_representantert);
@@ -48,11 +44,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#tipo_representante").val(result.cargo_representantert).trigger('change.select2');
       $("#sexo").val(result.sexo_representantert).trigger('change.select2');
 
-      
-      $("#band").val("edit");
-      $("#band1").val("edit");
-      $("#band2").val("edit");
-      combo_establecimiento(result.id_empresart);
+      if(bandera == "edit"){
+
+        $("#tipo_solicitud").val(result.tiposolicitud_expedientert);
+        combo_establecimiento(result.id_empresart);
+
+      } else {
+        
+        combo_establecimiento(result.id_empresart, 'disabled');
+        $("#tipo_solicitante").attr('disabled', 'disabled');
+
+      }
+
       combo_delegado(result.id_personal);
 
     });
@@ -68,15 +71,24 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
     if(bandera == "edit"){
 
+      $("#band").val("edit");
+      $("#band1").val("edit");
+      $("#band2").val("edit");
       $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Expediente");
 
     } else if(bandera == "reforma_parcial") {
 
+      $("#band").val("reforma_parcial");
+      $("#band1").val("reforma_parcial");
+      $("#band2").val("reforma_parcial");
       $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Reforma Parcial");
       $("#tipo_solicitud").val('Reforma Parcial');
 
     } else if(bandera == "reforma_total") {
 
+      $("#band").val("reforma_total");
+      $("#band1").val("reforma_total");
+      $("#band2").val("reforma_total");
       $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Reforma Total");
       $("#tipo_solicitud").val('Reforma Total');
 
@@ -119,6 +131,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#estatutos").attr('checked',false);
     $("#acuerdo_creacion").attr('checked',false);
     $("#nominacion").attr('checked',false);
+    $("#creacion_escritura").attr('checked',false);
+    $("#acuerdo_ejecutivo").attr('checked',false);
 
     $("#nombres").val("");
     $("#apellidos").val("");
@@ -172,13 +186,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
-  function combo_establecimiento(seleccion){
+  function combo_establecimiento(seleccion, disable=''){
     
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/combo_establecimiento",
       type: "post",
       dataType: "html",
-      data: {id : seleccion}
+      data: {id : seleccion, disable: disable}
     })
     .done(function(res){
       $('#div_combo_establecimiento').html(res);
