@@ -26,7 +26,9 @@ class Documentacion extends CI_Controller {
                 'matricula_documentort' => $this->input->post('matricula'),
                 'estatutos_documentort' => $this->input->post('estatutos'),
                 'acuerdoejec_documentort' => $this->input->post('acuerdo_creacion'),
-                'nominayfuncion_documentort' => $this->input->post('nominacion')
+                'nominayfuncion_documentort' => $this->input->post('nominacion'),
+                'leycreacionescritura_documentort' => $this->input->post('creacion_escritura'),
+                'acuerdoejecutivo_documentort' => $this->input->post('acuerdo_ejecutivo')
             );
 
             if ("fracaso" != $this->documento_model->insertar_documento($data2)) {
@@ -52,7 +54,9 @@ class Documentacion extends CI_Controller {
                 'matricula_documentort' => $this->input->post('matricula'),
                 'estatutos_documentort' => $this->input->post('estatutos'),
                 'acuerdoejec_documentort' => $this->input->post('acuerdo_creacion'),
-                'nominayfuncion_documentort' => $this->input->post('nominacion')
+                'nominayfuncion_documentort' => $this->input->post('nominacion'),
+                'leycreacionescritura_documentort' => $this->input->post('creacion_escritura'),
+                'acuerdoejecutivo_documentort' => $this->input->post('acuerdo_ejecutivo')
 			);
 
 			if ("fracaso" != $this->documento_model->editar_documento($data2)) {

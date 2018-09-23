@@ -20,11 +20,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
       $("#id_expedientert").val(result.id_expedientert);
       $("#id_expediente").val(result.id_expedientert);
-      $("#tipo_solicitante").val(result.tipopersona_expedientert).trigger('change.select2');
 
       if(bandera == "edit"){
 
         $("#tipo_solicitud").val(result.tiposolicitud_expedientert);
+        $("#tipo_solicitante").val(result.tipopersona_expedientert).trigger('change.select2');
 
       }
 
@@ -45,7 +45,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#nit").val(result.nit_representantert);
       $("#telefono").val(result.telefono_representantert);
       $("#correo").val(result.correo_representantert);
-      $("#tipo_representante").val(result.cargo_representantert);
+      $("#tipo_representante").val(result.cargo_representantert).trigger('change.select2');
       $("#sexo").val(result.sexo_representantert).trigger('change.select2');
 
       
@@ -106,7 +106,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   function cambiar_nuevo(){
     $("#id_expediente").val("");
     $("#id_expedient").val("");
-    $("#tipo_solicitante").val("0").trigger('change.select2');
+    $("#tipo_solicitante").val("").trigger('change.select2');
     $("#tipo_solicitud").val('Registro');
 
     $("#reglamento_interno").attr('checked',false);
@@ -126,7 +126,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#nit").val("");
     $("#telefono").val("");
     $("#correo").val("");
-    $("#tipo_representante").val("");
+    $("#tipo_representante").val("").trigger('change.select2');
     $("#sexo").val("").trigger('change.select2');
 
     $("#band").val("save");
@@ -465,7 +465,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <h3 class="box-title" style="margin: 0px;">
                 <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso
                   1</button>&emsp;
-                Datos del esblecimiento y del comisionado
+                Datos del esblecimiento y del Representante Legal o Apoderado
               </h3>
               <hr class="m-t-0 m-b-30">
 
@@ -488,6 +488,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         <option value="Sociedad">Sociedad</option>
                         <option value="Persona Natural">Persona Natural</option>
                         <option value="Asociación">Asociación</option>
+                        <option value="Autonomas">Autonomas</option>
                       </select>
                     </div>
                   </div>
@@ -495,7 +496,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
               </blockquote>
 
-              <span class="etiqueta">Comisionado</span>
+              <span class="etiqueta">Representante Legal o Apoderado</span>
 
               <blockquote class="m-t-0">
                 <div class="row">
@@ -564,9 +565,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Tipo representante:</h5>
                     <div class="controls">
-                      <input type="text" id="tipo_representante" name="tipo_representante" class="form-control"
-                        placeholder="Tipo de Representante">
-                      <div class="help-block"></div>
+                      <select id="tipo_representante" name="tipo_representante" class="form-control" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="Representante Legal">Representante Legal</option>
+                        <option value="Propietario">Propietario</option>
+                        <option value="Apoderado">Apoderado</option>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -633,11 +637,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                           <input type="checkbox" id="poder" name="poder" class="filled-in chk-col-light-blue">
                           <label for="poder">Poder</label>
 
+                          <br>
+                          <input type="checkbox" id="matricula" name="matricula" class="filled-in chk-col-light-blue">
+                          <label for="matricula">Matricula de Comercio</label>
                         </div>
 
                         <div class="col-lg-6">
-                          <input type="checkbox" id="matricula" name="matricula" class="filled-in chk-col-light-blue">
-                          <label for="matricula">Matricula de Comercio</label>
 
                           <br>
                           <input type="checkbox" id="estatutos" name="estatutos" class="filled-in chk-col-light-blue">
@@ -650,6 +655,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                           <br>
                           <input type="checkbox" id="nominacion" name="nominacion" class="filled-in chk-col-light-blue">
                           <label for="nominacion">Nominaci&oacute;n y Funcionamiento del Centro Educativo</label>
+
+                          <br>
+                          <input type="checkbox" id="creacion_escritura" name="creacion_escritura" class="filled-in chk-col-light-blue">
+                          <label for="creacion_escritura">Ley de creación de la escritura</label>
+
+                          <br>
+                          <input type="checkbox" id="acuerdo_ejecutivo" name="acuerdo_ejecutivo" class="filled-in chk-col-light-blue">
+                          <label for="acuerdo_ejecutivo">Acuerdo ejecutivo de nombramiento</label>
                         </div>
                       </div>
 
