@@ -126,10 +126,11 @@ class Reglamento_model extends CI_Model {
         
         $this->db->select('')
                ->from('sri_expedientert a')
-               ->join('sri_documentort b ', ' b.id_expedientert = a.id_expedientert')
-               ->join('sge_empresa c','c.id_empresa = a.id_empresart')
-               ->join('sri_representantert d ', ' c.id_empresa = a.id_empresart')
-               ->where('a.id_expedientert', $id);
+               ->join('sri_representantert b', 'a.id_empresart = b.id_empresart')
+               ->join('sri_documentort d', 'd.id_expedientert = a.id_expedientert')
+               ->join('sge_empresa e', 'e.id_empresa = a.id_empresart')
+               ->where('a.id_expedientert', $id)
+               ->where('b.ID_REPRESENTANTERT = ( SELECT MAX(c.ID_REPRESENTANTERT) FROM SRI_REPRESENTANTERT c WHERE c.ID_EMPRESART = a.ID_EMPRESART )');
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
             return  $query;
