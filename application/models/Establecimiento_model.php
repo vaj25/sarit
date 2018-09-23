@@ -28,6 +28,21 @@ class Establecimiento_model extends CI_Model {
         }
 
     }
+
+    public function cantidad_expediente_establecimiento($id) {
+        $this->db->select('count(*) expedientes')
+                ->from('sge_empresa a')
+                ->join('sri_expedientert b', 'b.id_empresart = a.id_empresa')
+                ->where('a.id_empresa', $id);
+
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return  $query;
+        }
+        else {
+            return FALSE;
+        }
+    }
     
 }
 

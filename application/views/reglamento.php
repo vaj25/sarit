@@ -563,7 +563,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     </div>
                   </div>
                   <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Tipo representante:</h5>
+                    <h5>Tipo representante: <span class="text-danger">*</span></h5>
                     <div class="controls">
                       <select id="tipo_representante" name="tipo_representante" class="form-control" required>
                         <option value="">[Seleccione]</option>

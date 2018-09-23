@@ -56,5 +56,16 @@ class Establecimiento extends CI_Controller {
 
 		}
 	}
+
+	public function consultar_establecimiento_expediente() {
+		$count = $this->establecimiento_model->cantidad_expediente_establecimiento($this->input->post('id'))->result()[0];
+
+		if ( $count->expedientes >= 1 ) {
+			echo "fracaso";
+		} else {
+			echo "exito";
+		}
+		
+	}
 }
 ?>
