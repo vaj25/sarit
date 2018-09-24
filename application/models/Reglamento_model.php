@@ -111,7 +111,8 @@ class Reglamento_model extends CI_Model {
                ->from('sri_expedientert a')
                ->join('sir_empleado b','b.id_empleado = a.id_personal', 'left')
                ->join('sge_empresa c','c.id_empresa = a.id_empresart')
-               ->join('sri_estadort d','a.id_estadort = d.id_estadort');
+               ->join('sri_estadort d','a.id_estadort = d.id_estadort')
+               ->where('a.id_expedientert IN ( SELECT MAX(e.id_expedientert)  FROM sri_expedientert e GROUP BY e.numexpediente_expedientert )');
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
             return  $query;

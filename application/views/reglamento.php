@@ -51,8 +51,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
       } else {
         
-        combo_establecimiento(result.id_empresart, 'disabled');
-        $("#tipo_solicitante").attr('disabled', 'disabled');
+        combo_establecimiento(result.id_empresart, 'readonly');
+        $("#tipo_solicitante").attr('readonly', 'readonly');
 
       }
 
@@ -119,6 +119,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#id_expediente").val("");
     $("#id_expedient").val("");
     $("#tipo_solicitante").val("").trigger('change.select2');
+    $("#tipo_solicitante").removeAttr('readonly');
     $("#tipo_solicitud").val('Registro');
 
     $("#reglamento_interno").attr('checked',false);

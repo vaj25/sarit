@@ -126,6 +126,14 @@ class Reglamento extends CI_Controller {
 
 				if ($data['tiposolicitud_expedientert'] != $this->input->post('tipo_solicitud')) {
 					$data['id_expedientert'] = null;
+					$data['resolucion_expedientert'] = null;
+					$data['fecharesolucion_expedientert'] = 0;
+					$data['archivo_expedientert'] = null;
+					$data['inhabilitado_expedientert'] = null;
+					$data['obsergenero_expedientrt'] = null;
+					$data['contenidoTitulos_expedientert'] = null;
+					$data['notificacion_expedientert'] = null;
+					$data['fechanotificacion_expedientert'] = 0;
 					$data['tiposolicitud_expedientert'] = $this->input->post('tipo_solicitud');
 					echo $this->reglamento_model->insertar_reglamento($data);
 				} else {
