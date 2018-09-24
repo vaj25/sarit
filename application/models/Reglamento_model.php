@@ -99,21 +99,30 @@ class Reglamento_model extends CI_Model {
         
         $this->db->select("
                 a.id_expedientert,
-                numexpediente_expedientert,
-                nombre_empresa,
-                tiposolicitud_expedientert,
-                fecharesolucion_expedientert,
-                d.id_estadort,
+                a.numexpediente_expedientert,
+                a.tiposolicitud_expedientert,
+                a.fecharesolucion_expedientert,
                 a.id_personal,
-                estado_estadort,
                 a.archivo_expedientert,
-                concat_ws(' ',b.primer_nombre,b.segundo_nombre,b.tercer_nombre,b.primer_apellido,b.segundo_apellido,b.apellido_casada) AS nombre_empleado")
+                concat_ws(' ',b.primer_nombre,b.segundo_nombre,b.tercer_nombre,b.primer_apellido,b.segundo_apellido,b.apellido_casada) AS nombre_empleado,
+                c.nombre_empresa,
+                d.id_estadort,
+                d.estado_estadort,
+                f.fecha_exp_est,
+                f.etapa_exp_est")
                ->from('sri_expedientert a')
                ->join('sir_empleado b','b.id_empleado = a.id_personal', 'left')
                ->join('sge_empresa c','c.id_empresa = a.id_empresart')
-               ->join('sri_estadort d','a.id_estadort = d.id_estadort')
-               ->where('a.id_expedientert IN ( SELECT MAX(e.id_expedientert)  FROM sri_expedientert e GROUP BY e.numexpediente_expedientert )');
+               ->join('sri_expediente_estado f ', 'f.id_expedientert = a.id_expedientert')
+               ->join('sri_estadort d','d.id_estadort = f.id_estadort')
+               ->where('a.id_expedientert IN ( SELECT MAX(e.id_expedientert) FROM sri_expedientert e GROUP BY e.numexpediente_expedientert )')
+               ->where('f.fecha_exp_est = (SELECT ee.fecha_exp_est FROM sri_expedientert e
+                        JOIN sri_expediente_estado ee on ee.id_expedientert=e.id_expedientert
+                        JOIN sri_estadort es on es.id_estadort=ee.id_estadort
+                        WHERE e.id_expedientert=a.id_expedientert
+                        AND  ee.fecha_exp_est=(SELECT max(eee.fecha_exp_est) from sri_expediente_estado eee where eee.id_expedientert=e.id_expedientert))');
         $query=$this->db->get();
+        //print $this->db->get_compiled_select();
         if ($query->num_rows() > 0) {
             return  $query;
         }

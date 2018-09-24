@@ -5,7 +5,7 @@ class Reglamento extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("reglamento_model", "documento_model", "comisionado_model" ));
+		$this->load->model(array("reglamento_model", "documento_model", "comisionado_model", "expediente_estado_model" ));
 	}
 
 	public function index(){
@@ -261,10 +261,14 @@ class Reglamento extends CI_Controller {
 
 	public function gestionar_estado_reglamento() {
 
-		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
-		$data['id_estadort'] = $this->input->post('estado');
+		$data = array(
+			'id_estadort' => $this->input->post('estado'),
+			'id_expedientert' => $this->input->post('id_reglamento_resolucion'),
+			'fecha_exp_est' => date("Y-m-d H:i:s"),
+			'etapa_exp_est' => $this->obtener_estado($this->input->post('id_reglamento_resolucion'))
+		);
 
-		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+		if ("fracaso" == $this->expediente_estado_model->insertar_expediente_estado($data)) {
 			echo "fracaso";
 		} else {
 			echo "exito";
@@ -367,6 +371,23 @@ class Reglamento extends CI_Controller {
 		} else {
 			echo "exito";
 		}
+	}
+
+	public function obtener_estado($id_expediente) {
+		
+		$res = $this->expediente_estado_model->obtener_ultimo_estado($id_expediente);
+
+		if ($res) {
+			$data = $res->result()[0];
+			
+			if ($data->id_estadort == 3 && $data->etapa_exp_est >= 4) {
+				return $data->etapa_exp_est + 1;
+			} else {
+				return $data->etapa_exp_est;
+			}
+			
+		}
+
 	}
 
 }
