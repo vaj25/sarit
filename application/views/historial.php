@@ -46,6 +46,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
+  function detalle(id_reglamento) {
+    $.ajax({
+      url: "<?php echo site_url(); ?>/historial/ver_detalle",
+      type: "post",
+      dataType: "html",
+      data: {id : id_reglamento}
+    })
+    .done(function(res){
+      $('#cnt_actions').html(res);
+      $('#table-detalle').DataTable();
+      $("#cnt_actions").show(0);
+      $("#cnt-tabla").hide(0);
+      $("#cnt_form_main").hide(0);
+    });
+  }
+
   function resolucion(id_reglamento) {
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/resolucion_reglamento",
