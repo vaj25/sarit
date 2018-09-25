@@ -32,7 +32,7 @@
                         if($reglamentos->num_rows() > 0){
                             foreach ($reglamentos->result() as $fila) {
                                 echo "<tr>";
-                                echo "<td>".$fila->numexpediente_expedientert." ".$fila->id_expedientert."</td>";
+                                echo "<td>".$fila->numexpediente_expedientert."</td>";
                                 echo "<td>".$fila->nombre_empresa."</td>";
                                 echo "<td>".$fila->nombre_empleado."</td>";
                                 echo "<td>".$fila->tiposolicitud_expedientert."</td>";
@@ -91,7 +91,7 @@
                                                     }
                                                 ?>
                                                 <a class="dropdown-item" href="javascript:;" onClick="adjuntar_reglamento(<?=$fila->id_expedientert?>)">Adjuntar Reglamento</a>
-                                                <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedientert?>)">Inhabilitar Expediente</a>
+                                                <!-- <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedientert?>)">Inhabilitar Expediente</a> -->
                                             </div>
                                         </div>
                                 <?php

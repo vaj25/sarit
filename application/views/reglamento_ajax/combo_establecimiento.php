@@ -31,7 +31,7 @@ $('#establecimiento').on('select2:select', function (e) {
     }).
     done(function (data) {
         if (data == "fracaso") {
-            swal({ title: "¡Ups! Error", text: "Esta empresa ya dispone de un expediente.", type: "error", showConfirmButton: true });
+            swal({ title: "¡Ups!", text: "Esta empresa ya dispone de un expediente.", type: "warning", showConfirmButton: true });
             $('#establecimiento').val("").trigger("change");
         }
     }).

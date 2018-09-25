@@ -41,7 +41,7 @@
                 <div class="table-responsive">
 
                     <table id="table-detalle" class="table table-bordered product-overview">
-                        <thead class="bg-info text-white">
+                        <thead class="bg-inverse text-white">
                             <tr>
                                 <th>N&uacute;mero</th>
                                 <th>Nivel de Proceso</th>
