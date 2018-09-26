@@ -13,7 +13,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#cnt_form_main").hide(0);
     $("#cnt_actions").hide(0);
     $("#cnt_actions").remove('.card');
-    open_form(1);
   }
 
   function iniciar(){
@@ -40,6 +39,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     })
     .done(function(res){
       $('#cnt_actions').html(res);
+      $("#cnt_actions").show(0);
+      $("#cnt-tabla").hide(0);
+      $("#cnt_form_main").hide(0);
+    });
+  }
+
+  function historial(num_reglamento) {
+    $.ajax({
+      url: "<?php echo site_url(); ?>/historial/ver_historial",
+      type: "post",
+      dataType: "html",
+      data: {num : num_reglamento}
+    })
+    .done(function(res){
+      $('#cnt_actions').html(res);
+      $('#table-historial').DataTable();
       $("#cnt_actions").show(0);
       $("#cnt-tabla").hide(0);
       $("#cnt_form_main").hide(0);
@@ -234,112 +249,3 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 <div id="cnt_model_establecimiento"></div>
 <div id="cnt_modal_acciones"></div>
-
-<script>
-
-$(function(){
-    $("#formajax").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax"));
-        formData.append("dato", "valor");
-        
-        $.ajax({
-            url: "<?php echo site_url(); ?>/reglamento/gestionar_reglamento",
-            type: "post",
-            dataType: "html",
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false
-        })
-        .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }else{
-              open_form(2);
-              $("#id_expediente").val(res);
-              $("#id_expedient").val(res);
-              $("#band1").val( $("#band").val() );
-              $("#band2").val( $("#band").val() );
-              if($("#band").val() == "delete"){
-                swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
-              }
-            }
-        });
-            
-    });
-});
-
-$(function(){
-    $("#formajax2").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax2"));
-        
-        $.ajax({
-          url: "<?php echo site_url(); ?>/documentacion/gestionar_documentacion",
-          type: "post",
-          dataType: "html",
-          data: formData,
-          cache: false,
-          contentType: false,
-          processData: false
-        })
-        .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }else{
-              cerrar_mantenimiento();
-              if($("#band2").val() == "save"){
-                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-              }else if($("#band2").val() == "edit"){
-                  swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-              }else{
-                  swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
-              }
-              tablaReglamentos();
-            }
-        });
-            
-    });
-});
-
-
-$(function(){
-    $("#formajax3").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax3"));
-        
-        $.ajax({
-          url: "<?php echo site_url(); ?>/establecimiento/gestionar_establecimiento",
-          type: "post",
-          dataType: "html",
-          data: formData,
-          cache: false,
-          contentType: false,
-          processData: false
-        })
-        .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }else{
-              swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-
-              var data = {
-                  id: res,
-                  text: $("#nombre_establecimiento").val()
-              };
-
-              var newOption = new Option(data.text, data.id, false, false);
-              $('#establecimiento').append(newOption).trigger('change');
-              $('#establecimiento').val(data.id).trigger("change");
-              $('#modal_establecimiento').modal('toggle');
-            }
-        });
-            
-    });
-});
-
-</script>

@@ -30,15 +30,17 @@
                 <?php
                     if ($reglamentos) {
                         if($reglamentos->num_rows() > 0){
+                            $i=1;
                             foreach ($reglamentos->result() as $fila) {
                                 echo "<tr>";
-                                echo "<td>".$fila->numexpediente_expedientert."</td>";
+                                // echo "<td>".$fila->numexpediente_expedientert."</td>";
+                                echo "<td>".$i."</td>";
                                 echo "<td>".$fila->nombre_empresa."</td>";
                                 echo "<td>".$fila->nombre_empleado."</td>";
                                 echo "<td>".$fila->tiposolicitud_expedientert."</td>";
-                                echo "<td>".$fila->fecharesolucion_expedientert."</td>";
+                                echo "<td>".$fila->fecha_exp_est."</td>";
                                 echo ($fila->id_estadort != "9") ? '<td><span class="label label-success">'.$fila->estado_estadort.'</span></td>' : '<td><span class="label label-danger">'.$fila->estado_estadort.'</span></td>';
-
+                                $i++;
                                 echo "<td>";
                                 $array = array($fila->id_expedientert);
 

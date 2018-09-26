@@ -47,7 +47,7 @@
                                         </button>
                                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
                                             <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedientert?>)">Visualizar</a>
-                                            <a class="dropdown-item" href="javascript:;" onClick="detalle(<?=$fila->id_expedientert?>)">Ver detalle</a>
+                                            <a class="dropdown-item" href="javascript:;" onClick="historial('<?=$fila->numexpediente_expedientert?>')">Ver historial</a>
                                             <?php
                                                 if ( $fila->id_estadort == 6 || $fila->id_estadort == 2 || $fila->id_estadort == 9 ) {
                                             ?>

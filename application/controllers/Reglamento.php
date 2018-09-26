@@ -26,7 +26,6 @@ class Reglamento extends CI_Controller {
 			$data = array(
 				'id_empresart' => $this->input->post('establecimiento'),
 				'id_personal' => '',
-				'id_estadort' => 1,
 				'numexpediente_expedientert' => 'N/A',
 				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
 				'tiposolicitud_expedientert' => $this->input->post('tipo_solicitud'),
