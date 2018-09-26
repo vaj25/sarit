@@ -8,7 +8,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 ?>
 
 <div class="modal fade" id="modal_actualizar_estado" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Actualizar estado del Reglamento</h4>
@@ -25,7 +25,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
           <div class="row">
             <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Estado Actual del Expediente: <span class="text-danger">*</span></h5>
+              <h5>Estado del Expediente: <span class="text-danger">*</span></h5>
               <div class="controls">
                 <select id="estado" name="estado" class="select2" onchange="" style="width: 100%">
                   <option value="">[Seleccione]</option>
@@ -46,6 +46,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </select>
               </div>
             </div>
+                    
+            <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <h5>Fecha de cambio de estado: <span class="text-danger">*</span></h5>
+              <div class="controls">
+                  <input type="date" class="form-control" id="fecha_estado" nombre="fecha_estado" required>
+              </div>
+            </div>
+
           </div>
 
           <div align="right" id="btnadd1">

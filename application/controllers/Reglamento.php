@@ -55,7 +55,19 @@ class Reglamento extends CI_Controller {
 			);
 
 			if ("exito" == $this->comisionado_model->insertar_comisionado($data2)) {
-				echo $this->reglamento_model->insertar_reglamento($data);
+				
+				$id = $this->reglamento_model->insertar_reglamento($data);
+				
+				$this->expediente_estado_model->insertar_expediente_estado(
+					array(
+					'id_estadort' => 1,
+					'id_expedientert' => $id,
+					'fecha_exp_est' => date("Y-m-d H:i:s"),
+					'etapa_exp_est' => 1
+				));
+
+				echo $id;
+
 			} else {
 				echo "fracaso";
 			}
