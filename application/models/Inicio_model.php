@@ -8,7 +8,21 @@ class Inicio_model extends CI_Model {
 	}
 
 	public function obtener_estadistica_estado_reglamento(){
-		$query=$this->db->query('SELECT ca.estado_estadort AS nombre, (SELECT COUNT(*) FROM sri_expedientert AS a WHERE a.id_estadort = ca.id_estadort) AS cantidad FROM sri_estadort AS ca');
+		$query=$this->db->query('SELECT ca.estado_estadort AS nombre, (SELECT COUNT(*) FROM (select ex.ID_EXPEDIENTERT, f.ID_ESTADORT
+		from sri_expedientert ex
+		join sri_expediente_estado f on f.id_expedientert = ex.id_expedientert
+		where f.fecha_exp_est = (select ee.fecha_exp_est
+			from sri_expedientert e
+			join sri_expediente_estado ee on ee.id_expedientert = e.id_expedientert
+			join sri_estadort es on es.id_estadort = ee.id_estadort
+			where e.id_expedientert = ex.id_expedientert
+			and ee.fecha_exp_est = (
+				select
+					max(eee.fecha_exp_est)
+				from
+					sri_expediente_estado eee
+				where
+					eee.id_expedientert = e.id_expedientert))) AS a WHERE a.id_estadort = ca.id_estadort) AS cantidad FROM sri_estadort AS ca');
 		if ($query->num_rows() > 0) { return $query;
 		}else{ return FALSE; }
 	}
