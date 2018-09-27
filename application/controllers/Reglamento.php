@@ -276,7 +276,8 @@ class Reglamento extends CI_Controller {
 			'id_estadort' => $this->input->post('estado'),
 			'id_expedientert' => $this->input->post('id_reglamento_resolucion'),
 			'fecha_exp_est' => date("Y-m-d H:i:s"),
-			'etapa_exp_est' => $this->obtener_estado($this->input->post('id_reglamento_resolucion'))
+			'etapa_exp_est' => $this->obtener_estado($this->input->post('id_reglamento_resolucion')),
+			'fecha_ingresar_exp_est' => date('Y-m-d', $this->input->post('fecha_estado'))
 		);
 
 		if ("fracaso" == $this->expediente_estado_model->insertar_expediente_estado($data)) {
@@ -318,7 +319,6 @@ class Reglamento extends CI_Controller {
 			}
 
 		}
-
 
 	}
 
@@ -376,6 +376,22 @@ class Reglamento extends CI_Controller {
 	public function gestionar_acta_aprobada() {
 		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento'))->result_array()[0];
 		$data['contenidoTitulos_expedientert'] = $this->input->post('contenido');
+
+		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+			echo "fracaso";
+		} else {
+			echo "exito";
+		}
+	}
+
+	public function entrega_resolucion() {
+		$this->load->view('reglamento_ajax/modal_entrega', array('id_expediente' => $this->input->post('id') ));
+	}
+
+	public function gestionar_entrega_resolucion() {
+		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
+		$data['fecha_entrega'] = date('Y-m-d', strtotime($this->input->post('fecha_entrega')));
+		$data['persona_recibe'] = $this->input->post('recibe');
 
 		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
 			echo "fracaso";

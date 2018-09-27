@@ -7,7 +7,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 }
 ?>
 
-<div class="modal fade" id="modal_actualizar_estado" role="dialog">
+<div class="modal fade" id="modal_entrega_resolucion" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -17,7 +17,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       <div class="modal-body" id="">
 
         <div id="cnt_form7" class="cnt_form">
-          <?php echo form_open('', array('id' => 'formajax7', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+          <?php echo form_open('', array('id' => 'formajax10', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
 
           <hr class="m-t-0 m-b-30">
 
@@ -25,31 +25,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
           <div class="row">
             <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Estado del Expediente: <span class="text-danger">*</span></h5>
-              <div class="controls">
-                <select id="estado" name="estado" class="select2" onchange="" style="width: 100%">
-                  <option value="">[Seleccione]</option>
-                  <?php
-                    if(!empty($estado)){
-                    foreach ($estado->result() as $fila) {
-                  ?>
-                  <option value="<?php echo $fila->id_estadort ?>" <?php if($fila->id_estadort==$id){?> selected
-                    <?php }?>>
-                    <?php
-                      echo $fila->estado_estadort;
-                    ?>
-                  </option>;
-                  <?php
-                    }
-                    }
-                  ?>
-                </select>
-              </div>
+                <h5>Quien recibe: <span class="text-danger">*</span></h5>
+                <input type="text" required="" class="form-control" id="recibe" name="recibe" placeholder="Nombre de la persona que recibe" >
             </div>
 
             <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-              <h5>Fecha de cambio de estado: <span class="text-danger">*</span></h5>
-              <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_estado" name="fecha_estado" placeholder="dd/mm/yyyy" readonly="">
+                <h5>Fecha de entrega: <span class="text-danger">*</span></h5>
+                <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_entrega" name="fecha_entrega" placeholder="dd/mm/yyyy" readonly="">
             </div>
 
           </div>
@@ -73,14 +55,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <script>
 
 $(function(){     
-    $("#formajax7").on("submit", function(e){
+    $("#formajax10").on("submit", function(e){
         e.preventDefault();
         var f = $(this);
-        var formData = new FormData(document.getElementById("formajax7"));
-        $('#modal_actualizar_estado').modal('hide');
+        var formData = new FormData(document.getElementById("formajax10"));
+        $('#modal_entrega_resolucion').modal('hide');
 
         $.ajax({
-            url: "<?php echo site_url(); ?>/reglamento/gestionar_estado_reglamento",
+            url: "<?php echo site_url(); ?>/reglamento/gestionar_entrega_resolucion",
             type: "post",
             dataType: "html",
             data: formData,
@@ -90,15 +72,13 @@ $(function(){
         })
         .done(function(res){
             if(res == "exito"){
-                //cerrar_mantenimiento();
-                swal({ title: "¡El estado se aplico con exito!", type: "success", showConfirmButton: true });
-                //tablaEstados();
+                swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
         });
 
-        $('#modal_actualizar_estado').remove();
+        $('#modal_entrega_resolucion').remove();
         $('.modal-backdrop').remove();
         tablaReglamentos();
             
@@ -107,7 +87,7 @@ $(function(){
 
 $(function () {
         $(document).ready(function () {
-            $('#fecha_estado').datepicker({
+            $('#fecha_entrega').datepicker({
                 format: 'dd-mm-yyyy',
                 autoclose: true,
                 todayHighlight: true,
