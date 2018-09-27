@@ -13,8 +13,7 @@ class Reglamento_model extends CI_Model {
             $this->db->insert(
                 'sri_expedientert',
                 array(
-                    'id_empresart' => $data['id_empresart'], 
-                    'id_personal' => $data['id_personal'],
+                    'id_empresart' => $data['id_empresart'],
                     'numexpediente_expedientert' => $data['numexpediente_expedientert'],
                     'tipopersona_expedientert' => $data['tipopersona_expedientert'],
                     'tiposolicitud_expedientert' => $data['tiposolicitud_expedientert'],
@@ -45,7 +44,6 @@ class Reglamento_model extends CI_Model {
             'sri_expedientert', 
             array(
                 'id_empresart' => $data['id_empresart'],
-                'id_personal' => $data['id_personal'],
                 'numexpediente_expedientert' => $data['numexpediente_expedientert'],
                 'tipopersona_expedientert' => $data['tipopersona_expedientert'],
                 'tiposolicitud_expedientert' => $data['tiposolicitud_expedientert'],
@@ -103,16 +101,17 @@ class Reglamento_model extends CI_Model {
                 a.tiposolicitud_expedientert,
                 a.fecharesolucion_expedientert,
                 a.fechacrea_expedientert,
-                a.id_personal,
+                bc.id_empleado id_personal,
                 a.archivo_expedientert,
-                concat_ws(' ',b.primer_nombre,b.segundo_nombre,b.tercer_nombre,b.primer_apellido,b.segundo_apellido,b.apellido_casada) AS nombre_empleado,
+                concat_ws(' ', bc.primer_nombre, bc.segundo_nombre, bc.tercer_nombre, bc.primer_apellido, bc.segundo_apellido, bc.apellido_casada) as nombre_empleado,
                 c.nombre_empresa,
                 d.id_estadort,
                 d.estado_estadort,
                 f.fecha_exp_est,
                 f.etapa_exp_est,")
                ->from('sri_expedientert a')
-               ->join('sir_empleado b','b.id_empleado = a.id_personal', 'left')
+               ->join('sri_expediente_empleado b', 'b.id_expedientert = a.id_expedientert', 'left')
+               ->join('sir_empleado bc', 'bc.id_empleado = b.id_empleado', 'left')
                ->join('sge_empresa c','c.id_empresa = a.id_empresart')
                ->join('sri_expediente_estado f ', 'f.id_expedientert = a.id_expedientert')
                ->join('sri_estadort d','d.id_estadort = f.id_estadort')
@@ -122,10 +121,13 @@ class Reglamento_model extends CI_Model {
                         JOIN sri_estadort es on es.id_estadort=ee.id_estadort
                         WHERE e.id_expedientert=a.id_expedientert
                         AND  ee.fecha_exp_est=(SELECT max(eee.fecha_exp_est) from sri_expediente_estado eee where eee.id_expedientert=e.id_expedientert))')
+                ->where('b.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
+                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
+                        where se.id_expedientert = a.id_expedientert ))')
                 ->where('f.etapa_exp_est <> 4')
                 ->order_by('f.fecha_exp_est', 'asc');
         $query=$this->db->get();
-        //print $this->db->get_compiled_select();
+        // print $this->db->get_compiled_select();
         if ($query->num_rows() > 0) {
             return  $query;
         }
@@ -142,16 +144,17 @@ class Reglamento_model extends CI_Model {
                 a.numexpediente_expedientert,
                 a.tiposolicitud_expedientert,
                 a.fecharesolucion_expedientert,
-                a.id_personal,
+                bc.id_empleado id_personal,
                 a.archivo_expedientert,
-                concat_ws(' ',b.primer_nombre,b.segundo_nombre,b.tercer_nombre,b.primer_apellido,b.segundo_apellido,b.apellido_casada) AS nombre_empleado,
+                concat_ws(' ', bc.primer_nombre, bc.segundo_nombre, bc.tercer_nombre, bc.primer_apellido, bc.segundo_apellido, bc.apellido_casada) as nombre_empleado,
                 c.nombre_empresa,
                 d.id_estadort,
                 d.estado_estadort,
                 f.fecha_exp_est,
                 f.etapa_exp_est")
                ->from('sri_expedientert a')
-               ->join('sir_empleado b','b.id_empleado = a.id_personal', 'left')
+               ->join('sri_expediente_empleado b', 'b.id_expedientert = a.id_expedientert', 'left')
+               ->join('sir_empleado bc', 'bc.id_empleado = b.id_empleado', 'left')
                ->join('sge_empresa c','c.id_empresa = a.id_empresart')
                ->join('sri_expediente_estado f ', 'f.id_expedientert = a.id_expedientert')
                ->join('sri_estadort d','d.id_estadort = f.id_estadort')
@@ -159,7 +162,10 @@ class Reglamento_model extends CI_Model {
                         JOIN sri_expediente_estado ee on ee.id_expedientert=e.id_expedientert
                         JOIN sri_estadort es on es.id_estadort=ee.id_estadort
                         WHERE e.id_expedientert=a.id_expedientert
-                        AND  ee.fecha_exp_est=(SELECT max(eee.fecha_exp_est) from sri_expediente_estado eee where eee.id_expedientert=e.id_expedientert))');
+                        AND  ee.fecha_exp_est=(SELECT max(eee.fecha_exp_est) from sri_expediente_estado eee where eee.id_expedientert=e.id_expedientert))')
+                ->where('b.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
+                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
+                        where se.id_expedientert = a.id_expedientert ))');
         
         if ($numero) {
             $this->db->where('a.numexpediente_expedientert', $numero);
@@ -205,8 +211,8 @@ class Reglamento_model extends CI_Model {
                ->join('sri_representantert e', 'e.id_empresart = b.id_empresa')
                ->join('sir_empleado f','f.id_empleado = a.id_personal', 'left')
                ->where('a.id_expedientert', $id);
-        $query=$this->db->get();
-        //print $this->db->get_compiled_select();
+        // $query=$this->db->get();
+        print $this->db->get_compiled_select();
         if ($query->num_rows() > 0) {
             return $query;
         }
