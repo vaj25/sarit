@@ -81,6 +81,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 });
             $('#modal_delegado').remove();
             $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
             tablaReglamentos();
         });
     });

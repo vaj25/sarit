@@ -77,6 +77,7 @@ $(function(){
 
       $('#modal_adjuntar').remove();
       $('.modal-backdrop').remove();
+      $('body').removeClass('modal-open');
       tablaReglamentos();
             
     });

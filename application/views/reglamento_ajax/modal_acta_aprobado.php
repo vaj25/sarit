@@ -67,6 +67,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             });
             $('#modal_acta_aprobada').remove();
             $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
         });
     });
 </script>

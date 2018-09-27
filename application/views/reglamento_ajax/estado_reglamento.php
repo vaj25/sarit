@@ -100,6 +100,7 @@ $(function(){
 
         $('#modal_actualizar_estado').remove();
         $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open');
         tablaReglamentos();
             
     });

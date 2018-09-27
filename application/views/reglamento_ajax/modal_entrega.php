@@ -80,6 +80,7 @@ $(function(){
 
         $('#modal_entrega_resolucion').remove();
         $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open');
         tablaReglamentos();
             
     });

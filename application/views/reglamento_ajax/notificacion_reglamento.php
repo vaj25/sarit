@@ -89,6 +89,7 @@ $(function(){
         });
         $('#modal_notificacion').remove();
         $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open');
             
     });
 });

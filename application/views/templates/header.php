@@ -24,7 +24,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <title>SARIT</title>
 
     
-    <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
+    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
     <script>
     // Initialize Firebase
     var config = {
@@ -36,7 +36,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         messagingSenderId: "128097213495"
     };
     firebase.initializeApp(config);
-    </script>
+    </script> -->
 
     <!-- CSS Requerido -->
     <script src="<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js"></script>
