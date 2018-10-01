@@ -56,7 +56,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
       }
 
-      combo_delegado(result.id_personal);
+      combo_delegado(result.id_empleado, 'readonly');
 
     });
 
@@ -430,13 +430,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       });
   }
 
-  function combo_delegado(seleccion){
+  function combo_delegado(seleccion, disable=''){
     
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/combo_delegado",
       type: "post",
       dataType: "html",
-      data: {id : seleccion}
+      data: {id : seleccion, disable: disable}
     })
     .done(function(res){
       $('#div_combo_delegado').html(res);

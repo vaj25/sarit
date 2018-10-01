@@ -82,7 +82,12 @@ class Reglamento_model extends CI_Model {
         
         $this->db->select('')
                ->from('sri_expedientert a')
-               ->where('id_expedientert', $id);
+               ->join('sri_expediente_empleado f', 'f.id_expedientert = a.id_expedientert')
+               ->join('sir_empleado h', 'h.id_empleado = f.id_empleado')
+               ->where('a.id_expedientert', $id)
+               ->where('h.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
+                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
+                        where se.id_expedientert = a.id_expedientert ))');
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
             return $query;
@@ -189,8 +194,13 @@ class Reglamento_model extends CI_Model {
                ->join('sri_representantert b', 'a.id_empresart = b.id_empresart')
                ->join('sri_documentort d', 'd.id_expedientert = a.id_expedientert')
                ->join('sge_empresa e', 'e.id_empresa = a.id_empresart')
+               ->join('sri_expediente_empleado f', 'f.id_expedientert = a.id_expedientert', 'left')
+               ->join('sir_empleado h', 'h.id_empleado = f.id_empleado', 'left')
                ->where('a.id_expedientert', $id)
-               ->where('b.ID_REPRESENTANTERT = ( SELECT MAX(c.ID_REPRESENTANTERT) FROM SRI_REPRESENTANTERT c WHERE c.ID_EMPRESART = a.ID_EMPRESART )');
+               ->where('b.ID_REPRESENTANTERT = ( SELECT MAX(c.ID_REPRESENTANTERT) FROM SRI_REPRESENTANTERT c WHERE c.ID_EMPRESART = a.ID_EMPRESART )')
+               ->where('h.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
+                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
+                        where se.id_expedientert = a.id_expedientert ))');
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
             return  $query;

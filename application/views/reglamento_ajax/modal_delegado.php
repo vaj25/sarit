@@ -34,6 +34,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             </select>
                         </div>
                     </div>
+
+                    <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                        <h5>Fecha de cambio de delegado: <span class="text-danger">*</span></h5>
+                        <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_delegado" name="fecha_delegado" placeholder="dd/mm/yyyy" readonly="">
+                    </div>
                 </div>
                 <div align="right">
                     <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cerrar</button>
@@ -83,6 +88,17 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             $('.modal-backdrop').remove();
             $('body').removeClass('modal-open');
             tablaReglamentos();
+        });
+    });
+
+    $(function () {
+        $(document).ready(function () {
+            $('#fecha_delegado').datepicker({
+                format: 'dd-mm-yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                startDate: moment().format("DD-MM-YYYY")
+            }).datepicker("setDate", new Date());
         });
     });
 </script>

@@ -5,7 +5,7 @@ class Reglamento extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("reglamento_model", "documento_model", "comisionado_model", "expediente_estado_model" ));
+		$this->load->model(array("reglamento_model", "documento_model", "comisionado_model", "expediente_estado_model", "expediente_empleado_model" ));
 	}
 
 	public function index(){
@@ -146,7 +146,19 @@ class Reglamento extends CI_Controller {
 					$data['notificacion_expedientert'] = null;
 					$data['fechanotificacion_expedientert'] = 0;
 					$data['tiposolicitud_expedientert'] = $this->input->post('tipo_solicitud');
-					echo $this->reglamento_model->insertar_reglamento($data);
+					
+					$id = $this->reglamento_model->insertar_reglamento($data);
+				
+					$this->expediente_estado_model->insertar_expediente_estado(
+						array(
+						'id_estadort' => 1,
+						'id_expedientert' => $id,
+						'fecha_exp_est' => date("Y-m-d H:i:s"),
+						'etapa_exp_est' => 1
+					));
+
+					echo $id;
+					
 				} else {
 					echo $this->input->post('id_expediente');
 				}
@@ -184,7 +196,8 @@ class Reglamento extends CI_Controller {
 		$this->load->view('reglamento_ajax/combo_delegado', 
 			array(
 				'id' => $this->input->post('id'),
-				'colaborador' => $this->db->get('lista_empleados_estado')
+				'colaborador' => $this->db->get('lista_empleados_estado'),
+				'disable' => $this->input->post('disable')
 			)
 		);
 
@@ -360,13 +373,26 @@ class Reglamento extends CI_Controller {
 
 	public function gestionar_reglamento_delegado() {
 		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento'))->result_array()[0];
-		$data['id_personal'] = $this->input->post('id_personal_copia');
-
-		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
-			echo "fracaso";
+		
+		if ($data['id_empleado'] != $this->input->post('id_personal_copia')) {
+			
+			if ("fracaso" == $this->expediente_empleado_model->
+				insertar_expediente_empleado(
+					array(
+						'id_expedientert' => $this->input->post('id_reglamento'),
+						'id_empleado' => $this->input->post('id_personal_copia'),
+						'fecha_exp_emp ' => date("Y-m-d H:i:s")
+					)
+				)
+			) {
+				echo "fracaso";
+			} else {
+				echo "exito";
+			}
 		} else {
-			echo "exito";
+			echo "fracaso";
 		}
+		
 	}
 
 	public function modal_acta_aprobada() {

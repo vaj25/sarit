@@ -5,7 +5,7 @@ class Documentacion extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("reglamento_model", "documento_model"));
+		$this->load->model(array("reglamento_model", "documento_model", "expediente_empleado_model"));
 	}
 
 	public function gestionar_documentacion() {
@@ -34,7 +34,15 @@ class Documentacion extends CI_Controller {
             );
 
             if ("fracaso" != $this->documento_model->insertar_documento($data2)) {
-				$this->reglamento_model->editar_reglamento($data);
+                $this->reglamento_model->editar_reglamento($data);
+                
+                $this->expediente_empleado_model->insertar_expediente_empleado(
+					array(
+					'id_expedientert' => $this->input->post('id_expedient'),
+					'id_empleado' => $this->input->post('colaborador'),
+					'fecha_exp_emp ' => date("Y-m-d H:i:s")
+				));
+
                 echo $this->input->post('id_expedient');
             } else {
                 echo "fracaso";
