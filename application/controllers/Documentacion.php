@@ -14,10 +14,6 @@ class Documentacion extends CI_Controller {
             || $this->input->post('band2') == "reforma_parcial"
             || $this->input->post('band2') == "reforma_total"){
 
-            $data = $this->reglamento_model->obtener_reglamento($this->input->post('id_expedient'))->result_array()[0];
-
-            $data['id_personal'] = $this->input->post('colaborador');
-
 			$data2 = array(
                 'id_expedientert' => $this->input->post('id_expedient'), 
                 'docreglamento_documentort' => $this->input->post('reglamento_interno'),
@@ -34,7 +30,6 @@ class Documentacion extends CI_Controller {
             );
 
             if ("fracaso" != $this->documento_model->insertar_documento($data2)) {
-                $this->reglamento_model->editar_reglamento($data);
                 
                 $this->expediente_empleado_model->insertar_expediente_empleado(
 					array(
@@ -49,10 +44,6 @@ class Documentacion extends CI_Controller {
             }
 
 		} else if($this->input->post('band2') == "edit"){
-
-			$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_expedient'))->result_array()[0];
-
-            $data['id_personal'] = $this->input->post('colaborador');
 
 			$data2 = array(
 				'id_expedientert' => $this->input->post('id_expedient'), 
@@ -70,7 +61,7 @@ class Documentacion extends CI_Controller {
 			);
 
 			if ("fracaso" != $this->documento_model->editar_documento($data2)) {
-				echo $this->reglamento_model->editar_reglamento($data);
+				echo $this->input->post('id_expedient');
 			} else {
 				echo "fracaso";
 			}

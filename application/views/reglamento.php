@@ -122,7 +122,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#tipo_solicitante").removeAttr('readonly');
     $("#tipo_solicitud").val('Registro');
 
-    $("#reglamento_interno").attr('checked',false);
+    $("#reglamento_interno").prop('checked',false);
     $("#constitucion_sociedad").attr('checked',false);
     $("#credencial_representante").attr('checked',false);
     $("#poder").attr('checked',false);
