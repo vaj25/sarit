@@ -102,7 +102,7 @@ $(function(){
         $('.modal-backdrop').remove();
         $('body').removeClass('modal-open');
         tablaReglamentos();
-            
+        
     });
 });
 

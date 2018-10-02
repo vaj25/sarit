@@ -88,8 +88,8 @@ class Reglamento_model extends CI_Model {
                ->where('h.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = a.id_expedientert ))');
-        // $query=$this->db->get();
-        print $this->db->get_compiled_select();
+        $query=$this->db->get();
+        // print $this->db->get_compiled_select();
         if ($query->num_rows() > 0) {
             return $query;
         }

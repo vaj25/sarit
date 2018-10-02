@@ -63,6 +63,7 @@ class Reglamento extends CI_Controller {
 					'id_estadort' => 1,
 					'id_expedientert' => $id,
 					'fecha_exp_est' => date("Y-m-d H:i:s"),
+					'fecha_ingresar_exp_est' => date("Y-m-d H:i:s"),
 					'etapa_exp_est' => 1
 				));
 
@@ -135,33 +136,29 @@ class Reglamento extends CI_Controller {
 			if ("exito" == $res) {
 				$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_expediente'))->result_array()[0];
 
-				if ($data['tiposolicitud_expedientert'] != $this->input->post('tipo_solicitud')) {
-					$data['id_expedientert'] = null;
-					$data['resolucion_expedientert'] = null;
-					$data['fecharesolucion_expedientert'] = 0;
-					$data['archivo_expedientert'] = null;
-					$data['inhabilitado_expedientert'] = null;
-					$data['obsergenero_expedientrt'] = null;
-					$data['contenidoTitulos_expedientert'] = null;
-					$data['notificacion_expedientert'] = null;
-					$data['fechanotificacion_expedientert'] = 0;
-					$data['tiposolicitud_expedientert'] = $this->input->post('tipo_solicitud');
+				$data['id_expedientert'] = null;
+				$data['resolucion_expedientert'] = null;
+				$data['fecharesolucion_expedientert'] = 0;
+				$data['archivo_expedientert'] = null;
+				$data['inhabilitado_expedientert'] = null;
+				$data['obsergenero_expedientrt'] = null;
+				$data['contenidoTitulos_expedientert'] = null;
+				$data['notificacion_expedientert'] = null;
+				$data['fechanotificacion_expedientert'] = 0;
+				$data['tiposolicitud_expedientert'] = $this->input->post('tipo_solicitud');
 					
-					$id = $this->reglamento_model->insertar_reglamento($data);
-				
-					$this->expediente_estado_model->insertar_expediente_estado(
-						array(
-						'id_estadort' => 1,
-						'id_expedientert' => $id,
-						'fecha_exp_est' => date("Y-m-d H:i:s"),
-						'etapa_exp_est' => 1
-					));
+				$id = $this->reglamento_model->insertar_reglamento($data);
+			
+				$this->expediente_estado_model->insertar_expediente_estado(
+					array(
+					'id_estadort' => 1,
+					'id_expedientert' => $id,
+					'fecha_exp_est' => date("Y-m-d H:i:s"),
+					'fecha_ingresar_exp_est' => date("Y-m-d H:i:s"),
+					'etapa_exp_est' => 1
+				));
 
-					echo $id;
-					
-				} else {
-					echo $this->input->post('id_expediente');
-				}
+				echo $id;
 
 			} else {
 				echo "fracaso";
