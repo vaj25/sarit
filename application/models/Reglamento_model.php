@@ -99,7 +99,7 @@ class Reglamento_model extends CI_Model {
 
     }
 
-    public function obtener_reglamentos() {
+    public function obtener_reglamentos($nr = false, $tipo = false) {
         
         $this->db->select("
                 a.id_expedientert,
@@ -132,6 +132,14 @@ class Reglamento_model extends CI_Model {
                         where se.id_expedientert = a.id_expedientert ))')
                 ->where('f.etapa_exp_est <> 4')
                 ->order_by('f.fecha_exp_est', 'asc');
+        if ($nr) {
+            $this->db->where('bc.nr', $nr);
+        }
+        
+        if ($tipo) {
+            $this->db->where('d.id_estadort', $tipo);
+        }
+        
         $query=$this->db->get();
         // print $this->db->get_compiled_select();
         if ($query->num_rows() > 0) {
