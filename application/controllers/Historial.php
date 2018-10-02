@@ -15,12 +15,12 @@ class Historial extends CI_Controller {
     }
     
     public function tabla_reglamento(){
-      $data['reglamentos'] = $this->reglamento_model->obtener_reglamentos_numero();
+      $data['reglamentos'] = $this->reglamento_model->obtener_reglamentos_numero(false, $this->input->get('nr'));
 			$this->load->view('historial_ajax/tabla_historial', $data);
 		}
 
 		public function ver_historial() {
-			$data['historial'] = $this->reglamento_model->obtener_reglamentos_numero( $this->input->post('num') );
+			$data['historial'] = $this->reglamento_model->obtener_reglamentos_numero( $this->input->post('num'));
 
 			$this->load->view('historial_ajax/vista_historial', $data);
 		}

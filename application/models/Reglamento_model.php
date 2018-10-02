@@ -151,7 +151,7 @@ class Reglamento_model extends CI_Model {
 
     }
 
-    public function obtener_reglamentos_numero($numero = false) {
+    public function obtener_reglamentos_numero($numero = false, $nr = false) {
         
         $this->db->select("
                 a.id_expedientert,
@@ -185,6 +185,10 @@ class Reglamento_model extends CI_Model {
             $this->db->where('a.numexpediente_expedientert', $numero);
         } else {
             $this->db->where('a.id_expedientert IN ( SELECT MAX(e.id_expedientert) FROM sri_expedientert e GROUP BY e.numexpediente_expedientert )');
+        }
+
+        if ($nr) {
+            $this->db->where('bc.nr', $nr);
         }
         
         $query=$this->db->get();
