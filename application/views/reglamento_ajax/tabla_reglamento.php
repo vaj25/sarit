@@ -63,6 +63,8 @@
                                                 <a class="dropdown-item" href="javascript:;" onClick="cambiar_editar(<?=$fila->id_expedientert?>, 'reforma_total')">Reforma Total</a> -->
                                                 <a class="dropdown-item" href="javascript:;" onClick="actualizar_estado(<?=$fila->id_expedientert?>)">Actualizar Estado</a>
                                                 <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedientert.','.$fila->id_personal?>)">Cambiar Delegado</a>
+                                                <?= ($fila->id_estadort == 3) ? '<a class="dropdown-item" href="javascript:;" onClick="modal_acciones('.$fila->id_expedientert.')">Agregar Reforma</a>' : 
+                                                    '<a class="dropdown-item" href="javascript:;" onClick="modal_desistir('.$fila->id_expedientert.')">Desistir</a>'?>
                                                 <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedientert?>)">Registrar Resolución</a>
                                                 <a class="dropdown-item" href="javascript:;" onClick="notificacion_resolucion(<?=$fila->id_expedientert?>)">Registrar Notificaci&oacute;n Resolución</a>
                                                 <a class="dropdown-item" href="javascript:;" onClick="entrega_resolucion(<?=$fila->id_expedientert?>)">Entrega Resolución</a>

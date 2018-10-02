@@ -290,7 +290,7 @@ class Reglamento extends CI_Controller {
 			'id_expedientert' => $this->input->post('id_reglamento_resolucion'),
 			'fecha_exp_est' => date("Y-m-d H:i:s"),
 			'etapa_exp_est' => $this->obtener_estado($this->input->post('id_reglamento_resolucion')),
-			'fecha_ingresar_exp_est' => date('Y-m-d', $this->input->post('fecha_estado'))
+			'fecha_ingresar_exp_est' => date('Y-m-d', strtotime($this->input->post('fecha_estado')))
 		);
 
 		if ("fracaso" == $this->expediente_estado_model->insertar_expediente_estado($data)) {
@@ -361,6 +361,10 @@ class Reglamento extends CI_Controller {
 		}
 		
 		return "./files/pdfs/" . $expediente;
+	}
+
+	public function modal_acciones() {
+		$this->load->view('reglamento_ajax/modal_acciones', array('id' => $this->input->post('id') ));
 	}
 	
 	public function modal_establecimiento() {
