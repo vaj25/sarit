@@ -387,33 +387,33 @@ function cambiar_pestana(tipo){
     });
   }
 
-  function inhabilitar(id_reglamento) {
+  function desistir(id_reglamento) {
     swal({
-      title: "Inhabilitar Expediente",
-      text: "Motivo de Inhabilitar Expediente: *",
+      title: "Desistir de Expediente",
+      text: "¿Motivo por el cual desiste? *",
       type: "input",
       showCancelButton: true,
       closeOnConfirm: false,
-      inputPlaceholder: "Motivo para inhabilitar"
+      inputPlaceholder: "Motivo para desistir"
     }, function (inputValue) {
       if (inputValue === false) return false;
       if (inputValue === "") {
-        swal.showInputError("Se necesita un motivo para inhabilitar.");
+        swal.showInputError("Se necesita un motivo para desistir.");
         return false
       }
       $.ajax({
-          url: "<?php echo site_url(); ?>/reglamento/gestionar_inhabilitar_reglamento",
+          url: "<?php echo site_url(); ?>/reglamento/gestionar_desistir_reglamento",
           type: "post",
           dataType: "html",
           data: {
             id_reglamento_resolucion: id_reglamento,
-            mov_inhabilitar: inputValue
+            mov_disistir: inputValue
           }
         })
         .done(function (res) {
           if(res == "exito"){
             tablaReglamentos();
-            swal({ title: "¡Expediente inhabilitado exitosamente!", type: "success", showConfirmButton: true });
+            swal({ title: "¡Expediente desistido exitosamente!", type: "success", showConfirmButton: true });
           }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
