@@ -257,6 +257,7 @@ class Reglamento extends CI_Controller {
 		))) {
 			echo "fracaso";
 		} else {
+			$this->reglamento_model->editar_reglamento($data);
 			echo "exito";
 		}
 	}
