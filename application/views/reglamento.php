@@ -774,13 +774,14 @@ function cambiar_pestana(tipo){
       <div class="card-body b-t" style="padding-top: 7px;">
         <div>
           <div class="pull-left">
+            <?php if (obtener_rango($segmentos=1, $permiso=1) > 1) { ?>
             <div class="form-group" style="width: 400px;">
               <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablaReglamentos();">
                 <option value="">[Todos los empleados]</option>
                 <?php
-                $otro_empleado = $this->db->query("SELECT e.id_empleado, e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE e.id_estado = '00001' ORDER BY e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada");
-                if($otro_empleado->num_rows() > 0){
-                  foreach ($otro_empleado->result() as $fila) {
+                if($delegados){
+                  var_dump($delegados);
+                  foreach ($delegados->result() as $fila) {
                     if($nr_usuario == $fila->nr){
                       echo '<option class="m-l-50" value="'.$fila->nr.'" selected>'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
                     }else{
@@ -791,6 +792,9 @@ function cambiar_pestana(tipo){
               ?>
               </select>
             </div>
+            <?php } else { ?>
+              <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('id_usuario')?>">
+            <?php }?>
           </div>
           <div class="pull-right">
             <?php if(tiene_permiso($segmentos=1,$permiso=2)){ ?>

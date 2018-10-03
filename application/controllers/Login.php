@@ -78,7 +78,8 @@ class Login extends CI_Controller {
 				}
 				$usuario_data = array(
 	               'id_usuario' => $fila->id_usuario,
-	               'usuario' => $fila->usuario,
+				   'usuario' => $fila->usuario,
+				   'nr' => $fila->nr,
 	               'nombre_usuario' => $fila->nombre_completo,
 	               'sesion' => TRUE
 	            );

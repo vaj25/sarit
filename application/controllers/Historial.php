@@ -5,13 +5,14 @@ class Historial extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("reglamento_model", "expediente_estado_model"));
+		$this->load->model(array("reglamento_model", "expediente_estado_model", "expediente_empleado_model"));
     }
 
     public function index(){
-		$this->load->view('templates/header');
-		$this->load->view('historial');
-		$this->load->view('templates/footer');
+			$data['delegados'] = $this->expediente_empleado_model->obtener_delegados_seccion();
+			$this->load->view('templates/header');
+			$this->load->view('historial', $data);
+			$this->load->view('templates/footer');
     }
     
     public function tabla_reglamento(){

@@ -9,8 +9,9 @@ class Reglamento extends CI_Controller {
 	}
 
 	public function index(){
+		$data['delegados'] = $this->expediente_empleado_model->obtener_delegados_seccion();
 		$this->load->view('templates/header');
-		$this->load->view('reglamento');
+		$this->load->view('reglamento', $data);
 		$this->load->view('templates/footer');
 	}
 
@@ -193,7 +194,7 @@ class Reglamento extends CI_Controller {
 		$this->load->view('reglamento_ajax/combo_delegado', 
 			array(
 				'id' => $this->input->post('id'),
-				'colaborador' => $this->db->get('lista_empleados_estado'),
+				'colaborador' => $this->expediente_empleado_model->obtener_delegados_seccion(),
 				'disable' => $this->input->post('disable')
 			)
 		);
