@@ -793,7 +793,7 @@ function cambiar_pestana(tipo){
               </select>
             </div>
             <?php } else { ?>
-              <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('id_usuario')?>">
+              <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
             <?php }?>
           </div>
           <div class="pull-right">
@@ -906,43 +906,6 @@ $(function(){
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
               tablaReglamentos();
-            }
-        });
-            
-    });
-});
-
-
-$(function(){
-    $("#formajax3").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax3"));
-        
-        $.ajax({
-          url: "<?php echo site_url(); ?>/establecimiento/gestionar_establecimiento",
-          type: "post",
-          dataType: "html",
-          data: formData,
-          cache: false,
-          contentType: false,
-          processData: false
-        })
-        .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }else{
-              swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-
-              var data = {
-                  id: res,
-                  text: $("#nombre_establecimiento").val()
-              };
-
-              var newOption = new Option(data.text, data.id, false, false);
-              $('#establecimiento').append(newOption).trigger('change');
-              $('#establecimiento').val(data.id).trigger("change");
-              $('#modal_establecimiento').modal('toggle');
             }
         });
             

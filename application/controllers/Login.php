@@ -80,6 +80,7 @@ class Login extends CI_Controller {
 	               'id_usuario' => $fila->id_usuario,
 				   'usuario' => $fila->usuario,
 				   'nr' => $fila->nr,
+				   'id_empleado' => $fila->id_empleado,
 	               'nombre_usuario' => $fila->nombre_completo,
 	               'sesion' => TRUE
 	            );

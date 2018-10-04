@@ -16,6 +16,18 @@
             }
         ?>
 </select>
-<?php } else { ?>
-    <input type="hidden" id="colaborador" name="colaborador" value="<?= $this->session->userdata('id_usuario')?>">
+<?php } else {
+
+        if($colaborador){
+            foreach ($colaborador->result() as $fila) {
+                if ($this->session->userdata('id_empleado') == $fila->id_empleado) {
+        ?>
+                    <label for="colaborador" class="font-weight-bold">Nombre del Delegado: <?= $fila->nombre_completo?> <span class="text-danger"></span></label>
+                    <input type="hidden" id="colaborador" name="colaborador" value="<?= $this->session->userdata('id_empleado')?>">
+        <?php
+                }
+            }
+        }
+        ?>
+
 <?php }?>

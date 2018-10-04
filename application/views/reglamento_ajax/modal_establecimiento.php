@@ -13,7 +13,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <input type="hidden" id="band3" name="band3" value="save">
           <input type="hidden" id="id_representante" name="id_representante" value="">
             <div class="modal-header">
-                <h4 class="modal-title">Gestión de representantes</h4>
+                <h4 class="modal-title">Gestión de establecimiento</h4>
             </div>
             <div class="modal-body" id="">
                 
@@ -73,3 +73,43 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     </div>
   </div>
 </div>
+
+<script>
+
+$(function(){
+    $("#formajax3").on("submit", function(e){
+        e.preventDefault();
+        var f = $(this);
+        var formData = new FormData(document.getElementById("formajax3"));
+        
+        $.ajax({
+          url: "<?php echo site_url(); ?>/establecimiento/gestionar_establecimiento",
+          type: "post",
+          dataType: "html",
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false
+        })
+        .done(function(res){
+            if(res == "fracaso"){
+              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }else{
+              swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+
+              var data = {
+                  id: res,
+                  text: $("#nombre_establecimiento").val()
+              };
+
+              var newOption = new Option(data.text, data.id, false, false);
+              $('#establecimiento').append(newOption).trigger('change');
+              $('#establecimiento').val(data.id).trigger("change");
+              $('#modal_establecimiento').modal('toggle');
+            }
+        });
+            
+    });
+});
+
+</script>

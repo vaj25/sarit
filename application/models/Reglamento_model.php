@@ -222,7 +222,7 @@ class Reglamento_model extends CI_Model {
                ->join('sir_empleado h', 'h.id_empleado = f.id_empleado', 'left')
                ->where('a.id_expedientert', $id)
                ->where('b.ID_REPRESENTANTERT = ( SELECT MAX(c.ID_REPRESENTANTERT) FROM SRI_REPRESENTANTERT c WHERE c.ID_EMPRESART = a.ID_EMPRESART )')
-               ->where('h.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
+               ->where('f.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = a.id_expedientert ))');
         $query=$this->db->get();
