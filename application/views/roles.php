@@ -7,6 +7,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 }
 ?>
 
+<script>
+
+  function iniciar() {
+    $(".checked").each(function(){
+      $(this).prop('checked', true);
+    });
+  }
+
+</script>
+
 <div class="page-wrapper">
   <div class="container-fluid">
 
@@ -28,9 +38,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <div class="cnt_form">
               <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
 
-              <input type="hidden" id="band" name="band">
-
-              <span class="etiqueta">Filtro</span>
+              <span class="etiqueta">Rol de Filtro</span>
 
               <blockquote class="m-t-0">
                 <div class="row">
@@ -41,13 +49,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         ?>
                         <div class="row">
                           <div class="col-8">
-                            <h5><?= $fila->nombre_completo?></h5> <?= $fila->nombre_rol?>
+                            <?= $fila->nombre_rol?>
+                            <h5><?= $fila->nombre_completo?></h5>
                           </div>
                           <div class="col-4">
                             <div class="switch">
-                              <label>Colaborador
-                              <input type="checkbox"  <?= ($fila->id_rol == 71) ? "checked" : "" ?> value="<?= $fila->id_empleado?>">
-                                <span class="lever switch-col-blue"></span>Filtro</label>
+                              <label>
+                                Colaborador
+                                <input type="checkbox" <?= ($fila->id_rol == 71) ? "class='checked'" : "class='check'" ?> name="<?= $fila->id_empleado?>" value="1">
+                                <span class="lever switch-col-blue"></span>Filtro
+                              </label>
                             </div>
                           </div>
                         </div>
@@ -70,3 +81,52 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     </div>
   </div>
 </div>
+
+<script>
+
+  $('.check').on('change', function () {
+    
+    $(".checked").each(function(){
+      $(this).prop('checked', false);
+      $(this).removeClass('checked');
+      $(this).addClass('check');
+    });
+
+    if ($(this).is(':checked')) {
+      $(this).removeClass('check');
+      $(this).addClass('checked');
+    }
+
+  });
+
+  $('.checked').on('click', function () {
+    $(this).removeClass('check');
+    $(this).addClass('checked');
+  });
+
+  $(function(){
+    $("#formajax").on("submit", function(e){
+      e.preventDefault();
+      var f = $(this);
+      var formData = new FormData(document.getElementById("formajax"));
+      
+      $.ajax({
+        url: "<?php echo site_url(); ?>/roles/gestionar_roles",
+        type: "post",
+        dataType: "html",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false
+      })
+      .done(function(res){
+        if(res == "fracaso"){
+          swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+        }else{
+          swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+        }
+      });
+    });
+  });
+
+</script>
