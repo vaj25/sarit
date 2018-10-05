@@ -26,7 +26,7 @@ class Reglamento_model extends CI_Model {
                     'archivo_expedientert' => $data['archivo_expedientert'],
                     'obsergenero_expedientrt' => $data['obsergenero_expedientrt'],
                     'contenidoTitulos_expedientert' => $data['contenidoTitulos_expedientert'],
-                    'inhabilitado_expedientert' => $data['inhabilitado_expedientert'],
+                    'desistido_expedientert' => $data['desistido_expedientert'],
                     'archivo_expedientert' => $data['archivo_expedientert'],
                     'fechacrea_expedientert' => date("Y-m-d H:i:s")
                 )
@@ -56,7 +56,7 @@ class Reglamento_model extends CI_Model {
                 'archivo_expedientert' => $data['archivo_expedientert'],
                 'obsergenero_expedientrt' => $data['obsergenero_expedientrt'],
                 'contenidoTitulos_expedientert' => $data['contenidoTitulos_expedientert'],
-                'inhabilitado_expedientert' => $data['inhabilitado_expedientert'],
+                'desistido_expedientert' => $data['desistido_expedientert'],
                 'archivo_expedientert' => $data['archivo_expedientert'],
                 'fecha_entrega' => $data['fecha_entrega'],
                 'persona_recibe' => $data['persona_recibe']
@@ -99,7 +99,7 @@ class Reglamento_model extends CI_Model {
 
     }
 
-    public function obtener_reglamentos() {
+    public function obtener_reglamentos($nr = false, $tipo = false) {
         
         $this->db->select("
                 a.id_expedientert,
@@ -121,7 +121,18 @@ class Reglamento_model extends CI_Model {
                ->join('sge_empresa c','c.id_empresa = a.id_empresart')
                ->join('sri_expediente_estado f ', 'f.id_expedientert = a.id_expedientert')
                ->join('sri_estadort d','d.id_estadort = f.id_estadort')
-               ->where('a.id_expedientert IN ( SELECT MAX(e.id_expedientert) FROM sri_expedientert e GROUP BY e.numexpediente_expedientert )')
+               ->where('a.id_expedientert IN 
+                        ( select max(aa.id_expedientert)
+                        from sri_expedientert aa
+                        join sri_expediente_estado fa on fa.id_expedientert = aa.id_expedientert
+                        join sri_estadort da on da.id_estadort = fa.id_estadort
+                        where fa.fecha_exp_est = (select eea.fecha_exp_est from sri_expedientert ea
+                                                join sri_expediente_estado eea on eea.id_expedientert=ea.id_expedientert
+                                                join sri_estadort esa on esa.id_estadort=eea.id_estadort
+                                                where ea.id_expedientert=aa.id_expedientert
+                                                and esa.id_estadort <> 9
+                                                and eea.fecha_exp_est=(select max(eeea.fecha_exp_est) from sri_expediente_estado eeea where eeea.id_expedientert=ea.id_expedientert))
+                        group by aa.numexpediente_expedientert )')
                ->where('f.fecha_exp_est = (SELECT ee.fecha_exp_est FROM sri_expedientert e
                         JOIN sri_expediente_estado ee on ee.id_expedientert=e.id_expedientert
                         JOIN sri_estadort es on es.id_estadort=ee.id_estadort
@@ -132,6 +143,14 @@ class Reglamento_model extends CI_Model {
                         where se.id_expedientert = a.id_expedientert ))')
                 ->where('f.etapa_exp_est <> 4')
                 ->order_by('f.fecha_exp_est', 'asc');
+        if ($nr) {
+            $this->db->where('bc.nr', $nr);
+        }
+        
+        if ($tipo) {
+            $this->db->where('d.id_estadort', $tipo);
+        }
+        
         $query=$this->db->get();
         // print $this->db->get_compiled_select();
         if ($query->num_rows() > 0) {
@@ -143,7 +162,7 @@ class Reglamento_model extends CI_Model {
 
     }
 
-    public function obtener_reglamentos_numero($numero = false) {
+    public function obtener_reglamentos_numero($numero = false, $nr = false) {
         
         $this->db->select("
                 a.id_expedientert,
@@ -178,6 +197,10 @@ class Reglamento_model extends CI_Model {
         } else {
             $this->db->where('a.id_expedientert IN ( SELECT MAX(e.id_expedientert) FROM sri_expedientert e GROUP BY e.numexpediente_expedientert )');
         }
+
+        if ($nr) {
+            $this->db->where('bc.nr', $nr);
+        }
         
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
@@ -199,7 +222,7 @@ class Reglamento_model extends CI_Model {
                ->join('sir_empleado h', 'h.id_empleado = f.id_empleado', 'left')
                ->where('a.id_expedientert', $id)
                ->where('b.ID_REPRESENTANTERT = ( SELECT MAX(c.ID_REPRESENTANTERT) FROM SRI_REPRESENTANTERT c WHERE c.ID_EMPRESART = a.ID_EMPRESART )')
-               ->where('h.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
+               ->where('f.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = a.id_expedientert ))');
         $query=$this->db->get();

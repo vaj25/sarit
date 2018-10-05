@@ -181,11 +181,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   }
 
   function tablaReglamentos(){
-    $( "#cnt-tabla" ).load("<?php echo site_url(); ?>/reglamento/tabla_reglamento/", function() {
+    var nr_empleado = $("#nr_search").val();
+    $( "#cnt_tabla_expedientes" ).load("<?php echo site_url(); ?>/reglamento/tabla_reglamento?nr="+nr_empleado+"&tipo="+estado_pestana, function() {
       $('#myTable').DataTable();
       $('[data-toggle="tooltip"]').tooltip();
     });
   }
+
+var estado_pestana = "";
+function cambiar_pestana(tipo){
+    estado_pestana = tipo;
+    tablaReglamentos();
+}
 
   function combo_establecimiento(seleccion, disable=''){
     
@@ -380,33 +387,33 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
-  function inhabilitar(id_reglamento) {
+  function desistir(id_reglamento) {
     swal({
-      title: "Inhabilitar Expediente",
-      text: "Motivo de Inhabilitar Expediente: *",
+      title: "Desistir de Expediente",
+      text: "¿Motivo por el cual desiste? *",
       type: "input",
       showCancelButton: true,
       closeOnConfirm: false,
-      inputPlaceholder: "Motivo para inhabilitar"
+      inputPlaceholder: "Motivo para desistir"
     }, function (inputValue) {
       if (inputValue === false) return false;
       if (inputValue === "") {
-        swal.showInputError("Se necesita un motivo para inhabilitar.");
+        swal.showInputError("Se necesita un motivo para desistir.");
         return false
       }
       $.ajax({
-          url: "<?php echo site_url(); ?>/reglamento/gestionar_inhabilitar_reglamento",
+          url: "<?php echo site_url(); ?>/reglamento/gestionar_desistir_reglamento",
           type: "post",
           dataType: "html",
           data: {
             id_reglamento_resolucion: id_reglamento,
-            mov_inhabilitar: inputValue
+            mov_disistir: inputValue
           }
         })
         .done(function (res) {
           if(res == "exito"){
             tablaReglamentos();
-            swal({ title: "¡Expediente inhabilitado exitosamente!", type: "success", showConfirmButton: true });
+            swal({ title: "¡Expediente desistido exitosamente!", type: "success", showConfirmButton: true });
           }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
@@ -481,24 +488,34 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 <div class="page-wrapper">
   <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- TITULO de la página de sección -->
+        <!-- ============================================================== -->
     <div class="row page-titles">
       <div class="align-self-center" align="center">
         <h3 class="text-themecolor m-b-0 m-t-0">Gestión de Aprobaci&oacute;n de Reglamentos</h3>
       </div>
     </div>
-    <div class="row">
+    <!-- ============================================================== -->
+    <!-- Fin TITULO de la página de sección -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Inicio del CUERPO DE LA SECCIÓN -->
+    <!-- ============================================================== -->
+    <div class="row" <?php if($navegatorless){ echo "style='margin-right: 80px;'"; } ?>>
+      <!-- ============================================================== -->
+      <!-- Inicio del FORMULARIO INFORMACIÓN DEL SOLICITANTE -->
+      <!-- ============================================================== -->
 
       <div class="col-lg-1"></div>
-      <div class="col-lg-10" id="cnt_form_main" style="display: none;">
-        <div class="card">
-          <div class="card-header bg-success2" id="ttl_form">
-            <div class="card-actions text-white">
-              <a style="font-size: 16px;" onclick="cerrar_mantenimiento();">
-                <i class="mdi mdi-window-close"></i>
-              </a>
+        <div class="col-lg-10" id="cnt_form_main" style="display: none;">
+          <div class="card">
+            <div class="card-header bg-success2" id="ttl_form">
+              <div class="card-actions text-white">
+                <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
+              </div>
+              <h4 class="card-title m-b-0 text-white">Listado de Expedientes</h4>
             </div>
-            <h4 class="card-title m-b-0 text-white">Listado de Actividades</h4>
-          </div>
           <div class="card-body b-t">
 
             <div id="cnt_form1" class="cnt_form">
@@ -744,18 +761,82 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <?php echo form_close(); ?>
             </div>
           </div>
-
         </div>
-
       </div>
-
     </div>
   </div>
   <div class="col-lg-1"></div>
-  <div class="col-lg-12" id="cnt-tabla"></div>
-  <div class="col-lg-1"></div>
-  <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
-</div>
+  <div class="col-lg-12" id="cnt-tabla">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title m-b-0">Listado de Expedientes</h4>
+      </div>
+      <div class="card-body b-t" style="padding-top: 7px;">
+        <div>
+          <div class="pull-left">
+            <?php if (obtener_rango($segmentos=1, $permiso=1) > 1) { ?>
+            <div class="form-group" style="width: 400px;">
+              <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablaReglamentos();">
+                <option value="">[Todos los empleados]</option>
+                <?php
+                if($delegados){
+                  var_dump($delegados);
+                  foreach ($delegados->result() as $fila) {
+                    if($nr_usuario == $fila->nr){
+                      echo '<option class="m-l-50" value="'.$fila->nr.'" selected>'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
+                    }else{
+                      echo '<option class="m-l-50" value="'.$fila->nr.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
+                    }
+                  }
+                }
+              ?>
+              </select>
+            </div>
+            <?php } else { ?>
+              <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
+            <?php }?>
+          </div>
+          <div class="pull-right">
+            <?php if(tiene_permiso($segmentos=1,$permiso=2)){ ?>
+            <button type="button" onclick="cambiar_nuevo();" class="btn waves-effect waves-light btn-success2" data-toggle="tooltip"><span
+                class="mdi mdi-plus"></span> Nuevo registro</button>
+            <?php } ?>
+          </div>
+        </div>
+        <div class="row" style="width: 100%"></div>
+        <div class="row col-lg-12">
+          <ul class="nav nav-tabs customtab2 <?php if($navegatorless){ echo " pull-left"; } ?>" role="tablist"
+            style='width:
+            100%;'>
+            <li class="nav-item <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <a class="nav-link active" onclick="cambiar_pestana('');" data-toggle="tab" href="#">
+                <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                <span class="hidden-xs-down">Todas</span></a>
+            </li>
+            <li class="nav-item <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <a class="nav-link" onclick="cambiar_pestana('1');" data-toggle="tab" href="#">
+                <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                <span class="hidden-xs-down">En estudio</span></a>
+            </li>
+            <li class="nav-item <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <a class="nav-link" onclick="cambiar_pestana('2');" data-toggle="tab" href="#">
+                <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                <span class="hidden-xs-down">Observado</span></a>
+            </li>
+            <li class="nav-item <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <a class="nav-link" onclick="cambiar_pestana('3');" data-toggle="tab" href="#">
+                <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                <span class="hidden-xs-down">Aprobado</span></a>
+            </li>
+          </ul>
+        </div>
+        <div id="cnt_tabla_expedientes"></div>
+      </div>
+      </div>
+      <div class="col-lg-1"></div>
+      <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
+    </div>
+  </div>
 </div>
 
 <div id="cnt_model_establecimiento"></div>
@@ -825,43 +906,6 @@ $(function(){
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }
               tablaReglamentos();
-            }
-        });
-            
-    });
-});
-
-
-$(function(){
-    $("#formajax3").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax3"));
-        
-        $.ajax({
-          url: "<?php echo site_url(); ?>/establecimiento/gestionar_establecimiento",
-          type: "post",
-          dataType: "html",
-          data: formData,
-          cache: false,
-          contentType: false,
-          processData: false
-        })
-        .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }else{
-              swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-
-              var data = {
-                  id: res,
-                  text: $("#nombre_establecimiento").val()
-              };
-
-              var newOption = new Option(data.text, data.id, false, false);
-              $('#establecimiento').append(newOption).trigger('change');
-              $('#establecimiento').val(data.id).trigger("change");
-              $('#modal_establecimiento').modal('toggle');
             }
         });
             

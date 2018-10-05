@@ -9,13 +9,14 @@ class Reglamento extends CI_Controller {
 	}
 
 	public function index(){
+		$data['delegados'] = $this->expediente_empleado_model->obtener_delegados_seccion();
 		$this->load->view('templates/header');
-		$this->load->view('reglamento');
+		$this->load->view('reglamento', $data);
 		$this->load->view('templates/footer');
 	}
 
 	public function tabla_reglamento(){
-		$data['reglamentos'] = $this->reglamento_model->obtener_reglamentos();
+		$data['reglamentos'] = $this->reglamento_model->obtener_reglamentos( $this->input->get('nr'), $this->input->get('tipo') );
 		$this->load->view('reglamento_ajax/tabla_reglamento', $data);
 	}
 
@@ -38,7 +39,7 @@ class Reglamento extends CI_Controller {
 				'archivo_expedientert' => '',
 				'obsergenero_expedientrt' => '',
 				'contenidoTitulos_expedientert' => '',
-				'inhabilitado_expedientert' => '',
+				'desistido_expedientert' => '',
 				'archivo_expedientert' => ''
 			);
 
@@ -140,7 +141,7 @@ class Reglamento extends CI_Controller {
 				$data['resolucion_expedientert'] = null;
 				$data['fecharesolucion_expedientert'] = 0;
 				$data['archivo_expedientert'] = null;
-				$data['inhabilitado_expedientert'] = null;
+				$data['desistido_expedientert'] = null;
 				$data['obsergenero_expedientrt'] = null;
 				$data['contenidoTitulos_expedientert'] = null;
 				$data['notificacion_expedientert'] = null;
@@ -193,7 +194,7 @@ class Reglamento extends CI_Controller {
 		$this->load->view('reglamento_ajax/combo_delegado', 
 			array(
 				'id' => $this->input->post('id'),
-				'colaborador' => $this->db->get('lista_empleados_estado'),
+				'colaborador' => $this->expediente_empleado_model->obtener_delegados_seccion(),
 				'disable' => $this->input->post('disable')
 			)
 		);
@@ -242,15 +243,22 @@ class Reglamento extends CI_Controller {
 		}
 	}
 
-	public function gestionar_inhabilitar_reglamento() {
+	public function gestionar_desistir_reglamento() {
 
 		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
-		$data['id_estadort'] = 9;
-		$data['inhabilitado_expedientert'] = $this->input->post('mov_inhabilitar');
+		$data['desistido_expedientert'] = $this->input->post('mov_disistir');
 
-		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+		if ("fracaso" == $this->expediente_estado_model->insertar_expediente_estado(
+			array(
+			'id_estadort' => 9,
+			'id_expedientert' => $this->input->post('id_reglamento_resolucion'),
+			'fecha_exp_est' => date("Y-m-d H:i:s"),
+			'fecha_ingresar_exp_est' => date("Y-m-d H:i:s"),
+			'etapa_exp_est' => 1
+		))) {
 			echo "fracaso";
 		} else {
+			$this->reglamento_model->editar_reglamento($data);
 			echo "exito";
 		}
 	}
@@ -259,7 +267,7 @@ class Reglamento extends CI_Controller {
 
 		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
 		$data['id_estadort'] = 1;
-		$data['inhabilitado_expedientert'] = null;
+		$data['desistido_expedientert'] = null;
 
 		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
 			echo "fracaso";
