@@ -56,7 +56,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <div class="switch">
                               <label>
                                 Colaborador
-                                <input type="checkbox" <?= ($fila->id_rol == FILTRO) ? "class='checked'" : "class='check'" ?> name="<?= $fila->id_empleado?>" value="1">
+                                <input type="checkbox" <?= ($fila->id_rol == FILTRO) ? "class='checked pred'" : "class='check'" ?> name="<?= $fila->id_empleado?>" value="1">
                                 <span class="lever switch-col-blue"></span>Filtro
                               </label>
                             </div>
@@ -84,6 +84,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 <script>
 
+  $('.pred').on('change', function () {
+    $(".checked").each(function(){
+      $(this).prop('checked', false);
+      $(this).removeClass('checked');
+      $(this).addClass('check');
+    });
+  });
+
   $('.check').on('change', function () {
     
     $(".checked").each(function(){
@@ -99,7 +107,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
   });
 
-  $('.checked').on('click', function () {
+  $('.checked').on('change', function () {
     $(this).removeClass('check');
     $(this).addClass('checked');
   });
