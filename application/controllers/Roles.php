@@ -22,7 +22,9 @@ class Roles extends CI_Controller {
 		if ($colaboradores) {
 			foreach ($colaboradores->result() as $delegado) {
 				if ( $this->input->post($delegado->id_empleado) ) {
-					echo $this->login_model->cambiar_rol($delegado->id_empleado, 71);
+					echo $this->login_model->cambiar_rol($delegado->id_empleado, FILTRO);
+				} elseif ($delegado->id_rol == 71) {
+					$this->login_model->cambiar_rol($delegado->id_empleado, COLABORADOR);
 				}
 			}
 		} else {

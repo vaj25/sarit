@@ -41,9 +41,9 @@ class Login_model extends CI_Model {
 
 	public function cambiar_rol($empleado, $rol) {
 		$roles = $this->obtener_roles_sistema()->result_array();
-		$usuario_rol = $this->obtener_roles_sistema()->row();
+		$usuario_rol = $this->obtener_usuario_rol_sistema($empleado)->row();
 
-		$this->db->where("id_usuario_rol", $$usuario_rol->id_usuario_rol);
+		$this->db->where("id_usuario_rol", $usuario_rol->id_usuario_rol);
 		if ($this->db->update('org_usuario_rol',
 			array('id_rol' => $rol))) {
 			return "exito";
@@ -60,7 +60,7 @@ class Login_model extends CI_Model {
                ->join('org_modulo b', 'a.id_sistema = b.id_sistema')
                ->join('org_rol_modulo_permiso c', 'b.id_modulo = c.id_modulo')
                ->join('org_rol d', 'c.id_rol = d.id_rol')
-               ->where('aa.id_sistema', $this->config->item('id_sistema'))
+               ->where('a.id_sistema', $this->config->item('id_sistema'))
                ->where('c.estado', '1')
 			   ->group_by('d.id_rol')
 			   ->order_by('d.id_rol');
@@ -82,7 +82,7 @@ class Login_model extends CI_Model {
                ->join('org_usuario_rol e', 'd.id_rol = e.id_rol')
                ->join('org_usuario f', 'e.id_usuario = f.id_usuario')
                ->join('sir_empleado g', 'f.nr = g.nr')
-               ->where('aa.id_sistema', $this->config->item('id_sistema'))
+               ->where('a.id_sistema', $this->config->item('id_sistema'))
                ->where('c.estado', '1')
                ->where('g.id_empleado', $empleado)
 			   ->group_by('f.id_usuario')
