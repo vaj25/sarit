@@ -5,7 +5,19 @@
     }
 </style>
 
-<div class="table table-responsive table-bordered">
+<?php 
+    $cant_entradas = 0;
+    foreach ($entradas as $value) {
+        $cant_entradas += $value['cantidad'];
+    }
+
+    $cant_resultados = 0;
+    foreach ($resultados as $value) {
+        $cant_resultados += $value['cantidad'];
+    }
+?>
+
+<div class="table table-responsive">
     <table border="1" style="width:100%; border-collapse: collapse;">
         <tr>
             <th scope="col" colspan="5">INFORME DE ACTIVIDADES REGLAMENTOS INTERNOS DE TRABAJO</th>
@@ -13,94 +25,94 @@
         <tr>
             <td rowspan="16"><p class="verticalText">REGLAMENTOS</p></td>
             <td colspan="3">Proyectos de Reglamentos Internos de Trabajo pendientes del mes anterior</td>
-            <td>0</td>
+            <td><?= $entradas[0]['cantidad'] ?></td>
         </tr>
         <tr>
             <td rowspan="4"><p class="verticalText">ENTRADAS</p></td>
-            <td>1</td>
+            <th scope="row">1</th>
             <td>Reglamentos Internos de Trabajo Recibidos (nuevos)</td>
-            <td>0</td>
+            <td><?= $entradas[1]['cantidad'] ?></td>
         </tr>
         <tr>
-            <td>2</td>
+            <th scope="row">2</th>
             <td>Reglamentos Internos de Trabajo Recibidos con Correcciones</td>
-            <td>0</td>
+            <td><?= $entradas[2]['cantidad'] ?></td>
         </tr>
 
         <tr>
-            <td>3</td>
+            <th scope="row">3</th>
             <td>Reformas a Reglamentos Internos Recibidas</td>
-            <td>0</td>
+            <td><?= $entradas[3]['cantidad'] ?></td>
         </tr>
 
         <tr>
             <td colspan="2">Reglamentos Internos a estudiar durante el mes</td>
-            <td>0</td>
+            <td><?= $cant_entradas ?></td>
         </tr>
 
         <tr>
             <td rowspan="11"><p class="verticalText">ENTRADAS</p></td>
-            <td>1</td>
+            <th scope="row">1</th>
             <td>Reglamentos Internos de Trabajo con Observaciones Realizadas</td>
-            <td></td>
+            <td><?= $resultados[0]['cantidad'] ?></td>
         </tr>
 
         <tr>
-            <td>2</td>
+            <th scope="row">2</th>
             <td>Proyectos de Reglamentos Interos con Observaciones de Género</td>
-            <td></td>
+            <td><?= $resultados[5]['cantidad'] ?></td>
         </tr>
 
         <tr>
-            <td>3</td>
+            <th scope="row">3</th>
             <td>Proyectos de Reglamentos Internos Aprobados</td>
-            <td></td>
+            <td><?= $resultados[7]['cantidad'] ?></td>
         </tr>
 
         <tr>
-            <td>4</td>
+            <th scope="row">4</th>
             <td>Reformas de Reglamentos Internos Aprobados</td>
-            <td></td>
+            <td><?= $resultados[6]['cantidad'] ?></td>
         </tr>
 
         <tr>
-            <td>5</td>
+            <th scope="row">5</th>
             <td>Proyectos de Reglamentos Internos Desistidos</td>
-            <td></td>
+            <td><?= $resultados[4]['cantidad'] ?></td>
         </tr>
 
         <tr>
-            <td>6</td>
+            <th scope="row">6</th>
             <td>Proyectos de Reglamentos Internos Declarados Improponibles</td>
-            <td></td>
+            <td><?= $resultados[3]['cantidad'] ?></td>
         </tr>
 
         <tr>
-            <td>7</td>
+            <th scope="row">7</th>
             <td>Proyectos de Reglamentos Internos Prevenidos</td>
-            <td></td>
+            <td><?= $resultados[1]['cantidad'] ?></td>
         </tr>
 
         <tr>
-            <td>8</td>
+            <th scope="row">8</th>
             <td>Proyectos de Reglamentos Internos en Calificacion de Labores (DGPS)</td>
-            <td></td>
+            <td><?= $resultados[2]['cantidad'] ?></td>
         </tr>
 
         <tr>
-            <td>9</td>
+            <th scope="row">9</th>
             <td>Casos Reasignados (cambio de Colaborador)</td>
-            <td></td>
+            <td><?= $resultados[8]['cantidad'] ?></td>
         </tr>
 
         <tr>
             <td colspan="2">Total de Estudios de Reglamento efectuados</td>
-            <td></td>
+            <td><?= $cant_resultados ?></td>
         </tr>
 
         <tr>
             <td colspan="2">Reglamento pendientes para el proximo mes</td>
-            <td></td>
+            <td><?= $cant_entradas - $cant_resultados ?></td>
         </tr>
 
     </table>
