@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 /***********************************
-	CREAR TABLA:	
-	Genera el body de una tabla, solicitando solamente los datos que conformaran la tabla 
+	CREAR TABLA:
+	Genera el body de una tabla, solicitando solamente los datos que conformaran la tabla
 	y las conlumnas que se desean presentar (genera el botón para modificaciones automaticamente).
 ************************************/
 	function generar_boton($opciones,$funcion,$color,$icono,$title){
@@ -61,7 +61,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		$combo .= '<div class="input-group-btn">';
 		$combo .= '<select class="form-control" id="'.$id.'" name="'.$id.'" onChange="cambiarBtnCombo('."'".$id."'".');">';
 		$combo .= '<option value="">[Seleccione una opción]</option>';
-		
+
 		if(!empty($lista)){
 			foreach ($lista->result() as $fila) {
 				$combo .= "<option value='".$fila->$datos[0]."'>".$fila->$datos[1]."</option>";
@@ -229,87 +229,220 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			</table>';
 
 		return $pie;
-	}
-	
-	function mes($mes){$mesesarray = array('ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'); return strtolower($mesesarray[($mes-1)]); }
+    }
 
-	function hora($hora) {
-		$arrayHoras = array('CERO','UNA','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE',
-							'QUINCE','DIESCISEIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VENTIUNO','VEINTIDOS','VEINTITRES','VEINTICUATRO');
-		return $arrayHoras[$hora];
+    function fecha_ENG($fecha){
+		return date("Y-m-d",strtotime($fecha));
 	}
 
-	function dia($dia) {
-		$arrayDias = array('UNO','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE',
-							'QUINCE','DIESCISEIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VENTIUNO','VEINTIDOS','VEINTITRES','VEINTICUATRO',
-							'VEINTICINCO','VEINTISEIS','VEINTESIETE','VEINTIOCHO','VEINTINUEVE','TREINTA','TREINTA Y UNO');
-		return $arrayDias[$dia-1];
+	function fecha_ESP($fecha){
+		return date("d-m-Y",strtotime($fecha));
 	}
 
-	function anio($anio) {
-		$arrayAnio = array(
-			2015 => 'DOS MIL QUINCE', 
-			2016 => 'DOS MIL DIESCISEIS', 
-			2017 => 'DOS MIL DIECISIETE',
-			2018 => 'DOS MIL DIECIOCHO',
-			2019 => 'DOS MIL DIECINUEVE',
-			2020 => 'DOS MIL VEINTE'
-		);
-		return $arrayAnio[$anio];
-	}
+		function mes($mes){$mesesarray = array('ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'); return strtolower($mesesarray[($mes-1)]); }
 
-
-	function head_table_html($titles, $data, $tipo){
-
-		if($tipo == 'pdf'){
-			$cabecera_vista = '
-		 	<table style="width: 100%;">
-		 		<tr style="font-size: 20px; vertical-align: middle; font-family: "Poppins", sans-serif;">
-		 			<td width="110px"><img src="'.base_url().'assets/logos_vista/logo_izquierdo.jpg" width="110px"></td>
-					<td align="center" style="font-size: 13px; font-weight: bold; line-height: 1.3;">';
-		}else{
-			$cabecera_vista = '
-		 	<table style="width: 100%;">
-			 	<tr style="font-size: 20px; vertical-align: center; font-family: "Poppins", sans-serif;">
-			 		<td width="130px"><img src="'.base_url().'assets/logos_vista/logo_izquierdo.jpg" width="130px"></td>
-					<td align="center" style="font-size: 15px; font-weight: bold; vertical-align: center; line-height: 1.5;">';
+		function hora($hora) {
+			$arrayHoras = array('CERO','UNA','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE',
+								'QUINCE','DIESCISEIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VENTIUNO','VEINTIDOS','VEINTITRES','VEINTICUATRO');
+			return $arrayHoras[$hora];
 		}
-		for($i=0; $i <= count($titles); $i++){
-			if($i < 2){
-				$cabecera_vista .= mb_strtoupper($titles[$i])."<br>";
-			}elseif($i == 2){
-				$cabecera_vista .= '<span style="font-size: 12px; text-decoration: underline;">'.mb_strtoupper($titles[$i])."</span><br>";
+
+		function minuto($minutos) {
+			$arrayMinutos = array('CERO','UNO','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE',
+								'QUINCE','DIESCISEIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VENTIUNO','VEINTIDOS','VEINTITRES','VEINTICUATRO',
+								'VEINTICINCO','VEINTISEIS','VEINTESIETE','VEINTIOCHO','VEINTINUEVE','TREINTA','TREINTA Y UNO','TREINTA Y DOS','TREINTA Y TRES',
+								'TREINTA Y CUATRO','TREINTA Y CINCO','TREINTA Y SEIS','TREINTA Y SIETE','TREINTA Y OCHO','TREINTA Y NUEVE','CUARENTA','CUARENTA Y UNO',
+								'CUARENTA Y DOS','CUARENTA Y TRES','CUARENTA Y CUATRO','CUARENTA Y CINCO','CUARENTA Y SEIS','CUARENTA Y SIETE','CUARENTA Y OCHO','CUARENTA Y NUEVE',
+								'CINCUENTA','CINCUENTA Y UNO',' CINCUENTA Y DOS','CINCUENTA Y TRES','CINCUENTA Y CUATRO','CINCUENTA Y CINCO','CINCUENTA Y SEIS','CINCUENTA Y SIETE','CINCUENTA Y OCHO','CINCUENTA Y NUEVE','SESENTA');
+			return $arrayMinutos[$minutos];
+		}
+
+		function dia($dia) {
+			$arrayDias = array('UNO','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE',
+								'QUINCE','DIESCISEIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VENTIUNO','VEINTIDOS','VEINTITRES','VEINTICUATRO',
+								'VEINTICINCO','VEINTISEIS','VEINTESIETE','VEINTIOCHO','VEINTINUEVE','TREINTA','TREINTA Y UNO');
+			return $arrayDias[$dia-1];
+		}
+
+		function anio($anio) {
+			$arrayAnio = array(
+				2015 => 'DOS MIL QUINCE',
+				2016 => 'DOS MIL DIESCISEIS',
+				2017 => 'DOS MIL DIECISIETE',
+				2018 => 'DOS MIL DIECIOCHO',
+				2019 => 'DOS MIL DIECINUEVE',
+				2020 => 'DOS MIL VEINTE'
+			);
+			return $arrayAnio[$anio];
+		}
+
+	 function departamento($numero_expediente) {
+        $abr = substr($numero_expediente, -2);
+
+        switch ($abr) {
+            case 'SS':
+                return "SAN SALVADOR";
+                break;
+            case 'AH':
+                return "AHUACHAPAN";
+                break;
+            case 'SO':
+                return "SONSONATE";
+                break;
+            case 'SA':
+                return "SANTA ANA";
+                break;
+            case 'LL':
+                return "LA LIBERTAD";
+                break;
+            case 'CU':
+                return "CUSCATLAN";
+                break;
+            case 'CH':
+                return "CHALATENANGO";
+                break;
+            case 'CA':
+                return "CABANAS";
+                break;
+            case 'SV':
+                return "SAN VICENTE";
+                break;
+            case 'US':
+                return "USULUTAN";
+                break;
+            case 'MO':
+                return "MORAZAN";
+                break;
+            case 'SM':
+                return "SAN MIGUEL";
+                break;
+            case 'LU':
+                return "LA UNION";
+                break;
+            default:
+                # code...
+                break;
+        }
+    }
+		/* Ej: calcular_edad("1945-11-22")*/
+		function calcular_edad( $fecha ) {
+	    list($Y,$m,$d) = explode("-",$fecha);
+	    return( date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y );
+		}
+
+		function convertir_dui($dui_numeros){
+			$dui_letras='';
+			$letras='';
+			for($i=0;$i<strlen($dui_numeros);$i++){
+				switch ($dui_numeros[$i]) {
+					case '0':
+						$letras='CERO';
+						break;
+					case '1':
+						$letras='UNO';
+						break;
+					case '2':
+						$letras='DOS';
+						break;
+					case '3':
+						$letras='TRES';
+						break;
+					case '4':
+						$letras='CUATRO';
+						break;
+					case '5':
+						$letras='CINCO';
+						break;
+					case '6':
+						$letras='SEIS';
+						break;
+					case '7':
+						$letras='SIETE';
+						break;
+					case '8':
+						$letras='OCHO';
+						break;
+					case '9':
+						$letras='NUEVE';
+						break;
+					case '-':
+						$letras='GUION';
+						break;
+					default:
+						break;
+				}
+			  $dui_letras.=$letras.' ';
+			}
+			return $dui_letras;
+		}
+
+		function convertir_numeros_cadena($cadena){
+			$cadena = str_replace(":", " y ", $cadena);
+			$array_cadena = explode(" ", $cadena);
+
+			foreach ($array_cadena as $key => $palabra) {
+				$numero = intval(preg_replace('/[^0-9]+/', '', $palabra), 10);
+				if(is_numeric($numero)) {
+					$letras = trim(CifrasEnLetras::convertirCifrasEnLetras($numero));
+					$array_cadena[$key] =trim( str_replace($numero, $letras, $palabra));
+				}
+			}
+			$cadena = implode(" ", $array_cadena);
+			$cadena = str_replace("y cerocero", "en punto", $cadena);
+			return mb_strtoupper($cadena) ;
+		}
+
+	function extraer_departamento($expedienteci){
+		$fragmentos = explode(" ", $expedienteci);
+
+		$depto = 'N/A';
+		if(count($fragmentos) == 2){
+			switch ($fragmentos[1]) {
+			    case 'SO':
+			        $depto = "SONSONATE";
+			        break;
+			    case 'AH':
+			        $depto = "AHUACHAPÁN";
+			        break;
+			    case 'SA':
+			        $depto = "SANTA ANA";
+			        break;
+			    case 'CH':
+			        $depto = "CHALATENANGO";
+			        break;
+			    case 'LL':
+			        $depto = "LA LIBERTAD";
+			        break;
+			    case 'SS':
+			        $depto = "SAN SALVADOR";
+			        break;
+			    case 'CU':
+			        $depto = "CUSCATLÁN";
+			        break;
+			    case 'LP':
+			        $depto = "LA PAZ";
+			        break;
+			    case 'CA':
+			        $depto = "CABAÑAS";
+			        break;
+			    case 'SV':
+			        $depto = "AN VICENTE";
+			        break;
+			    case 'US':
+			        $depto = "USULUTÁN";
+			        break;
+			    case 'SM':
+			        $depto = "SAN MIGUEL";
+			        break;
+			    case 'MO':
+			        $depto = "MORAZÁN";
+			        break;
+			    case 'LU':
+			        $depto = "LA UNIÓN";
+			        break;
 			}
 		}
-		if($data["tipo"] == "mensual"){
-			$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al MES: ".mes($data["value"])." DE ".$data["anio"])."</span>";
-		}else if($data["tipo"] == "trimestral"){
- 			$tmfin = (intval($data["value"])*3);
- 			$tminicio = $tmfin-2;
- 			$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al TRIMESTRE: ".mes($tminicio)." - ".mes($tmfin)." DE ".$data["anio"])."</span>";
-	 	}else if($data["tipo"] == "semestral"){
- 			$smfin = (intval($data["value"])*6);
- 			$sminicio = $smfin-5;
-	 		$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al SEMESTRE: ".mes($sminicio)." - ".mes($smfin)." DE ".$data["anio"])."</span>";
-	 	}else if($data["tipo"] == "periodo"){
-	 		$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al PERIODO: ".fecha_ESP($data["value"])." - ".fecha_ESP($data["value2"]))."</span>";
-	 	}else{
-	 		$cabecera_vista .= '<span style="font-size: 12px; font-weight: normal;">'.mb_strtoupper("Correspondiente al AÑO: ".$data["anio"])."</span>";
-	 	}
-
-	 	if($tipo == 'pdf'){
-			$cabecera_vista .= '</td>
-				<td width="130px"><img src="'.base_url().'assets/logos_vista/logo_derecho.jpg"  width="130px"></td>
-				 	</tr>
-			 	</table><br>';
-		}else{
-			$cabecera_vista .= '</td>
-				<td width="150px"><img src="'.base_url().'assets/logos_vista/logo_derecho.jpg"  width="150px"></td>
-				 	</tr>
-			 	</table><br>';
-		}
-		
-	 	return $cabecera_vista;
+		return $depto;
 	}
 
 ?>
