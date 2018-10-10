@@ -65,7 +65,8 @@ class Estadistico extends CI_Controller {
 				'entradas' => $this->expediente_estado_model->obtener_entradas_reporte($data)->result_array(),
 				'resultados' => $this->expediente_estado_model->obtener_resultados_reporte($data)->result_array()
 			), 
-			true);
+			true
+		);
 	}
 	
 	public function estadistico_excel($data) {
