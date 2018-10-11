@@ -140,56 +140,45 @@ class Carga_laboral extends CI_Controller {
 		/*********************************** 	  INICIO ENCABEZADOS DE LA TABLAS	****************************************/
 
 		$this->objPHPExcel->setActiveSheetIndex()->mergeCells('B5:E5');
-		$this->objPHPExcel->getActiveSheet()
-    					->getCell('B5')
-						->setValue(' ');
-
 		$this->objPHPExcel->setActiveSheetIndex()->mergeCells('B6:B21');
-		$this->objPHPExcel->getActiveSheet()
-						->getCell('B6')
-						->setValue('REGLAMENTOS');
-					
-		$this->objPHPExcel->getActiveSheet()
-						->getStyle('B6')
-						->getAlignment()
-						->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		
-		$this->objPHPExcel->getActiveSheet()
-						->getStyle('B6')
-						->getAlignment()
-						->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-
-		$this->objPHPExcel->getActiveSheet()
-						->getStyle('B6')
-						->getAlignment()
-						->setTextRotation(90);
-
 		$this->objPHPExcel->setActiveSheetIndex()->mergeCells('C7:C10');
-		
-		$this->objPHPExcel->getActiveSheet()
-						->getCell('C7')
-						->setValue('Entradas');
-					
-		$this->objPHPExcel->getActiveSheet()
-						->getStyle('C7')
-						->getAlignment()
-						->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		
-		$this->objPHPExcel->getActiveSheet()
-						->getStyle('C7')
-						->getAlignment()
-						->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-
-		$this->objPHPExcel->getActiveSheet()
-						->getStyle('C7')
-						->getAlignment()
-						->setTextRotation(90);
-
 		$this->objPHPExcel->setActiveSheetIndex()->mergeCells('C11:C19');
 
+		$this->objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('B5', ' ')
+						->setCellValue('B6', 'REGLAMENTOS')
+						->setCellValue('C7', 'Entradas')
+						->setCellValue('C11', 'Resultados');
+					
 		$this->objPHPExcel->getActiveSheet()
-						->getCell('C11')
-						->setValue('Resultados');
+						->getStyle('B6')
+						->getAlignment()
+						->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$this->objPHPExcel->getActiveSheet()
+						->getStyle('B6')
+						->getAlignment()
+						->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+		$this->objPHPExcel->getActiveSheet()
+						->getStyle('B6')
+						->getAlignment()
+						->setTextRotation(90);
+					
+		$this->objPHPExcel->getActiveSheet()
+						->getStyle('C7')
+						->getAlignment()
+						->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$this->objPHPExcel->getActiveSheet()
+						->getStyle('C7')
+						->getAlignment()
+						->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+		$this->objPHPExcel->getActiveSheet()
+						->getStyle('C7')
+						->getAlignment()
+						->setTextRotation(90);
 					
 		$this->objPHPExcel->getActiveSheet()
 						->getStyle('C11')
@@ -258,36 +247,117 @@ class Carga_laboral extends CI_Controller {
 
 		 /*********************************** 	   INICIO DE LOS REGISTROS DE LA TABLA   	****************************************/
 
-		$entradas = $this->expediente_estado_model->obtener_entradas_reporte($data)->result_array();
-		$resultados = $this->expediente_estado_model->obtener_resultados_reporte($data)->result_array();
-
 		$cant_entradas = 0;
-		foreach ($entradas as $value) {
-			$cant_entradas += $value['cantidad'];
-		}
+		// foreach ($entradas as $value) {
+		// 	$cant_entradas += $value['cantidad'];
+		// }
 
 		$cant_resultados = 0;
-		foreach ($resultados as $value) {
-			$cant_resultados += $value['cantidad'];
+		// foreach ($resultados as $value) {
+		// 	$cant_resultados += $value['cantidad'];
+		// }
+		
+		$subtotal = array();
+		$subtotal_res = array();
+
+		foreach ($colaboradores as $key => $colaborador) {
+			
+			$entradas = $this->expediente_estado_model->obtener_entradas_reporte($data, $colaborador['id_empleado'])->result_array();
+			$resultados = $this->expediente_estado_model->obtener_resultados_reporte($data, $colaborador['id_empleado'])->result_array();
+
+			$sub_cant_entrada = 0;
+			$sub_cant_resultados = 0;
+
+			for ($i=0; $i < 5; $i++) {
+				
+				if (!array_key_exists($i, $subtotal)) {
+					$subtotal[$i] = 0;
+				}
+				
+				if ($i < 4) {
+					$cantidad = $entradas[$i]['cantidad'];
+					$this->objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue(obtener_columna_excel(6 + $key) . '' . (6 + $i), $cantidad);
+					$sub_cant_entrada += $cantidad;
+					
+					$subtotal[$i] = $subtotal[$i] + $cantidad;
+				} else {
+					$this->objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue(obtener_columna_excel(6 + $key) . '' . (6 + $i), $sub_cant_entrada);
+
+					$subtotal[$i] = $subtotal[$i] + $sub_cant_entrada;
+				}
+
+			}
+
+			for ($i=0; $i < 5; $i++) {
+				$this->objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue(obtener_columna_excel(6 + $key + 1) . '' . (6 + $i), $subtotal[$i]);
+			}
+
+			$j = 0;
+
+			for ($i=0; $i < 10; $i++) {
+
+				if (!array_key_exists($i, $subtotal_res)) {
+					$subtotal_res[$i] = 0;
+				}
+			
+				if ($i < 9) {
+					switch ($i) {
+						case (2 - 1):
+							$j = 5;
+							break;
+						case (3 - 1):
+							$j = 7;
+							break;
+						case (4 -1):
+							$j = 6;
+							break;
+						case (6 - 1):
+							$j = 3;
+							break;
+						case (7 - 1):
+							$j = 1;
+							break;
+						case (8 - 1):
+							$j = 2;
+							break;
+						default:
+							$j = $i;
+							break;
+					}
+
+					$cantidad = $resultados[$j]['cantidad'];
+					$this->objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue(obtener_columna_excel(6 + $key) . '' . (11 + $i), $cantidad);
+
+					if ( !($i == 8 || $i == 5) ) {
+						$sub_cant_resultados += $cantidad;
+						$subtotal_res[$i] = $subtotal_res[$i] + $cantidad;
+					}
+
+				} else {
+					$this->objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue(obtener_columna_excel(6 + $key) . '' . (11 + $i), $sub_cant_resultados);
+
+					$subtotal_res[$i] = $subtotal_res[$i] + $sub_cant_resultados;
+				}
+
+			}
+
+			for ($i=0; $i < 10; $i++) {
+				$this->objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue(obtener_columna_excel(6 + $key + 1) . '' . (11 + $i), $subtotal_res[$i]);
+			}
+
+			$this->objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue(obtener_columna_excel(6 + $key) . '21', ( $sub_cant_entrada - $sub_cant_resultados ));
+			
 		}
-		 
-		 $this->objPHPExcel->setActiveSheetIndex(0)
-							->setCellValue('F6', $entradas[0]['cantidad'])
-							->setCellValue('F7', $entradas[1]['cantidad'])
-							->setCellValue('F8', $entradas[2]['cantidad'])
-							->setCellValue('F9', $entradas[3]['cantidad'])
-							->setCellValue('F10', $cant_entradas)
-							->setCellValue('F11', $resultados[0]['cantidad'])
-							->setCellValue('F12', $resultados[5]['cantidad'])
-							->setCellValue('F13', $resultados[7]['cantidad'])
-							->setCellValue('F14', $resultados[6]['cantidad'])
-							->setCellValue('F15', $resultados[4]['cantidad'])
-							->setCellValue('F16', $resultados[3]['cantidad'])
-							->setCellValue('F17', $resultados[1]['cantidad'])
-							->setCellValue('F18', $resultados[2]['cantidad'])
-							->setCellValue('F19', $resultados[8]['cantidad'])
-							->setCellValue('F20', $cant_resultados)
-							->setCellValue('F21', $cant_entradas - $cant_resultados);
+
+		$this->objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue(obtener_columna_excel(6 + $key +1) . '21', ( array_pop($subtotal) - array_pop($subtotal_res) ));
 
 		 /*********************************** 	   FIN DE LOS REGISTROS DE LA TABLA   	****************************************/
 
