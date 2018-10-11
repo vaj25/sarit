@@ -5,20 +5,6 @@
     }
 </style>
 
-<?php 
-    $cant_entradas = 0;
-    // foreach ($entradas as $value) {
-    //     $cant_entradas += $value['cantidad'];
-    // }
-
-    $cant_resultados = 0;
-    foreach ($resultados as $value) {
-        $cant_resultados += $value['cantidad'];
-    }
-
-    $total_col = count($colaboradores);
-?>
-
 <div class="table table-responsive">
     <table border="1" style="width:100%; border-collapse: collapse;">
         <tr>
@@ -109,130 +95,180 @@
             <th scope="row">1</th>
             <td>Reglamentos Internos de Trabajo con Observaciones Realizadas</td>
             <?php
+                $observaciones = 0;
                 foreach ($colaboradores as $value) {
-                    $cantidad = $value['id_empleado'];
+                    $cantidad = $resultados[$value['id_empleado']][0]['cantidad'];
                     echo "<td>$cantidad</td>";
+                    $observaciones += $cantidad;
                 }
+                echo "<td>$observaciones</td>"
             ?>
-            <td><?= $resultados[0]['cantidad'] ?></td>
         </tr>
 
         <tr>
             <th scope="row">2</th>
             <td>Proyectos de Reglamentos Interos con Observaciones de Género</td>
             <?php
+                $genero = 0;
                 foreach ($colaboradores as $value) {
-                    $cantidad = $value['id_empleado'];
+                    $cantidad = $resultados[$value['id_empleado']][5]['cantidad'];
                     echo "<td>$cantidad</td>";
+                    $genero += $cantidad;
                 }
+                echo "<td>$genero</td>"
             ?>
-            <td><?= $resultados[5]['cantidad'] ?></td>
         </tr>
 
         <tr>
             <th scope="row">3</th>
             <td>Proyectos de Reglamentos Internos Aprobados</td>
             <?php
+                $aprobados = 0;
                 foreach ($colaboradores as $value) {
-                    $cantidad = $value['id_empleado'];
+                    $cantidad = $resultados[$value['id_empleado']][7]['cantidad'];
                     echo "<td>$cantidad</td>";
+                    $aprobados += $cantidad;
                 }
+                echo "<td>$aprobados</td>"
             ?>
-            <td><?= $resultados[7]['cantidad'] ?></td>
         </tr>
 
         <tr>
             <th scope="row">4</th>
             <td>Reformas de Reglamentos Internos Aprobados</td>
             <?php
+                $reformas = 0;
                 foreach ($colaboradores as $value) {
-                    $cantidad = $value['id_empleado'];
+                    $cantidad = $resultados[$value['id_empleado']][6]['cantidad'];
                     echo "<td>$cantidad</td>";
+                    $reformas += $cantidad;
                 }
+                echo "<td>$reformas</td>"
             ?>
-            <td><?= $resultados[6]['cantidad'] ?></td>
         </tr>
 
         <tr>
             <th scope="row">5</th>
             <td>Proyectos de Reglamentos Internos Desistidos</td>
             <?php
+                $desistidos = 0;
                 foreach ($colaboradores as $value) {
-                    $cantidad = $value['id_empleado'];
+                    $cantidad = $resultados[$value['id_empleado']][4]['cantidad'];
                     echo "<td>$cantidad</td>";
+                    $desistidos += $cantidad;
                 }
+                echo "<td>$desistidos</td>"
             ?>
-            <td><?= $resultados[4]['cantidad'] ?></td>
         </tr>
 
         <tr>
             <th scope="row">6</th>
             <td>Proyectos de Reglamentos Internos Declarados Improponibles</td>
             <?php
+                $improponibles = 0;
                 foreach ($colaboradores as $value) {
-                    $cantidad = $value['id_empleado'];
+                    $cantidad = $resultados[$value['id_empleado']][3]['cantidad'];
                     echo "<td>$cantidad</td>";
+                    $improponibles += $cantidad;
                 }
+                echo "<td>$improponibles</td>"
             ?>
-            <td><?= $resultados[3]['cantidad'] ?></td>
         </tr>
 
         <tr>
             <th scope="row">7</th>
             <td>Proyectos de Reglamentos Internos Prevenidos</td>
             <?php
+                $prevenidos = 0;
                 foreach ($colaboradores as $value) {
-                    $cantidad = $value['id_empleado'];
+                    $cantidad = $resultados[$value['id_empleado']][1]['cantidad'];
                     echo "<td>$cantidad</td>";
+                    $prevenidos += $cantidad;
                 }
+                echo "<td>$prevenidos</td>"
             ?>
-            <td><?= $resultados[1]['cantidad'] ?></td>
         </tr>
 
         <tr>
             <th scope="row">8</th>
             <td>Proyectos de Reglamentos Internos en Calificacion de Labores (DGPS)</td>
             <?php
+                $dgps = 0;
                 foreach ($colaboradores as $value) {
-                    $cantidad = $value['id_empleado'];
+                    $cantidad = $resultados[$value['id_empleado']][2]['cantidad'];
                     echo "<td>$cantidad</td>";
+                    $dgps += $cantidad;
                 }
+                echo "<td>$dgps</td>"
             ?>
-            <td><?= $resultados[2]['cantidad'] ?></td>
         </tr>
 
         <tr>
             <th scope="row">9</th>
             <td>Casos Reasignados (cambio de Colaborador)</td>
             <?php
+                $reasignados = 0;
                 foreach ($colaboradores as $value) {
-                    $cantidad = $value['id_empleado'];
+                    $cantidad = $resultados[$value['id_empleado']][8]['cantidad'];
                     echo "<td>$cantidad</td>";
+                    $reasignados += $cantidad;
                 }
+                echo "<td>$reasignados</td>"
             ?>
-            <td><?= $resultados[8]['cantidad'] ?></td>
         </tr>
 
         <tr>
             <td colspan="2">Total de Estudios de Reglamento efectuados</td>
             <?php
+                $sub_total_resultados = 0;
+                $total_resultados = 0;
                 foreach ($colaboradores as $value) {
-                    $cantidad = $value['id_empleado'];
-                    echo "<td>$cantidad</td>";
+                    $sub_total_resultados = 0;
+                    for ($i=0; $i < 9; $i++) {
+                        if ( !($i == 8 || $i == 5) ) {
+                            $cantidad = $resultados[$value['id_empleado']][$i]['cantidad'];
+                            $sub_total_resultados += $cantidad;
+                        }
+                    }
+                    $total_resultados += $sub_total_resultados;
+                    echo "<td>$sub_total_resultados</td>";
                 }
+                echo "<td>$total_resultados</td>";
             ?>
-            <td><?= $cant_resultados ?></td>
         </tr>
 
         <tr>
             <td colspan="2">Reglamento pendientes para el proximo mes</td>
             <?php
+                $sub_total_resultados = 0;
+                $total_resultados = 0;
+
+                $sub_total_entradas = 0;
+                $total_entradas = 0;
+
                 foreach ($colaboradores as $value) {
-                    $cantidad = $value['id_empleado'];
-                    echo "<td>$cantidad</td>";
+                    $sub_total_resultados = 0;
+                    $sub_total_entradas = 0;
+                    for ($i=0; $i < 9; $i++) {
+                        
+                        if ( !($i == 8 || $i == 5) ) {
+                            $cantidad = $resultados[$value['id_empleado']][$i]['cantidad'];
+                            $sub_total_resultados += $cantidad;
+                        }
+
+                        if ($i < 4) {
+                            $cantidad = $entradas[$value['id_empleado']][$i]['cantidad'];
+                            $sub_total_entradas += $cantidad;
+                        }
+
+                    }
+                    $total_resultados += $sub_total_resultados;
+                    $total_entradas += $sub_total_entradas;
+
+                    echo "<td>".($sub_total_entradas - $sub_total_resultados)."</td>";
                 }
+                echo "<td>".($total_entradas - $total_resultados)."</td>";
             ?>
-            <td><?= $cant_entradas - $cant_resultados ?></td>
         </tr>
 
     </table>

@@ -295,7 +295,7 @@ class Expediente_estado_model extends CI_Model {
                 ->order_by('ab.fecha_exp_est asc');
 
         if ($empleado) {
-            $this->db->where('ab.id_empleado', $empleado);
+            $this->db->where('ad.id_empleado', $empleado);
         }
         
         if($data["tipo"] == "mensual"){
@@ -406,7 +406,7 @@ class Expediente_estado_model extends CI_Model {
                 ->order_by('ab.fecha_exp_est asc');
 
         if ($empleado) {
-            $this->db->where('ab.id_empleado', $empleado);
+            $this->db->where('ad.id_empleado', $empleado);
         }
         
         if($data["tipo"] == "mensual"){
@@ -475,7 +475,7 @@ class Expediente_estado_model extends CI_Model {
                 ->order_by('ab.fecha_exp_est asc');
 
         if ($empleado) {
-            $this->db->where('ab.id_empleado', $empleado);
+            $this->db->where('ad.id_empleado', $empleado);
         }
         
         if($data["tipo"] == "mensual"){
@@ -505,7 +505,7 @@ class Expediente_estado_model extends CI_Model {
 
          /* Casos Reasignados (cambio de Colaborador) */
 
-         $this->db->select("aa.numexpediente_expedientert, count(*) cant")
+         $this->db->select("aa.numexpediente_expedientert, count(*) cant, aa.id_expedientert")
             ->from('sri_expedientert aa')
             ->join('sri_expediente_empleado ab', 'aa.id_expedientert = ab.id_expedientert')
             ->join('sri_expediente_estado ac', 'ac.id_expedientert = aa.id_expedientert')
@@ -555,7 +555,7 @@ class Expediente_estado_model extends CI_Model {
                         where se.id_expedientert = a.id_expedientert ))');
         
         if ($empleado) {
-            $this->db->where('ab.id_empleado', $empleado);
+            $this->db->where('b.id_empleado', $empleado);
         }
         
         $sql[] = '('.$this->db->get_compiled_select().')';

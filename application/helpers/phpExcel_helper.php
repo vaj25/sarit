@@ -169,4 +169,58 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	 	return $cabecera_vista;
 	}
 
+	/**
+	 * @author	 Alberto Castaneda
+	 * @since	 Version 1.0.0
+	 * @category Helpers
+	 * Funcion devuelve la columna en formato excel hasta la ZZ
+	 * recibiendo un numero entero
+  	 */
+	  
+  	function obtener_columna_excel($col) {
+    if ($col > 0) {
+      $letras = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
+                'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+
+      if ($col > 26) {
+
+        $columna = '';
+
+        $num_col_uno = floor($col/26) - 1;
+        if ($num_col_uno >= 0) {
+
+          if ($col%26 == 0) {
+            $num_col_uno = $num_col_uno - 1;
+          }
+
+          $columna = $letras[$num_col_uno];
+
+        } else {
+
+          $columna = '';
+
+        }
+
+
+        $num_col_dos = $col % 26;
+
+        if ($num_col_dos == 0) {
+          $num_col_dos = 26;
+        }
+
+        $columna .= $letras[$num_col_dos - 1];
+
+        return $columna;
+
+      } else {
+
+        return $letras[$col - 1];
+
+      }
+    } else {
+      return 0;
+    }
+
+  }
+
 ?>
