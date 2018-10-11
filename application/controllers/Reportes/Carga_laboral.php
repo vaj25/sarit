@@ -18,8 +18,8 @@ class Carga_laboral extends CI_Controller {
 		$data = array(
 			'anio' => $this->input->post('anio'),
 			'tipo' => $this->input->post('tipo'),
-			'value' => date('Y-m-d H:i:s', strtotime($this->input->post('value'))),
-			'value2' => date('Y-m-d H:i:s', strtotime($this->input->post('value2')))
+			'value' => $this->input->post('value'),
+			'value2' => $this->input->post('value2')
 		);
 
 		$titles = array(

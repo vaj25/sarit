@@ -88,18 +88,16 @@ class Expediente_estado_model extends CI_Model {
         }
 
         if($data["tipo"] == "mensual"){
-            $this->db->where('YEAR(f.fecha_exp_est) <', $data["anio"])
-                    ->where('MONTH(f.fecha_exp_est) <', $data["value"]);
+            $this->db->where('f.fecha_exp_est <', $data["anio"].'-'.$data["value"].'-1');
         }else if($data["tipo"] == "trimestral"){
             $tmfin = (intval($data["value"])*3);	
             $tminicio = $tmfin-2;
-            $this->db->where('YEAR(f.fecha_exp_est) <', $data["anio"])
-                ->where("MONTH(f.fecha_exp_est) < ", $tminicio);
+            print('1-'.$tminicio.'-'.$data["anio"]);
+            $this->db->where('f.fecha_exp_est <', $data["anio"].'-'.$tminicio.'-'.'01-');
         }else if($data["tipo"] == "semestral"){
             $smfin = (intval($data["value"])*6);	
             $sminicio = $smfin-5;
-            $this->db->where('YEAR(f.fecha_exp_est) <', $data["anio"])
-                ->where("MONTH(f.fecha_exp_est) < ", $tminicio);
+            $this->db->where('YEAR(f.fecha_exp_est) <', $data["anio"].'-'.$sminicio.'-'.'01-');
         }else if($data["tipo"] == "periodo"){
             $this->db->where("f.fecha_exp_est < ", $data["value"]);
         }else{

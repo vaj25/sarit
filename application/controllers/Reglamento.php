@@ -191,7 +191,7 @@ class Reglamento extends CI_Controller {
 
 	public function combo_delegado() {
 		
-		$this->load->view('reglamento_ajax/combo_delegado', 
+		$this->load->view('reglamento_ajax/combo_delegado',
 			array(
 				'id' => $this->input->post('id'),
 				'colaborador' => $this->expediente_empleado_model->obtener_delegados_seccion(),

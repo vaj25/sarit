@@ -76,7 +76,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 
 
-    function periodo($data){
+  function periodo($data){
 		$periodo = "";
 		if($data["tipo"] == "mensual"){
 			$periodo = mb_strtoupper("Correspondiente al MES: ".mes($data["value"])." DE ".$data["anio"]);

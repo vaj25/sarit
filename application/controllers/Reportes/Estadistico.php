@@ -18,8 +18,8 @@ class Estadistico extends CI_Controller {
 		$data = array(
 			'anio' => $this->input->post('anio'),
 			'tipo' => $this->input->post('tipo'),
-			'value' => date('Y-m-d H:i:s', strtotime($this->input->post('value'))),
-			'value2' => date('Y-m-d H:i:s', strtotime($this->input->post('value2')))
+			'value' => $this->input->post('value'),
+			'value2' => $this->input->post('value2')
 		);
 
 		$titles = array(
@@ -237,8 +237,10 @@ class Estadistico extends CI_Controller {
 		}
 
 		$cant_resultados = 0;
-		foreach ($resultados as $value) {
-			$cant_resultados += $value['cantidad'];
+		foreach ($resultados as $key => $value) {
+			if ( !($key == 8 || $key == 5) ) {
+				$cant_resultados += $value['cantidad'];
+			}
 		}
 		 
 		 $this->objPHPExcel->setActiveSheetIndex(0)

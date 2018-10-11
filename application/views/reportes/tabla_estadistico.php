@@ -12,8 +12,10 @@
     }
 
     $cant_resultados = 0;
-    foreach ($resultados as $value) {
-        $cant_resultados += $value['cantidad'];
+    foreach ($resultados as $key => $value) {
+        if ( !($key == 8 || $key == 5) ) {
+            $cant_resultados += $value['cantidad'];
+        }
     }
 ?>
 
