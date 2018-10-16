@@ -3,6 +3,11 @@
         writing-mode: vertical-lr;
         transform: rotate(180deg);
     }
+
+    .total {
+        text-align: right;
+        font-weight: bold;
+    }
 </style>
 
 <?php 
@@ -49,11 +54,11 @@
 
         <tr>
             <td colspan="2">Reglamentos Internos a estudiar durante el mes</td>
-            <td><?= $cant_entradas ?></td>
+            <td class="total"><?= $cant_entradas ?></td>
         </tr>
 
         <tr>
-            <td rowspan="11"><p class="verticalText">ENTRADAS</p></td>
+            <td rowspan="11"><p class="verticalText">RESULTADOS</p></td>
             <th scope="row">1</th>
             <td>Reglamentos Internos de Trabajo con Observaciones Realizadas</td>
             <td><?= $resultados[0]['cantidad'] ?></td>
@@ -109,12 +114,12 @@
 
         <tr>
             <td colspan="2">Total de Estudios de Reglamento efectuados</td>
-            <td><?= $cant_resultados ?></td>
+            <td class="total"><?= $cant_resultados ?></td>
         </tr>
 
         <tr>
             <td colspan="2">Reglamento pendientes para el proximo mes</td>
-            <td><?= $cant_entradas - $cant_resultados ?></td>
+            <td class="total"><?= $cant_entradas - $cant_resultados ?></td>
         </tr>
 
     </table>

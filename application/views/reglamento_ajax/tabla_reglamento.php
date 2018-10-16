@@ -8,7 +8,7 @@
                 <th>Nombre del solicitante</th>
                 <th>Colaborador Asignado (a) </th>
                 <th>Tipo Solicitud </th>
-                <th>Fecha Resoluci&oacute;n </th>
+                <th>Fecha Modificación </th>
                 <th>Estado </th>
                 <th style="min-width: 120px;">(*)</th>
             </tr>
@@ -49,8 +49,10 @@
                                                 <a class="dropdown-item" href="javascript:;" onClick="cambiar_editar(<?=$fila->id_expedientert?>, 'reforma_total')">Reforma Total</a> -->
                     <a class="dropdown-item" href="javascript:;" onClick="actualizar_estado(<?=$fila->id_expedientert?>)">Actualizar
                         Estado</a>
-                    <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedientert.','.$fila->id_personal?>)">Cambiar
+                    <?php if (obtener_rango($segmentos=1, $permiso=1) > 1) { ?>
+                        <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedientert.','.$fila->id_personal?>)">Cambiar
                         Delegado</a>
+                    <?php }?>
                     <?= ($fila->id_estadort == 3) ? '<a class="dropdown-item" href="javascript:;" onClick="modal_acciones('.$fila->id_expedientert.')">Agregar Reforma</a>' : 
                                                     '<a class="dropdown-item" href="javascript:;" onClick="desistir('.$fila->id_expedientert.')">Desistir</a>'?>
                     <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedientert?>)">Registrar

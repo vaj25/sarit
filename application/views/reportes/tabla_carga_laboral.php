@@ -3,6 +3,11 @@
         writing-mode: vertical-lr;
         transform: rotate(180deg);
     }
+
+    .total {
+        text-align: right;
+        font-weight: bold;
+    }
 </style>
 
 <div class="table table-responsive">
@@ -86,12 +91,12 @@
                     $total_entradas += $sub_total_entradas;
                     echo "<td>$sub_total_entradas</td>";
                 }
-                echo "<td>$total_entradas</td>";
+                echo "<td class='total'>$total_entradas</td>";
             ?>
         </tr>
 
         <tr>
-            <td rowspan="11"><p class="verticalText">ENTRADAS</p></td>
+            <td rowspan="11"><p class="verticalText">RESULTADOS</p></td>
             <th scope="row">1</th>
             <td>Reglamentos Internos de Trabajo con Observaciones Realizadas</td>
             <?php
@@ -233,7 +238,7 @@
                     $total_resultados += $sub_total_resultados;
                     echo "<td>$sub_total_resultados</td>";
                 }
-                echo "<td>$total_resultados</td>";
+                echo "<td class='total'>$total_resultados</td>";
             ?>
         </tr>
 
@@ -267,7 +272,7 @@
 
                     echo "<td>".($sub_total_entradas - $sub_total_resultados)."</td>";
                 }
-                echo "<td>".($total_entradas - $total_resultados)."</td>";
+                echo "<td class='total'>".($total_entradas - $total_resultados)."</td>";
             ?>
         </tr>
 
