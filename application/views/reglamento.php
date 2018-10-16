@@ -596,10 +596,9 @@ function cambiar_pestana(tipo){
                     </div>
                   </div>
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>NIT: <span class="text-danger">*</span></h5>
+                    <h5>NIT: </h5>
                     <div class="controls">
-                      <input type="text" id="nit" name="nit" class="form-control" placeholder="No. De Idententificaci&oacute;n Tributaria"
-                        required="" data-mask="9999-999999-999-9">
+                      <input type="text" id="nit" name="nit" class="form-control" placeholder="No. De Idententificaci&oacute;n Tributaria" data-mask="9999-999999-999-9">
                       <div class="help-block"></div>
                     </div>
                   </div>
@@ -827,6 +826,11 @@ function cambiar_pestana(tipo){
               <a class="nav-link" onclick="cambiar_pestana('3');" data-toggle="tab" href="#">
                 <span class="hidden-sm-up"><i class="ti-home"></i></span>
                 <span class="hidden-xs-down">Aprobado</span></a>
+            </li>
+            <li class="nav-item <?php if($navegatorless){ echo " pull-left"; } ?>">
+              <a class="nav-link" onclick="cambiar_pestana('4');" data-toggle="tab" href="#">
+                <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                <span class="hidden-xs-down">Prevenido</span></a>
             </li>
           </ul>
         </div>

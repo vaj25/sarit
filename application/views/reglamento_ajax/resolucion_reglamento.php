@@ -76,9 +76,7 @@ $(function(){
         })
         .done(function(res){
             if(res == "exito"){
-                //cerrar_mantenimiento();
                 swal({ title: "¡La resolucion se aplico con exito!", type: "success", showConfirmButton: true });
-                //tablaEstados();
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }

@@ -270,7 +270,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               </select>
             </div>
             <?php } else { ?>
-              <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('id_usuario')?>">
+              <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
             <?php }?>
           </div>
 

@@ -18,20 +18,20 @@ class Historial extends CI_Controller {
     public function tabla_reglamento(){
       $data['reglamentos'] = $this->reglamento_model->obtener_reglamentos_numero(false, $this->input->get('nr'));
 			$this->load->view('historial_ajax/tabla_historial', $data);
-		}
+	}
 
-		public function ver_historial() {
-			$data['historial'] = $this->reglamento_model->obtener_reglamentos_numero( $this->input->post('num'));
+	public function ver_historial() {
+		$data['historial'] = $this->reglamento_model->obtener_reglamentos_numero( $this->input->post('num'));
 
-			$this->load->view('historial_ajax/vista_historial', $data);
-		}
+		$this->load->view('historial_ajax/vista_historial', $data);
+	}
 
-		public function ver_detalle() {
-			$data['detalle'] = $this->expediente_estado_model->obtener_reglamento_estados( $this->input->post('id') );
-			$data['reglamento'] = $this->reglamento_model->obtener_reglamento_empresa( $this->input->post('id') );
+	public function ver_detalle() {
+		$data['detalle'] = $this->expediente_estado_model->obtener_reglamento_estados( $this->input->post('id') );
+		$data['reglamento'] = $this->reglamento_model->obtener_reglamento_empresa( $this->input->post('id') );
 
-			$this->load->view('historial_ajax/vista_detalle', $data);
-		}
+		$this->load->view('historial_ajax/vista_detalle', $data);
+	}
 
 }
 
