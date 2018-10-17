@@ -29,12 +29,19 @@
                                 echo ($fila->id_estadort != "9") ? '<td><span class="label label-success">'.$fila->estado_estadort.'</span></td>' : '<td><span class="label label-danger">'.$fila->estado_estadort.'</span></td>';
                                 $i++;
                                 echo "<td>";
+
                                 $array = array($fila->id_expedientert);
 
                                 if(tiene_permiso($segmentos=1,$permiso=4)){
 
                                     if ($fila->id_estadort != "9") {
-                                        array_push($array, "edit");
+
+                                        if ($fila->id_representantert == null) {
+                                            array_push($array, "edit_new");
+                                        } else {
+                                            array_push($array, "edit");
+                                        }
+
                                         echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
 
                                         ?>

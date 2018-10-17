@@ -47,16 +47,16 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       if(bandera == "edit"){
 
         $("#tipo_solicitud").val(result.tiposolicitud_expedientert);
-        combo_establecimiento(result.id_empresart);
+        combo_establecimiento(result.id_empresa, 1);
 
       } else {
         
-        combo_establecimiento(result.id_empresart, 'readonly');
+        combo_establecimiento(result.id_empresa, 1, 'readonly');
         $("#tipo_solicitante").attr('readonly', 'readonly');
 
       }
 
-      combo_delegado(result.id_empleado, 'readonly');
+      combo_delegado(result.id_empleado, 1, 'readonly');
 
     });
 
@@ -91,6 +91,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#band2").val("reforma_total");
       $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Reforma Total");
       $("#tipo_solicitud").val('Reforma Total');
+
+    } else if(bandera = "edit_new") {
+
+      $("#band").val("edit_new");
+      $("#band1").val("edit_new");
+      $("#band2").val("edit_new");
+      $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Expediente");
 
     } else {
       cambiar_nuevo();
@@ -148,7 +155,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#band1").val("save");
     $("#band2").val("save");
 
-    combo_delegado('');
+    combo_delegado('', 1);
 
     $("#ttl_form").addClass("bg-success");
     $("#ttl_form").removeClass("bg-info");
@@ -161,7 +168,23 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#cnt_form_main").show(0);
     $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Aprobaci&oacute;n de Reglamentos");
     
-    combo_establecimiento('');
+    combo_establecimiento('', 1);
+  }
+
+  function cambiar_nuevo_filtro() {
+
+    combo_delegado('', 2);
+
+    $("#band11").val("save");
+    $("#tipo_solicitud2").val('Registro');
+
+    $("#cnt-tabla").hide(0);
+    $(".cnt_form").hide(0);
+    $("#cnt_form11").show(0);
+    $("#cnt_form_main2").show(0);
+    $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva Aprobaci&oacute;n de Reglamentos");
+
+    combo_establecimiento('', 2);
   }
 
   function cerrar_mantenimiento(){
@@ -194,7 +217,7 @@ function cambiar_pestana(tipo){
     tablaReglamentos();
 }
 
-  function combo_establecimiento(seleccion, disable=''){
+  function combo_establecimiento(seleccion, numero, disable=''){
     
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/combo_establecimiento",
@@ -203,7 +226,13 @@ function cambiar_pestana(tipo){
       data: {id : seleccion, disable: disable}
     })
     .done(function(res){
-      $('#div_combo_establecimiento').html(res);
+
+      if (numero == 1) {
+        $('#div_combo_establecimiento').html(res);
+      } else {
+        $('#div_combo_establecimiento'+numero).html(res);
+      }
+
       $("#establecimiento").select2({
         'minimumInputLength': 3,
         'language': {
@@ -451,7 +480,7 @@ function cambiar_pestana(tipo){
       });
   }
 
-  function combo_delegado(seleccion, disable=''){
+  function combo_delegado(seleccion, numero, disable=''){
     
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/combo_delegado",
@@ -460,7 +489,12 @@ function cambiar_pestana(tipo){
       data: {id : seleccion, disable: disable}
     })
     .done(function(res){
-      $('#div_combo_delegado').html(res);
+
+      if (numero == 1) {
+        $('#div_combo_delegado').html(res);
+      } else {
+        $('#div_combo_delegado'+numero).html(res);
+      }
       $(".select2").select2();
     });
 
@@ -508,14 +542,14 @@ function cambiar_pestana(tipo){
       <!-- ============================================================== -->
 
       <div class="col-lg-1"></div>
-        <div class="col-lg-10" id="cnt_form_main" style="display: none;">
-          <div class="card">
-            <div class="card-header bg-success2" id="ttl_form">
-              <div class="card-actions text-white">
-                <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
-              </div>
-              <h4 class="card-title m-b-0 text-white">Listado de Expedientes</h4>
+      <div class="col-lg-10" id="cnt_form_main" style="display: none;">
+        <div class="card">
+          <div class="card-header bg-success2" id="ttl_form">
+            <div class="card-actions text-white">
+              <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
             </div>
+            <h4 class="card-title m-b-0 text-white">Listado de Expedientes</h4>
+          </div>
           <div class="card-body b-t">
 
             <div id="cnt_form1" class="cnt_form">
@@ -598,15 +632,15 @@ function cambiar_pestana(tipo){
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>NIT: </h5>
                     <div class="controls">
-                      <input type="text" id="nit" name="nit" class="form-control" placeholder="No. De Idententificaci&oacute;n Tributaria" data-mask="9999-999999-999-9">
+                      <input type="text" id="nit" name="nit" class="form-control" placeholder="No. De Idententificaci&oacute;n Tributaria"
+                        data-mask="9999-999999-999-9">
                       <div class="help-block"></div>
                     </div>
                   </div>
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Telefono: </h5>
                     <div class="controls">
-                      <input type="text" placeholder="Telefono" id="telefono" name="telefono" class="form-control"
-                        data-mask="9999-9999">
+                      <input type="text" placeholder="Telefono" id="telefono" name="telefono" class="form-control" data-mask="9999-9999">
                       <div class="help-block"></div>
                     </div>
                   </div>
@@ -762,7 +796,68 @@ function cambiar_pestana(tipo){
           </div>
         </div>
       </div>
-    </div>
+      <div class="col-lg-10" id="cnt_form_main2" style="display: none;">
+        <div class="card">
+          <div class="card-header bg-success2" id="ttl_form">
+            <div class="card-actions text-white">
+              <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
+            </div>
+            <h4 class="card-title m-b-0 text-white">Listado de Expedientes</h4>
+          </div>
+          <div class="card-body b-t">
+
+            <div id="cnt_form11" class="cnt_form">
+              <?php echo form_open('', array('id' => 'formajax11', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+
+              <hr class="m-t-0 m-b-30">
+
+              <input type="hidden" id="band11" name="band">
+              <input type="hidden" id="tipo_solicitud2" name="tipo_solicitud">
+
+              <span class="etiqueta">Establecimiento</span>
+
+              <blockquote class="m-t-0">
+                <div class="row">
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Tipo de Solicitante: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <select id="tipo_solicitante2" name="tipo_solicitante" class="form-control" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="Sociedad">Sociedad</option>
+                        <option value="Persona Natural">Persona Natural</option>
+                        <option value="Asociación">Asociación</option>
+                        <option value="Autonomas">Autonomas</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento2"></div>
+                </div>
+              </blockquote>
+
+              <span class="etiqueta">Delegado</span>
+
+              <blockquote class="m-t-0">
+
+                <div class="row">
+                  <div class="col-lg-6 form-group <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_delegado2"></div>
+                </div>
+
+              </blockquote>
+
+              <div align="right" id="btnadd2">
+                <button type="reset" class="btn waves-effect waves-light btn-success">
+                  <i class="mdi mdi-recycle"></i> Limpiar
+                </button>
+                <button type="submit" class="btn waves-effect waves-light btn-success2">Finalizar
+                  <i class="mdi mdi-chevron-right"></i></button>
+              </div>
+
+              <?php echo form_close(); ?>
+            </div>
+
+          </div>
+        </div>
+      </div>
   </div>
   <div class="col-lg-1"></div>
   <div class="col-lg-12" id="cnt-tabla">
@@ -796,6 +891,10 @@ function cambiar_pestana(tipo){
             <?php }?>
           </div>
           <div class="pull-right">
+            <?php if(obtener_rango($segmentos=1, $permiso=1) > 1){ ?>
+            <button type="button" onclick="cambiar_nuevo_filtro();" class="btn waves-effect waves-light btn-success2" data-toggle="tooltip"><span
+                class="mdi mdi-plus"></span> Nuevo registro por filtro</button>
+            <?php } ?>
             <?php if(tiene_permiso($segmentos=1,$permiso=2)){ ?>
             <button type="button" onclick="cambiar_nuevo();" class="btn waves-effect waves-light btn-success2" data-toggle="tooltip"><span
                 class="mdi mdi-plus"></span> Nuevo registro</button>
@@ -908,6 +1007,36 @@ $(function(){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
+              }
+              tablaReglamentos();
+            }
+        });
+            
+    });
+});
+
+$(function(){
+    $("#formajax11").on("submit", function(e){
+        e.preventDefault();
+        var f = $(this);
+        var formData = new FormData(document.getElementById("formajax11"));
+        
+        $.ajax({
+          url: "<?php echo site_url(); ?>/reglamento/insertar_reglamentos_filtro",
+          type: "post",
+          dataType: "html",
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false
+        })
+        .done(function(res){
+            if(res == "fracaso"){
+              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }else{
+              cerrar_mantenimiento();
+              if($("#band11").val() == "save"){
+                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
               }
               tablaReglamentos();
             }

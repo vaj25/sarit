@@ -96,4 +96,24 @@ class Login_model extends CI_Model {
         }
 	}
 
+	public function obtenerSiguienteIdModuloIncrement($tabla){
+		$this->db->select('DATABASE() as nombre');
+		$query=$this->db->get();
+		$base=$query->row()->nombre;
+		$this->db->select('AUTO_INCREMENT as var');
+		$this->db->where('TABLE_SCHEMA',$base);
+		$this->db->where('TABLE_NAME',$tabla);
+		$query = $this->db->get('information_schema.TABLES');
+		if ($query->num_rows() > 0) {
+		  $nombre;
+		  foreach ($query->result() as $fact) {
+			$nombre = $fact->var;
+		  }
+		  return  $nombre;
+		}
+		else {
+			return FALSE;
+		}
+	}
+
 }

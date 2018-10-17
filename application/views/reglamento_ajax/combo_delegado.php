@@ -1,5 +1,5 @@
 <?php if (obtener_rango($segmentos=1, $permiso=1) > 1) { ?>
-<label for="colaborador" class="font-weight-bold">Asignar Delegado: <span class="text-danger"></span></label>
+<h5>Establecimiento: <span class="text-danger">*</span></h5>
 <select id="colaborador" name="colaborador" <?= $disable ?> class="select2" onchange="" style="width: 100%">
     <option value="">[Seleccione]</option>
         <?php

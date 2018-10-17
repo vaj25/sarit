@@ -5,7 +5,7 @@ class Reglamento extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("reglamento_model", "documento_model", "comisionado_model", "expediente_estado_model", "expediente_empleado_model" ));
+		$this->load->model(array("reglamento_model", "documento_model", "comisionado_model", "expediente_estado_model", "expediente_empleado_model", "login_model" ));
 	}
 
 	public function index(){
@@ -101,6 +101,31 @@ class Reglamento extends CI_Controller {
 				echo "fracaso";
 			}
 
+		} else if($this->input->post('band1') == "edit_new"){
+
+			$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_expediente'))->result_array()[0];
+
+			$data['id_empresart'] = $this->input->post('establecimiento');
+			$data['tipopersona_expedientert'] = $this->input->post('tipo_solicitante');
+
+			$data2 = array(
+				'id_empresart' =>$this->input->post('establecimiento'), 
+				'nombres_representantert' => $this->input->post('nombres'),
+				'apellidos_representantert' => $this->input->post('apellidos'),
+				'dui_representantert'  => $this->input->post('dui_comisionado'),
+				'nit_representantert' => $this->input->post('nit'),
+				'telefono_representantert' => $this->input->post('telefono'),
+				'correo_representantert' => $this->input->post('correo'),
+				'cargo_representantert' => $this->input->post('tipo_representante'),
+				'sexo_representantert' => $this->input->post('sexo')
+			);
+
+			if ("exito" == $this->comisionado_model->insertar_comisionado($data2)) {
+				echo $this->reglamento_model->editar_reglamento($data);
+			} else {
+				echo "fracaso";
+			}
+
 		} else if($this->input->post('band') == "delete"){
 			$data = array(
 				'id_expedientert' => $this->input->post('id_expedientert')
@@ -169,8 +194,56 @@ class Reglamento extends CI_Controller {
 
 	}
 
-	public function registros_reglamentos_documentos() {
+	public function insertar_reglamentos_filtro() {
+		
+		$id = $this->reglamento_model->insertar_reglamento(
+			array(
+				'id_empresart' => $this->input->post('establecimiento'),
+				'id_personal' => '',
+				'numexpediente_expedientert' => 'N/A',
+				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
+				'tiposolicitud_expedientert' => $this->input->post('tipo_solicitud'),
+				'organizacionsocial_expedientert' => '',
+				'contratocolectivo_expedientert' => '',
+				'notificacion_expedientert' => '',
+				'fechanotificacion_expedientert' => '',
+				'resolucion_expedientert' => '',
+				'fecharesolucion_expedientert' => '',
+				'archivo_expedientert' => '',
+				'obsergenero_expedientrt' => '',
+				'contenidoTitulos_expedientert' => '',
+				'desistido_expedientert' => '',
+				'archivo_expedientert' => ''
+			)
+		);
 
+		if ($id != 'fracaso') {
+			$this->expediente_estado_model->insertar_expediente_estado(
+				array(
+				'id_estadort' => 1,
+				'id_expedientert' => $id,
+				'fecha_exp_est' => date("Y-m-d H:i:s"),
+				'fecha_ingresar_exp_est' => date("Y-m-d H:i:s"),
+				'etapa_exp_est' => 1
+			));
+	
+			$this->expediente_empleado_model->insertar_expediente_empleado(
+				array(
+				'id_expedientert' => $id,
+				'id_empleado' => $this->input->post('colaborador'),
+				'fecha_exp_emp ' => date("Y-m-d H:i:s")
+			));
+
+			echo 'exito';
+
+		} else {
+			echo $id;
+		}
+
+	}
+
+	public function registros_reglamentos_documentos() {
+		
 		print json_encode(
 			$this->reglamento_model->obtener_reglamentos_documentos($this->input->post('id'))->result()
 		);
