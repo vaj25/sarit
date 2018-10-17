@@ -106,6 +106,49 @@
                             <?= date("d-M-Y g:i:s A", strtotime($reglamento->fechacrea_expedientert)) ?>
                         </td>
                     </tr>
+
+                    <?php
+                        if (strtotime($reglamento->fecharesolucion_expedientert) != null) {
+                    ?>
+                    <tr>
+                        <td>Resolución del expediente:</td>
+                        <td class="font-medium">
+                            <?= $reglamento->resolucion_expedientert ?>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Fecha y Hora de resolución del expediente:</td>
+                        <td class="font-medium">
+                            <?= date("d-M-Y g:i:s A", strtotime($reglamento->fecharesolucion_expedientert)) ?>
+                        </td>
+                    </tr>
+
+                    <?php
+                        }
+                    ?>
+
+                    <?php
+                        if (strtotime($reglamento->fecha_entrega) != null) {
+                    ?>
+
+                    <tr>
+                        <td>Persona quien recibe:</td>
+                        <td class="font-medium">
+                            <?= $reglamento->persona_recibe ?>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Fecha entrega de resolución:</td>
+                        <td class="font-medium">
+                            <?= date("d-M-Y", strtotime($reglamento->fecha_entrega)) ?>
+                        </td>
+                    </tr>
+                    <?php
+                        }
+                    ?>
+
                 </tbody>
             </table>
         </blockquote>

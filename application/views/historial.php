@@ -241,22 +241,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 </script>
 
 <div class="page-wrapper">
-    <div class="col-lg-1"></div>
-    <div class="col-lg-12" id="cnt-tabla">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-actions">
+  <div class="col-lg-1"></div>
+  <div class="col-lg-12" id="cnt-tabla">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-actions">
 
-          </div>
-          <h4 class="card-title m-b-0">Listado de Reglamentos</h4>
         </div>
-        <div class="card-body b-t" style="padding-top: 7px;">
-          <div class="pull-left">
-            <?php if (obtener_rango($segmentos=1, $permiso=1) > 1) { ?>
-            <div class="form-group" style="width: 400px;">
-              <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablaReglamentos();">
-                <option value="">[Todos los empleados]</option>
-                <?php
+        <h4 class="card-title m-b-0">Listado de Reglamentos</h4>
+      </div>
+      <div class="card-body b-t" style="padding-top: 7px;">
+        <div class="pull-left">
+          <?php if (obtener_rango($segmentos=1, $permiso=1) > 1) { ?>
+          <div class="form-group" style="width: 400px;">
+            <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablaReglamentos();">
+              <option value="">[Todos los empleados]</option>
+              <?php
                 if($delegados){
                   foreach ($delegados->result() as $fila) {
                     if($nr_usuario == $fila->nr){
@@ -267,21 +267,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   }
                 }
               ?>
-              </select>
-            </div>
-            <?php } else { ?>
-              <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
-            <?php }?>
+            </select>
           </div>
-
-          <div id="cnt-tabla-historial"></div>
-
+          <?php } else { ?>
+          <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
+          <?php }?>
         </div>
+
+        <div id="cnt-tabla-historial"></div>
+
       </div>
     </div>
-    <div class="col-lg-1"></div>
-    <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
-</div>
+  </div>
+  <div class="col-lg-1"></div>
+  <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
 </div>
 
 <div id="cnt_model_establecimiento"></div>

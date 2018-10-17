@@ -838,8 +838,8 @@ function cambiar_pestana(tipo){
       </div>
       </div>
       <div class="col-lg-1"></div>
-      <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
     </div>
+    <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
   </div>
 </div>
 
