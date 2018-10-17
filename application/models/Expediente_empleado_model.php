@@ -30,8 +30,8 @@ class Expediente_empleado_model extends CI_Model {
                ->join('org_usuario_rol ur', 'u.id_usuario = ur.id_usuario')
                ->join('org_rol r', 'ur.id_rol = r.id_rol')
                ->where('e.id_estado', '00001')
-               ->where('r.id_rol', '72')
-               ->or_where('r.id_rol', '71')
+               ->where('r.id_rol', COLABORADOR)
+               ->or_where('r.id_rol', FILTRO)
                ->order_by('e.primer_nombre,
                     e.segundo_nombre,
                     e.tercer_nombre,
