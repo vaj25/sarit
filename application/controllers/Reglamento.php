@@ -134,8 +134,8 @@ class Reglamento extends CI_Controller {
 
 		} else if($this->input->post('band1') == "reforma_parcial" || $this->input->post('band1') == "reforma_total"){
 			
-			$dui = $this->reglamento_model->obtener_reglamentos_documentos($this->input->post('id_expediente'))
-																							->result()[0]->dui_representantert;
+			$dui = $this->reglamento_model->obtener_reglamentos_documentos($this->input->post('id_expediente'))->result();
+			$dui = $dui[0]->dui_representantert;
 
 			$data2 = array(
 				'id_representantert' => $this->input->post('id_comisionado'),
@@ -245,7 +245,10 @@ class Reglamento extends CI_Controller {
 	public function registros_reglamentos_documentos() {
 		
 		print json_encode(
-			$this->reglamento_model->obtener_reglamentos_documentos($this->input->post('id'))->result()
+			$this->reglamento_model->obtener_reglamentos_documentos(
+				$this->input->post('id'),
+				($this->input->post('id') == 'edit_new') ? FALSE : TRUE
+				)->result()
 		);
 		
 	}

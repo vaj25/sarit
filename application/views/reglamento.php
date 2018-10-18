@@ -13,7 +13,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/registros_reglamentos_documentos",
       type: "POST",
-      data: {id : id_reglamento}
+      data: {id : id_reglamento, bandera: bandera}
     })
     .done(function(res){
       result = JSON.parse(res)[0];
