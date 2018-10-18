@@ -203,7 +203,7 @@ class Expediente_estado_model extends CI_Model {
                 ->join('sri_expediente_estado ab', 'ab.id_expedientert = aa.id_expedientert')
                 ->join('sri_expediente_empleado ac', 'ac.id_expedientert = aa.id_expedientert')
                 ->join('sir_empleado ad', 'ad.id_empleado = ac.id_empleado')
-                ->where("(aa.tiposolicitud_expedientert = 'Reforma Parcial' or aa.tiposolicitud_expedientert = 'Reforma Total')")
+                ->where("(aa.tiposolicitud_expedientert = 2 or aa.tiposolicitud_expedientert = 3)")
                 ->where('ad.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = aa.id_expedientert ))')

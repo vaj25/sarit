@@ -104,7 +104,7 @@ class Reglamento_model extends CI_Model {
         $this->db->select("
                 a.id_expedientert,
                 a.numexpediente_expedientert,
-                a.tiposolicitud_expedientert,
+                h.nombre_tipo_solicitud tiposolicitud_expedientert,
                 a.fecharesolucion_expedientert,
                 a.fechacrea_expedientert,
                 bc.id_empleado id_personal,
@@ -123,6 +123,7 @@ class Reglamento_model extends CI_Model {
                ->join('sri_expediente_estado f ', 'f.id_expedientert = a.id_expedientert')
                ->join('sri_estadort d','d.id_estadort = f.id_estadort')
                ->join('sri_representantert g', 'a.id_empresart = g.id_empresart', 'left')
+               ->join('sri_tipo_solicitud h', 'a.tiposolicitud_expedientert = h.id_tipo_solicitud')
                ->where('a.id_expedientert IN 
                         ( select max(aa.id_expedientert)
                         from sri_expedientert aa
@@ -169,7 +170,7 @@ class Reglamento_model extends CI_Model {
         $this->db->select("
                 a.id_expedientert,
                 a.numexpediente_expedientert,
-                a.tiposolicitud_expedientert,
+                g.nombre_tipo_solicitud tiposolicitud_expedientert,
                 a.fecharesolucion_expedientert,
                 bc.id_empleado id_personal,
                 a.archivo_expedientert,
@@ -185,6 +186,7 @@ class Reglamento_model extends CI_Model {
                ->join('sge_empresa c','c.id_empresa = a.id_empresart')
                ->join('sri_expediente_estado f ', 'f.id_expedientert = a.id_expedientert')
                ->join('sri_estadort d','d.id_estadort = f.id_estadort')
+               ->join('sri_tipo_solicitud g', 'g.id_tipo_solicitud = a.tiposolicitud_expedientert')
                ->where('f.fecha_exp_est = (SELECT ee.fecha_exp_est FROM sri_expedientert e
                         JOIN sri_expediente_estado ee on ee.id_expedientert=e.id_expedientert
                         JOIN sri_estadort es on es.id_estadort=ee.id_estadort

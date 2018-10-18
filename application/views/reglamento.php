@@ -82,7 +82,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#band1").val("reforma_parcial");
       $("#band2").val("reforma_parcial");
       $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Reforma Parcial");
-      $("#tipo_solicitud").val('Reforma Parcial');
+      $("#tipo_solicitud").val('2');
 
     } else if(bandera == "reforma_total") {
 
@@ -90,7 +90,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#band1").val("reforma_total");
       $("#band2").val("reforma_total");
       $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Reforma Total");
-      $("#tipo_solicitud").val('Reforma Total');
+      $("#tipo_solicitud").val('3');
 
     } else if(bandera = "edit_new") {
 
