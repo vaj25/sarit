@@ -10,6 +10,7 @@ class Reglamento extends CI_Controller {
 
 	public function index(){
 		$data['delegados'] = $this->expediente_empleado_model->obtener_delegados_seccion();
+		$data['tipo_persona'] = $this->db->get('sri_tipo_solicitante');
 		$this->load->view('templates/header');
 		$this->load->view('reglamento', $data);
 		$this->load->view('templates/footer');

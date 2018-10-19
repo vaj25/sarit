@@ -190,6 +190,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   function cerrar_mantenimiento(){
     $("#cnt-tabla").show(0);
     $("#cnt_form_main").hide(0);
+    $("#cnt_form_main2").hide(0);
     $("#cnt_actions").hide(0);
     $("#cnt_actions").remove('.card');
     open_form(1);
@@ -578,10 +579,9 @@ function cambiar_pestana(tipo){
                     <div class="controls">
                       <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" required>
                         <option value="">[Seleccione]</option>
-                        <option value="Sociedad">Sociedad</option>
-                        <option value="Persona Natural">Persona Natural</option>
-                        <option value="Asociación">Asociación</option>
-                        <option value="Autonomas">Autonomas</option>
+                        <?php foreach ($tipo_persona->result() as $fila) {
+                          echo "<option value=$fila->id_tipo_solicitante >$fila->nombre_tipo_solicitante</option>";
+                        } ?>
                       </select>
                     </div>
                   </div>
@@ -823,10 +823,9 @@ function cambiar_pestana(tipo){
                     <div class="controls">
                       <select id="tipo_solicitante2" name="tipo_solicitante" class="form-control" required>
                         <option value="">[Seleccione]</option>
-                        <option value="Sociedad">Sociedad</option>
-                        <option value="Persona Natural">Persona Natural</option>
-                        <option value="Asociación">Asociación</option>
-                        <option value="Autonomas">Autonomas</option>
+                        <?php foreach ($tipo_persona->result() as $fila) {
+                          echo "<option value=$fila->id_tipo_solicitante >$fila->nombre_tipo_solicitante</option>";
+                        } ?>
                       </select>
                     </div>
                   </div>
