@@ -32,6 +32,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <?php
                     if(!empty($estado)){
                     foreach ($estado->result() as $fila) {
+                      if ($fila->id_estadort != 9) {
                   ?>
                   <option value="<?php echo $fila->id_estadort ?>" <?php if($fila->id_estadort==$id){?> selected
                     <?php }?>>
@@ -40,6 +41,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     ?>
                   </option>;
                   <?php
+                    }
                     }
                     }
                   ?>
