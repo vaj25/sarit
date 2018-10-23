@@ -81,14 +81,15 @@ class Expediente_estado_model extends CI_Model {
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = a.id_expedientert ))')
                 ->where('f.etapa_exp_est <> 4')
-                ->where('f.id_estadort <> 3');
+                ->where('f.id_estadort = 1');
                 
         if ($empleado) {
             $this->db->where('b.id_empleado', $empleado);
         }
 
         if($data["tipo"] == "mensual"){
-            $this->db->where('f.fecha_exp_est <', $data["anio"].'-'.$data["value"].'-1');
+            $this->db->where('YEAR(f.fecha_exp_est) <=', $data["anio"])
+                    ->where('MONTH(f.fecha_exp_est) <', $data["value"]);
         }else if($data["tipo"] == "trimestral"){
             $tmfin = (intval($data["value"])*3);	
             $tminicio = $tmfin-2;
@@ -103,7 +104,7 @@ class Expediente_estado_model extends CI_Model {
         }else{
             $this->db->where('YEAR(f.fecha_exp_est) <', $data["anio"]);
         }
-		
+
         $sql[] = '('.$this->db->get_compiled_select().')';
 
         /* Reglamentos Internos de Trabajo Recibidos (nuevos) */
@@ -113,8 +114,8 @@ class Expediente_estado_model extends CI_Model {
                 ->join('sri_expediente_estado ab', 'ab.id_expedientert = aa.id_expedientert')
                 ->join('sri_expediente_empleado ac', 'ac.id_expedientert = aa.id_expedientert')
                 ->join('sir_empleado ad', 'ad.id_empleado = ac.id_empleado')
-                ->where("aa.tiposolicitud_expedientert", "Registro")
-                ->where('(ab.id_estadort = 1 or ab.id_estadort = 3)')
+                ->where("aa.tiposolicitud_expedientert", 1)
+                //->where('(ab.id_estadort = 1 or ab.id_estadort = 3)')
                 ->where('ad.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = aa.id_expedientert ))')
@@ -158,8 +159,17 @@ class Expediente_estado_model extends CI_Model {
                 ->join('sri_expediente_estado ab', 'ab.id_expedientert = aa.id_expedientert')
                 ->join('sri_expediente_empleado ac', 'ac.id_expedientert = aa.id_expedientert')
                 ->join('sir_empleado ad', 'ad.id_empleado = ac.id_empleado')
-                ->where("aa.tiposolicitud_expedientert", "Registro")
-                ->where('(ab.id_estadort = 2 or ab.id_estadort = 4)')
+                ->where("aa.tiposolicitud_expedientert", 1)
+                ->where('ab.fecha_exp_est = (
+                            select ee.fecha_exp_est from sri_expedientert e
+                            join sri_expediente_estado ee on ee.id_expedientert = e.id_expedientert
+                            join sri_estadort es on es.id_estadort = ee.id_estadort
+                            where e.id_expedientert = aa.id_expedientert
+                                and ee.fecha_exp_est =(
+                                select max(eee.fecha_exp_est)
+                                from sri_expediente_estado eee
+                                where eee.id_expedientert = e.id_expedientert))')
+                ->where('(select count(*) from sri_expediente_estado aab where aab.id_expedientert = aa.id_expedientert) >', '1')
                 ->where('ad.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = aa.id_expedientert ))')
@@ -439,7 +449,7 @@ class Expediente_estado_model extends CI_Model {
                 ->join('sri_expediente_estado ab', 'ab.id_expedientert = aa.id_expedientert')
                 ->join('sri_expediente_empleado ac', 'ac.id_expedientert = aa.id_expedientert')
                 ->join('sir_empleado ad', 'ad.id_empleado = ac.id_empleado')
-                ->where('aa.tiposolicitud_expedientert', 'Registro')
+                ->where('aa.tiposolicitud_expedientert', 1)
                 ->where('ab.id_estadort', '3')
                 ->where('aa.id_expedientert in (
                     select max(aaa.id_expedientert)

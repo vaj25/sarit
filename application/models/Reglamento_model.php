@@ -144,8 +144,10 @@ class Reglamento_model extends CI_Model {
                 ->where('b.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = a.id_expedientert ))')
+                //->where('g.id_representantert = (select max(ag.id_representantert) from sri_representantert ag where ag.id_empresart = g.id_empresart)')
                 ->where('f.etapa_exp_est <> 4')
-                ->order_by('f.fecha_exp_est', 'asc');
+                ->order_by('f.fecha_exp_est', 'desc')
+                ->order_by('d.id_estadort', 'asc');
         if ($nr) {
             $this->db->where('bc.nr', $nr);
         }
