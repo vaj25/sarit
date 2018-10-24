@@ -20,24 +20,30 @@
         </tr>
 
         <?php
-        foreach ($expedientes as $expediente) {
-
-            $bg = ($expediente->servicio>0) ? "style='background:#fff8ec;'" : "";
-            echo "<tr $bg>
-                <td>$expediente->numexpediente_expedientert</td>
-                <td>$expediente->nombre_empresa</td>
-                <td>$expediente->seccion_catalogociiu</td>
-                <td>".date("d/m/Y", strtotime($expediente->fechacrea_expedientert))."</td>
-                <td>$expediente->estado_estadort</td>
-                <td>".date("d/m/Y", strtotime($expediente->fecha_ingresar_exp_est))."</td>
-                <td class='number'>$expediente->servicio</td>
-                </tr>";
+        if ( isset($expedientes) ) {
+            foreach ($expedientes as $expediente) {
+    
+                $bg = ($expediente->servicio>0) ? "style='background:#fff8ec;'" : "";
+                echo "<tr $bg>
+                    <td>$expediente->numexpediente_expedientert</td>
+                    <td>$expediente->nombre_empresa</td>
+                    <td>$expediente->seccion_catalogociiu</td>
+                    <td>".date("d/m/Y", strtotime($expediente->fechacrea_expedientert))."</td>
+                    <td>$expediente->estado_estadort</td>
+                    <td>".date("d/m/Y", strtotime($expediente->fecha_ingresar_exp_est))."</td>
+                    <td class='number'>$expediente->servicio</td>
+                    </tr>";
+            }
+        } else {
+            echo "<tr><td colspan='7'>No se encontraron coincidencias</td></tr>";
         }
         ?>
     </table>
 </div>
 
 <br>
+
+<?php if ( isset($duracion) ) { ?>
 
 <div class="table table-responsive">
     <table border="1" style="width:100%; border-collapse: collapse;">
@@ -51,3 +57,5 @@
         </tr>
     </table>
 </div>
+
+<?php }?>

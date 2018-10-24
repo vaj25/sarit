@@ -6,11 +6,12 @@ class Asignados extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('expediente_estado_model');
+		$this->load->model('expediente_empleado_model');
     }
 
     public function index() {
         $this->load->view('templates/header');
-        $this->load->view('reportes/asignados');
+        $this->load->view('reportes/asignados', array('delegados' => $this->expediente_empleado_model->obtener_delegados_seccion()));
 		$this->load->view('templates/footer');
     }
 
@@ -19,7 +20,8 @@ class Asignados extends CI_Controller {
 			'anio' => $this->input->post('anio'),
 			'tipo' => $this->input->post('tipo'),
 			'value' => $this->input->post('value'),
-			'value2' => $this->input->post('value2')
+			'value2' => $this->input->post('value2'),
+			'empleado' => $this->input->post('empleado')
 		);
 
 		$titles = array(
@@ -114,7 +116,8 @@ class Asignados extends CI_Controller {
 
 	 	/********************************* 	   INICIO DE LOS REGISTROS DE LA TABLA   	***********************************/
 	 	$registros = $this->expediente_estado_model->obtener_asignados_reporte($data);
-		if(count($registros) > 0){
+		if($registros){
+
 			foreach ($registros['expedientes'] as $rows) {
 
 				$cell_row = array(
@@ -129,49 +132,54 @@ class Asignados extends CI_Controller {
 
 				$f = PhpExcelAddRowTable($this->objPHPExcel, $cell_row, $letradesde, $letrahasta, $f, $estilo);
 			}
+		
+
+			$this->objPHPExcel->setActiveSheetIndex()->mergeCells('C'.($f+3).':C'.($f+4));
+			$this->objPHPExcel->getActiveSheet()
+							->getCell('C'.($f+3))
+							->setValue('Duración de Servicio');
+						
+			$this->objPHPExcel->getActiveSheet()
+							->getStyle('C'.($f+3))
+							->getAlignment()
+							->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			
+			$this->objPHPExcel->getActiveSheet()
+							->getStyle('C'.($f+3))
+							->getAlignment()
+							->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+			$this->objPHPExcel->getActiveSheet()
+							->getCell('D'.($f+3))
+							->setValue($registros['duracion']->duracion);
+
+			$this->objPHPExcel->getActiveSheet()
+							->getCell('D'.($f+4))
+							->setValue($registros['duracion']->prom_duracion);
+
+			$this->objPHPExcel->setActiveSheetIndex()->mergeCells('E'.($f+3).':E'.($f+4));
+			$this->objPHPExcel->getActiveSheet()
+							->getCell('E'.($f+3))
+							->setValue('Días Hábiles');
+						
+			$this->objPHPExcel->getActiveSheet()
+							->getStyle('E'.($f+3))
+							->getAlignment()
+							->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			
+			$this->objPHPExcel->getActiveSheet()
+							->getStyle('E'.($f+3))
+							->getAlignment()
+							->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+			$this->objPHPExcel->getActiveSheet()->getStyle('C'.($f+3).':E'.($f+3))->applyFromArray($estilo);
+			$this->objPHPExcel->getActiveSheet()->getStyle('C'.($f+4).':E'.($f+4))->applyFromArray($estilo);
+		} else {
+			$this->objPHPExcel->setActiveSheetIndex()->mergeCells($letradesde.'7:'.$letrahasta.'7');
+			$this->objPHPExcel->getActiveSheet()
+							->getCell($letradesde.'7')
+							->setValue('No se encontraron coincidencias');
 		}
-
-		$this->objPHPExcel->setActiveSheetIndex()->mergeCells('C'.($f+3).':C'.($f+4));
-		$this->objPHPExcel->getActiveSheet()
-						->getCell('C'.($f+3))
-						->setValue('Duración de Servicio');
-					
-		$this->objPHPExcel->getActiveSheet()
-						->getStyle('C'.($f+3))
-						->getAlignment()
-						->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		
-		$this->objPHPExcel->getActiveSheet()
-						->getStyle('C'.($f+3))
-						->getAlignment()
-						->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-
-		$this->objPHPExcel->getActiveSheet()
-						->getCell('D'.($f+3))
-						->setValue($registros['duracion']->duracion);
-
-		$this->objPHPExcel->getActiveSheet()
-						->getCell('D'.($f+4))
-						->setValue($registros['duracion']->prom_duracion);
-
-		$this->objPHPExcel->setActiveSheetIndex()->mergeCells('E'.($f+3).':E'.($f+4));
-		$this->objPHPExcel->getActiveSheet()
-						->getCell('E'.($f+3))
-						->setValue('Días Hábiles');
-					
-		$this->objPHPExcel->getActiveSheet()
-						->getStyle('E'.($f+3))
-						->getAlignment()
-						->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		
-		$this->objPHPExcel->getActiveSheet()
-						->getStyle('E'.($f+3))
-						->getAlignment()
-						->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-
-		$this->objPHPExcel->getActiveSheet()->getStyle('C'.($f+3).':E'.($f+3))->applyFromArray($estilo);
-		$this->objPHPExcel->getActiveSheet()->getStyle('C'.($f+4).':E'.($f+4))->applyFromArray($estilo);
-
 		/******************************** 	   FIN DE LOS REGISTROS DE LA TABLA   	***********************************/
 		
 		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true); 

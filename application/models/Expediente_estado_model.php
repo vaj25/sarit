@@ -648,6 +648,10 @@ class Expediente_estado_model extends CI_Model {
             $this->db->where('YEAR(a.fecha_ingresar_exp_est)', $data["anio"]);
         }
 
+        if ( $data["empleado"] != '' ) {
+            $this->db->where('f.id_empleado', $data["empleado"]);
+        }
+
         $sql = $this->db->get_compiled_select();
 
         $query = $this->db->query($sql);

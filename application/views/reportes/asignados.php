@@ -3,6 +3,7 @@
 		var type = "anual";
 		var value = "";
 		var value2 = "";
+		var empleado = $('#empleado').val();
        	anio = $("#anio_actual").val();
 	    if(document.getElementById('radio_mensual').checked==true){
 	    	value = $("#mes").val();
@@ -33,13 +34,13 @@
           	var url = "<?php echo site_url()?>"+"/reportes/asignados/asignados_report";
 
           	if(document.getElementById('radio_pdf').checked==true && tipo==""){
-          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2 , 'report_type' : 'pdf' };
+          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2 , 'empleado' : empleado, 'report_type' : 'pdf' };
         		OpenWindowWithPost(url, param, "_blank");
           	}else if(document.getElementById('radio_excel').checked==true && tipo==""){
-          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'report_type' : 'excel' };
+          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'empleado' : empleado, 'report_type' : 'excel' };
         		OpenWindowWithPost(url, param, "_blank");
           	}else{
-          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'report_type' : 'html' };
+          		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2, 'empleado' : empleado, 'report_type' : 'html' };
         		embed_html(url, param);
           	}
         }else{
@@ -215,6 +216,19 @@
 	                            <input type="text" class="form-control" readonly id="fecha_fin" name="fecha_fin" placeholder="yyyy-mm-dd">
 	                        </div>
                         </div>
+						<div class="form-group" style="width: 350px;">
+							<h5>Delegados: <span class="text-danger">*</span></h5>
+							<select id="empleado" name="empleado" class="select2" style="width: 100%" required="" >
+								<option value="">[Todos los delegados]</option>
+								<?php
+								if($delegados){
+									foreach ($delegados->result() as $fila) {
+										echo '<option class="m-l-50" value="'.$fila->id_empleado.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
+									}
+								}
+								?>
+							</select>
+						</div>
                         <div class="form-group" align="right">
                         	<button type="button" onclick="mostrarReportePorPeriodo('vista')" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-view-dashboard"></i> Vista previa</button>
                     	</div>
