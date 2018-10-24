@@ -648,9 +648,20 @@ class Expediente_estado_model extends CI_Model {
             $this->db->where('YEAR(a.fecha_ingresar_exp_est)', $data["anio"]);
         }
 
-        $query = $this->db->get();
+        $sql = $this->db->get_compiled_select();
+
+        $query = $this->db->query($sql);
 		if ($query->num_rows() > 0) {
-			return $query;
+
+            $this->db->select("sum(aa.servicio) duracion, avg(aa.servicio) prom_duracion")
+                     ->from("( $sql ) aa");
+
+            $query2 = $this->db->get();
+
+			return array(
+                'expedientes' => $query->result(),
+                'duracion' => $query2->row()
+            );
 		}
 		else {
 			return FALSE;

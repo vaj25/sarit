@@ -43,7 +43,7 @@ class Asignados extends CI_Controller {
 		 	
 		 	$body .= $this->asignados_html($data);
 
-		 	$pie = piePagina($this->session->userdata('usuario_centro'));
+		 	$pie = piePagina($this->session->userdata('usuario'));
 			$this->mpdf->setFooter($pie);
 
 			$stylesheet = file_get_contents(base_url().'assets/css/bootstrap.min.css');
@@ -61,9 +61,7 @@ class Asignados extends CI_Controller {
 
         return $this->load->view(
 			'reportes/tabla_asignados',
-			array(
-				'expedientes' => $this->expediente_estado_model->obtener_asignados_reporte($data)->result()
-			), 
+			$this->expediente_estado_model->obtener_asignados_reporte($data),
 			true
 		);
 	}
@@ -90,7 +88,7 @@ class Asignados extends CI_Controller {
 
 		//MODIFICANDO ANCHO DE LAS COLUMNAS
 		PhpExcelSetColumnWidth($this->objPHPExcel,
-			$width = array(10,80,25,40,10,10,10), 
+			$width = array(10,80,25,20,15,20,10),
 			$letradesde, $letrahasta);
 
 		//AGREGAMOS LOS TITULOS DEL REPORTE
@@ -116,8 +114,8 @@ class Asignados extends CI_Controller {
 
 	 	/********************************* 	   INICIO DE LOS REGISTROS DE LA TABLA   	***********************************/
 	 	$registros = $this->expediente_estado_model->obtener_asignados_reporte($data);
-		if($registros->num_rows()>0){
-			foreach ($registros->result() as $rows) {
+		if(count($registros) > 0){
+			foreach ($registros['expedientes'] as $rows) {
 
 				$cell_row = array(
 					$rows->numexpediente_expedientert,
@@ -133,11 +131,52 @@ class Asignados extends CI_Controller {
 			}
 		}
 
+		$this->objPHPExcel->setActiveSheetIndex()->mergeCells('C'.($f+3).':C'.($f+4));
+		$this->objPHPExcel->getActiveSheet()
+						->getCell('C'.($f+3))
+						->setValue('Duración de Servicio');
+					
+		$this->objPHPExcel->getActiveSheet()
+						->getStyle('C'.($f+3))
+						->getAlignment()
+						->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$this->objPHPExcel->getActiveSheet()
+						->getStyle('C'.($f+3))
+						->getAlignment()
+						->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+		$this->objPHPExcel->getActiveSheet()
+						->getCell('D'.($f+3))
+						->setValue($registros['duracion']->duracion);
+
+		$this->objPHPExcel->getActiveSheet()
+						->getCell('D'.($f+4))
+						->setValue($registros['duracion']->prom_duracion);
+
+		$this->objPHPExcel->setActiveSheetIndex()->mergeCells('E'.($f+3).':E'.($f+4));
+		$this->objPHPExcel->getActiveSheet()
+						->getCell('E'.($f+3))
+						->setValue('Días Hábiles');
+					
+		$this->objPHPExcel->getActiveSheet()
+						->getStyle('E'.($f+3))
+						->getAlignment()
+						->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$this->objPHPExcel->getActiveSheet()
+						->getStyle('E'.($f+3))
+						->getAlignment()
+						->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+		$this->objPHPExcel->getActiveSheet()->getStyle('C'.($f+3).':E'.($f+3))->applyFromArray($estilo);
+		$this->objPHPExcel->getActiveSheet()->getStyle('C'.($f+4).':E'.($f+4))->applyFromArray($estilo);
+
 		/******************************** 	   FIN DE LOS REGISTROS DE LA TABLA   	***********************************/
 		
 		$this->objPHPExcel->getActiveSheet()->getStyle($letradesde.'1:'.$letrahasta.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true); 
 
-		$f+=3;
+		$f+=8;
 
 	 	$fecha=strftime( "%d-%m-%Y - %H:%M:%S", time() );
 		$this->objPHPExcel->setActiveSheetIndex(0)->setCellValue("A".$f,"Fecha y Hora de Creación: ".$fecha); $f++;
