@@ -212,7 +212,7 @@ class Expediente_estado_model extends CI_Model {
         $query_interna = '('.$this->db->get_compiled_select().') a';
         
         $this->db->select("'Reglamentos Internos de Trabajo Recibidos con Correcciones',
-                0 cantidad")
+                count(*) cantidad")
                 ->from($query_interna);
 
         $sql[] = '('.$this->db->get_compiled_select().')';
