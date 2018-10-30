@@ -41,7 +41,8 @@ class Reglamento extends CI_Controller {
 				'obsergenero_expedientrt' => '',
 				'contenidoTitulos_expedientert' => '',
 				'desistido_expedientert' => '',
-				'archivo_expedientert' => ''
+				'archivo_expedientert' => '',
+				'numeroexpediente_anterior' => null
 			);
 
 			$data2 = array(
@@ -157,7 +158,7 @@ class Reglamento extends CI_Controller {
 				$res = $this->comisionado_model->editar_comisionado($data2);
 			} else {
 				$data2['id_representantert'] = null;
-				$res = $this->comisionado_model->insertar_comisionado($data2);				
+				$res = $this->comisionado_model->insertar_comisionado($data2);
 			}
 			
 			if ("exito" == $res) {

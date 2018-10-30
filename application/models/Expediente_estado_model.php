@@ -88,14 +88,14 @@ class Expediente_estado_model extends CI_Model {
                 ->join('sri_expediente_estado b', 'a.id_expedientert = b.id_expedientert')
                 ->join('sri_expediente_empleado c', 'a.id_expedientert = c.id_expedientert')
                 ->where('a.id_expedientert NOT IN ' . $query_interna)
-                // ->where('b.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
-                //         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
-                //         where se.id_expedientert = a.id_expedientert ))')
+                ->where('c.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
+                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
+                        where se.id_expedientert = a.id_expedientert ))')
                 ->where('b.etapa_exp_est <> 4')
                 ->where('b.id_estadort = 1');
                 
         if ($empleado) {
-            $this->db->where('b.id_empleado', $empleado);
+            $this->db->where('c.id_empleado', $empleado);
         }
 
         if($data["tipo"] == "mensual"){

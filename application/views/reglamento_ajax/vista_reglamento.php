@@ -22,135 +22,177 @@
     <div class="card-body b-t" style="padding-top: 7px;">
         <span class="label label-success" style="font-size: 16px;">Expediente</span>
         <blockquote class="m-t-0">
-            <table class="table no-border">
-                <tbody>
-                    <tr>
-                        <td>N&uacute;mero del expediente:</td>
-                        <td class="font-medium">
-                            <?= $reglamento->numexpediente_expedientert ?>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    N&uacute;mero del expediente:
+                </div>
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    <h5><?= $reglamento->numexpediente_expedientert ?></h5>
+                </div>
+            </div>
+
+            <?php
+                if ($reglamento->numeroexpediente_anterior != null) {
+            ?>
+                <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                        N&uacute;mero del expediente anterior:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                        <h5><?= $reglamento->numeroexpediente_anterior ?></h5>
+                    </div>
+                </div>
+            <?php
+                }
+            ?>
         </blockquote>
 
         <span class="label label-success" style="font-size: 16px;">Datos del establecimiento</span>
         <blockquote class="m-t-0">
-            <table class="table no-border">
-                <tbody>
-                    <tr>
-                        <td>Nombre establecimiento:</td>
-                        <td class="font-medium">
-                            <?= $reglamento->nombre_empresa ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Abreviatura del establecimiento:</td>
-                        <td class="font-medium">
-                            <?= $reglamento->abreviatura_empresa ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Direcci&oacute;n:</td>
-                        <td class="font-medium">
-                            <?= $reglamento->direccion_empresa ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Tel&eacute;fono:</td>
-                        <td class="font-medium">
-                            <?= $reglamento->telefono_empresa ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Actividad Econ&oacute;mica:</td>
-                        <td class="font-medium">
-                            <?= $reglamento->actividad_catalogociiu ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Municipio:</td>
-                        <td class="font-medium">
-                            <?= $reglamento->municipio ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Representante Legal:</td>
-                        <td class="font-medium">
-                            <?= $reglamento->nombres_representantert . ' ' . $reglamento->apellidos_representantert ?>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    Nombre establecimiento:
+                </div>
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    <h5><?= $reglamento->nombre_empresa ?></h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    Abreviatura del establecimiento:
+                </div>
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    <h5><?= $reglamento->abreviatura_empresa ?></h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    Direcci&oacute;n:
+                </div>
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    <h5><?= $reglamento->direccion_empresa ?></h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    Tel&eacute;fono:
+                </div>
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    <h5><?= $reglamento->telefono_empresa ?></h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    Actividad Econ&oacute;mica:
+                </div>
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    <h5><?= $reglamento->actividad_catalogociiu ?></h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    Municipio:
+                </div>
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    <h5><?= $reglamento->municipio ?></h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    Representante Legal:
+                </div>
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    <h5><?= $reglamento->nombres_representantert . ' ' . $reglamento->apellidos_representantert ?></h5>
+                </div>
+            </div>
         </blockquote>
 
         <span class="label label-success" style="font-size: 16px;">Detalles del expediente</span>
         <blockquote class="m-t-0">
-            <table class="table no-border">
-                <tbody>
-                    <tr>
-                        <td>Tipo de Solicitante:</td>
-                        <td class="font-medium">
-                            <?= $reglamento->tipopersona_expedientert ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Tipo Solicitud:</td>
-                        <td class="font-medium">
-                            <?= $reglamento->tiposolicitud_expedientert ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Fecha y Hora de Creaci&oacute;n del expediente:</td>
-                        <td class="font-medium">
-                            <?= date("d-M-Y g:i:s A", strtotime($reglamento->fechacrea_expedientert)) ?>
-                        </td>
-                    </tr>
 
-                    <?php
-                        if (strtotime($reglamento->fecharesolucion_expedientert) != null) {
-                    ?>
-                    <tr>
-                        <td>Resolución del expediente:</td>
-                        <td class="font-medium">
-                            <?= $reglamento->resolucion_expedientert ?>
-                        </td>
-                    </tr>
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    Tipo de Solicitante:
+                </div>
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    <h5><?= $reglamento->nombre_tipo_solicitante ?></h5>
+                </div>
+            </div>
 
-                    <tr>
-                        <td>Fecha y Hora de resolución del expediente:</td>
-                        <td class="font-medium">
-                            <?= date("d-M-Y g:i:s A", strtotime($reglamento->fecharesolucion_expedientert)) ?>
-                        </td>
-                    </tr>
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    Tipo Solicitud:
+                </div>
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    <h5><?= $reglamento->nombre_tipo_solicitud ?></h5>
+                </div>
+            </div>
 
-                    <?php
-                        }
-                    ?>
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    Fecha y Hora de Creaci&oacute;n del expediente:
+                </div>
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    <h5><?= date("d-M-Y g:i:s A", strtotime($reglamento->fechacrea_expedientert)) ?></h5>
+                </div>
+            </div>
 
-                    <?php
-                        if (strtotime($reglamento->fecha_entrega) != null) {
-                    ?>
+            <?php
+                if (strtotime($reglamento->fecharesolucion_expedientert) != null) {
+            ?>
 
-                    <tr>
-                        <td>Persona quien recibe:</td>
-                        <td class="font-medium">
-                            <?= $reglamento->persona_recibe ?>
-                        </td>
-                    </tr>
+                <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                        Resolución del expediente:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                        <h5><?= $reglamento->resolucion_expedientert ?></h5>
+                    </div>
+                </div>
 
-                    <tr>
-                        <td>Fecha entrega de resolución:</td>
-                        <td class="font-medium">
-                            <?= date("d-M-Y", strtotime($reglamento->fecha_entrega)) ?>
-                        </td>
-                    </tr>
-                    <?php
-                        }
-                    ?>
+                <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                        Fecha y Hora de resolución del expediente:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                        <h5><?= date("d-M-Y g:i:s A", strtotime($reglamento->fecharesolucion_expedientert)) ?></h5>
+                    </div>
+                </div>
 
-                </tbody>
-            </table>
+            <?php
+                }
+            ?>
+
+            <?php
+                if (strtotime($reglamento->fecha_entrega) != null) {
+            ?>
+
+                <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                        Persona quien recibe:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                        <h5><?= $reglamento->persona_recibe ?></h5>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                        Fecha entrega de resolución:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                        <h5><?= date("d-M-Y", strtotime($reglamento->fecha_entrega)) ?></h5>
+                    </div>
+                </div>
+            <?php
+                }
+            ?>
         </blockquote>
     </div>
 </div>

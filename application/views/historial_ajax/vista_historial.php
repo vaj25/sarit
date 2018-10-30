@@ -21,16 +21,39 @@
     <div class="card-body b-t" style="padding-top: 7px;">
         <span class="label label-success" style="font-size: 16px;">Expediente</span>
         <blockquote class="m-t-0">
-            <table class="table no-border">
-                <tbody>
-                    <tr>
-                        <td>N&uacute;mero del expediente:</td>
-                        <td class="font-medium">
-                            <?= $this->input->post('num') ?>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+        <?php
+            if ($historial) {
+                if($historial->num_rows() > 0){
+                    
+                    $reglamento = $historial->row(0);
+                    
+                }
+            }
+        ?>
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    N&uacute;mero del expediente:
+                </div>
+                <div class="form-group col-lg-5" style="height: 20px;">
+                    <h5><?= $reglamento->numexpediente_expedientert ?></h5>
+                </div>
+            </div>
+
+            <?php
+                if ($reglamento->numeroexpediente_anterior != null) {
+            ?>
+                <div class="row">
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                        N&uacute;mero del expediente anterior:
+                    </div>
+                    <div class="form-group col-lg-5" style="height: 20px;">
+                        <h5><?= $reglamento->numeroexpediente_anterior ?></h5>
+                    </div>
+                </div>
+            <?php
+                }
+            ?>
         </blockquote>
 
         <span class="label label-success" style="font-size: 16px;">Historial</span>
@@ -43,7 +66,6 @@
                         <thead class="bg-inverse text-white">
                             <tr>
                                 <th>N&uacute;mero</th>
-                                <th>N&uacute;mero de expediente</th>
                                 <th>Nombre del solicitante</th>
                                 <th>Colaborador asignado </th>
                                 <th>Tipo de solicitud </th>
@@ -60,7 +82,6 @@
                                     $array = array($fila->id_expedientert);
                                     echo "<tr>";
                                         echo "<td>".$i."</td>";
-                                        echo "<td>".$fila->numexpediente_expedientert."</td>";
                                         echo "<td>".$fila->nombre_empresa."</td>";
                                         echo "<td>".$fila->nombre_empleado."</td>";
                                         echo "<td>".$fila->tiposolicitud_expedientert."</td>";
