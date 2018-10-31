@@ -27,7 +27,7 @@ class Asignados extends CI_Controller {
 		$titles = array(
 				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL', 
 				'DIRECCIÓN GENERAL DE TRABAJO', 
-				'INFORME DE RELACIONES COLECTIVAS',
+				'INFORME DE REGLAMENTOS ASIGNADOS POR DELEGADOS',
 				periodo($data));
 
 		$body = '';
