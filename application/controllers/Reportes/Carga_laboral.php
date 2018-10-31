@@ -25,7 +25,7 @@ class Carga_laboral extends CI_Controller {
 		$titles = array(
 				'MINISTERIO DE TRABAJO Y PREVISION SOCIAL', 
 				'DIRECCIÓN GENERAL DE TRABAJO', 
-				'INFORME DE RELACIONES COLECTIVAS',
+				'INFORME DE CARGA LABORAL',
 				periodo($data));
 
 		$body = '';

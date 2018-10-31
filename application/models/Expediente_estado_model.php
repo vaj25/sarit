@@ -49,7 +49,7 @@ class Expediente_estado_model extends CI_Model {
     public function obtener_entradas_reporte($data, $empleado = FALSE) {
         /* Proyectos de Reglamentos Internos de Trabajo pendientes del mes anterior */
 
-        $this->db->select('MAX(eee.fecha_exp_est)')
+        $this->db->select('MAX(eee.id_expediente_estado)')
                 ->from('sri_expediente_estado eee')
                 ->where('eee.id_expedientert = e.id_expedientert')
                 ->where('eee.id_estadort <> 1')
@@ -78,7 +78,7 @@ class Expediente_estado_model extends CI_Model {
         $this->db->select('e.id_expedientert')
                 ->from('sri_expedientert e')
                 ->join('sri_expediente_estado ee', 'ee.id_expedientert = e.id_expedientert')
-                ->where('ee.fecha_exp_est = ' . $query_interna);
+                ->where('ee.id_expediente_estado = ' . $query_interna);
 
         $query_interna = '( ' . $this->db->get_compiled_select() . ' )';
         
@@ -302,28 +302,28 @@ class Expediente_estado_model extends CI_Model {
                     select max(aaa.id_expedientert)
                     from sri_expedientert aaa
                     join sri_expediente_estado aab on aab.id_expedientert = aaa.id_expedientert
-                    where aab.fecha_exp_est = (
-                            select eea.fecha_exp_est
+                    where aab.id_expediente_estado = (
+                            select eea.id_expediente_estado
                             from sri_expedientert ea
                             join sri_expediente_estado eea on eea.id_expedientert = ea.id_expedientert
                             join sri_estadort esa on esa.id_estadort = eea.id_estadort
                             where ea.id_expedientert = aaa.id_expedientert
-                                and eea.fecha_exp_est =(
-                                    select max(eeea.fecha_exp_est)
+                                and eea.id_expediente_estado =(
+                                    select max(eeea.id_expediente_estado)
                                     from sri_expediente_estado eeea
                                     where eeea.id_expedientert = ea.id_expedientert))
                     group by aaa.numexpediente_expedientert )')
                 ->where('ad.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = aa.id_expedientert ))')
-                ->where('ab.fecha_exp_est = (
-                        select ee.fecha_exp_est
+                ->where('ab.id_expediente_estado = (
+                        select ee.id_expediente_estado
                         from sri_expedientert e
                         join sri_expediente_estado ee on ee.id_expedientert = e.id_expedientert
                         join sri_estadort es on es.id_estadort = ee.id_estadort
                         where e.id_expedientert = aa.id_expedientert
-                        and ee.fecha_exp_est =(
-                            select max(eee.fecha_exp_est)
+                        and ee.id_expediente_estado =(
+                            select max(eee.id_expediente_estado)
                             from sri_expediente_estado eee
                             where eee.id_expedientert = e.id_expedientert))')
                 ->group_by('ab.id_estadort')
@@ -414,27 +414,27 @@ class Expediente_estado_model extends CI_Model {
                     select max(aaa.id_expedientert)
                     from sri_expedientert aaa
                     join sri_expediente_estado aab on aab.id_expedientert = aaa.id_expedientert
-                    where aab.fecha_exp_est = (
-                            select eea.fecha_exp_est
+                    where aab.id_expediente_estado = (
+                            select eea.id_expediente_estado
                             from sri_expedientert ea
                             join sri_expediente_estado eea on eea.id_expedientert = ea.id_expedientert
                             join sri_estadort esa on esa.id_estadort = eea.id_estadort
                             where ea.id_expedientert = aaa.id_expedientert
-                                and eea.fecha_exp_est =(
-                                    select max(eeea.fecha_exp_est)
+                                and eea.id_expediente_estado =(
+                                    select max(eeea.id_expediente_estado)
                                     from sri_expediente_estado eeea
                                     where eeea.id_expedientert = ea.id_expedientert))
                     group by aaa.numexpediente_expedientert )')
                 ->where('ad.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = aa.id_expedientert ))')
-                ->where('ab.fecha_exp_est = (
-                    select ee.fecha_exp_est from sri_expedientert e
+                ->where('ab.id_expediente_estado = (
+                    select ee.id_expediente_estado from sri_expedientert e
                     join sri_expediente_estado ee on ee.id_expedientert = e.id_expedientert
                     join sri_estadort es on es.id_estadort = ee.id_estadort
                     where e.id_expedientert = aa.id_expedientert
-                        and ee.fecha_exp_est =(
-                        select max(eee.fecha_exp_est)
+                        and ee.id_expediente_estado =(
+                        select max(eee.id_expediente_estado)
                         from sri_expediente_estado eee
                         where eee.id_expedientert = e.id_expedientert))')
                 ->group_by('aa.numexpediente_expedientert')
@@ -483,27 +483,27 @@ class Expediente_estado_model extends CI_Model {
                     select max(aaa.id_expedientert)
                     from sri_expedientert aaa
                     join sri_expediente_estado aab on aab.id_expedientert = aaa.id_expedientert
-                    where aab.fecha_exp_est = (
-                            select eea.fecha_exp_est
+                    where aab.id_expediente_estado = (
+                            select eea.id_expediente_estado
                             from sri_expedientert ea
                             join sri_expediente_estado eea on eea.id_expedientert = ea.id_expedientert
                             join sri_estadort esa on esa.id_estadort = eea.id_estadort
                             where ea.id_expedientert = aaa.id_expedientert
-                                and eea.fecha_exp_est =(
-                                    select max(eeea.fecha_exp_est)
+                                and eea.id_expediente_estado =(
+                                    select max(eeea.id_expediente_estado)
                                     from sri_expediente_estado eeea
                                     where eeea.id_expedientert = ea.id_expedientert))
                     group by aaa.numexpediente_expedientert )')
                 ->where('ad.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = aa.id_expedientert ))')
-                ->where('ab.fecha_exp_est = (
-                    select ee.fecha_exp_est from sri_expedientert e
+                ->where('ab.id_expediente_estado = (
+                    select ee.id_expediente_estado from sri_expedientert e
                     join sri_expediente_estado ee on ee.id_expedientert = e.id_expedientert
                     join sri_estadort es on es.id_estadort = ee.id_estadort
                     where e.id_expedientert = aa.id_expedientert
-                        and ee.fecha_exp_est =(
-                        select max(eee.fecha_exp_est)
+                        and ee.id_expediente_estado =(
+                        select max(eee.id_expediente_estado)
                         from sri_expediente_estado eee
                         where eee.id_expedientert = e.id_expedientert))')
                 ->group_by('aa.numexpediente_expedientert')
@@ -549,14 +549,14 @@ class Expediente_estado_model extends CI_Model {
                 select max(aaa.id_expedientert)
                 from sri_expedientert aaa
                 join sri_expediente_estado aab on aab.id_expedientert = aaa.id_expedientert
-                where aab.fecha_exp_est = (
-                        select eea.fecha_exp_est
+                where aab.id_expediente_estado = (
+                        select eea.id_expediente_estado
                         from sri_expedientert ea
                         join sri_expediente_estado eea on eea.id_expedientert = ea.id_expedientert
                         join sri_estadort esa on esa.id_estadort = eea.id_estadort
                         where ea.id_expedientert = aaa.id_expedientert
-                            and eea.fecha_exp_est =(
-                                select max(eeea.fecha_exp_est)
+                            and eea.id_expediente_estado =(
+                                select max(eeea.id_expediente_estado)
                                 from sri_expediente_estado eeea
                                 where eeea.id_expedientert = ea.id_expedientert))
                 group by aaa.numexpediente_expedientert )')
