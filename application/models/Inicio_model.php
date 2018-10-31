@@ -16,9 +16,9 @@ class Inicio_model extends CI_Model {
 			join sri_expediente_estado ee on ee.id_expedientert = e.id_expedientert
 			join sri_estadort es on es.id_estadort = ee.id_estadort
 			where e.id_expedientert = ex.id_expedientert
-			and ee.fecha_exp_est = (
+			and ee.id_expediente_estado = (
 				select
-					max(eee.fecha_exp_est)
+					max(eee.id_expediente_estado)
 				from
 					sri_expediente_estado eee
 				where
@@ -34,7 +34,7 @@ class Inicio_model extends CI_Model {
 	}
 
 	public function obtener_estadistica_tipo_solicitante(){
-		$query=$this->db->query("SELECT 'SOCIEDAD' AS nombre, COUNT(*) AS cantidad FROM sri_expedientert AS a WHERE a.tipopersona_expedientert = 'Sociedad' UNION SELECT 'PERSONA NATURAL' AS nombre, COUNT(*) AS cantidad FROM sri_expedientert AS a WHERE a.tipopersona_expedientert = 'Persona Natural' UNION SELECT 'ASOCIACIÓN' AS nombre, COUNT(*) AS cantidad FROM sri_expedientert AS a WHERE a.tipopersona_expedientert = 'Asociación'");
+		$query=$this->db->query("SELECT 'SOCIEDAD' AS nombre, COUNT(*) AS cantidad FROM sri_expedientert AS a WHERE a.tipopersona_expedientert = 1 UNION SELECT 'PERSONA NATURAL' AS nombre, COUNT(*) AS cantidad FROM sri_expedientert AS a WHERE a.tipopersona_expedientert = 2 UNION SELECT 'ASOCIACIÓN' AS nombre, COUNT(*) AS cantidad FROM sri_expedientert AS a WHERE a.tipopersona_expedientert = 3 UNION SELECT 'AUTONOMAS' AS nombre, COUNT(*) AS cantidad FROM sri_expedientert AS a WHERE a.tipopersona_expedientert = 4");
 		if ($query->num_rows() > 0) { return $query;
 		}else{ return FALSE; }
 	}

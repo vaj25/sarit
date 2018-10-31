@@ -131,21 +131,22 @@ class Reglamento_model extends CI_Model {
                         from sri_expedientert aa
                         join sri_expediente_estado fa on fa.id_expedientert = aa.id_expedientert
                         join sri_estadort da on da.id_estadort = fa.id_estadort
-                        where fa.fecha_exp_est = (select eea.fecha_exp_est from sri_expedientert ea
+                        where fa.id_expediente_estado = (select eea.id_expediente_estado from sri_expedientert ea
                                                 join sri_expediente_estado eea on eea.id_expedientert=ea.id_expedientert
                                                 join sri_estadort esa on esa.id_estadort=eea.id_estadort
                                                 where ea.id_expedientert=aa.id_expedientert
                                                 and esa.id_estadort <> 9
-                                                and eea.fecha_exp_est=(select max(eeea.fecha_exp_est) from sri_expediente_estado eeea where eeea.id_expedientert=ea.id_expedientert))
+                                                and eea.id_expediente_estado=(select max(eeea.id_expediente_estado) from sri_expediente_estado eeea where eeea.id_expedientert=ea.id_expedientert))
                         group by aa.numexpediente_expedientert )')
-               ->where('f.fecha_exp_est = (SELECT ee.fecha_exp_est FROM sri_expedientert e
+               ->where('f.id_expediente_estado = (SELECT ee.id_expediente_estado FROM sri_expedientert e
                         JOIN sri_expediente_estado ee on ee.id_expedientert=e.id_expedientert
                         JOIN sri_estadort es on es.id_estadort=ee.id_estadort
                         WHERE e.id_expedientert=a.id_expedientert
-                        AND  ee.fecha_exp_est=(SELECT max(eee.fecha_exp_est) from sri_expediente_estado eee where eee.id_expedientert=e.id_expedientert))')
+                        AND  ee.id_expediente_estado=(SELECT max(eee.id_expediente_estado) from sri_expediente_estado eee where eee.id_expedientert=e.id_expedientert))')
                 ->where('b.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = a.id_expedientert ))')
+                // ->or_where('b.id_empleado IS NULL')
                 //->where('g.id_representantert = (select max(ag.id_representantert) from sri_representantert ag where ag.id_empresart = g.id_empresart)')
                 ->where('f.etapa_exp_est <> 4')
                 ->order_by('f.fecha_exp_est', 'desc')
@@ -158,8 +159,8 @@ class Reglamento_model extends CI_Model {
             $this->db->where('d.id_estadort', $tipo);
         }
         
+        print $this->db->get_compiled_select();
         $query=$this->db->get();
-        // print $this->db->get_compiled_select();
         if ($query->num_rows() > 0) {
             return  $query;
         }
@@ -192,11 +193,11 @@ class Reglamento_model extends CI_Model {
                ->join('sri_expediente_estado f ', 'f.id_expedientert = a.id_expedientert')
                ->join('sri_estadort d','d.id_estadort = f.id_estadort')
                ->join('sri_tipo_solicitud g', 'g.id_tipo_solicitud = a.tiposolicitud_expedientert')
-               ->where('f.fecha_exp_est = (SELECT ee.fecha_exp_est FROM sri_expedientert e
+               ->where('f.id_expediente_estado = (SELECT ee.id_expediente_estado FROM sri_expedientert e
                         JOIN sri_expediente_estado ee on ee.id_expedientert=e.id_expedientert
                         JOIN sri_estadort es on es.id_estadort=ee.id_estadort
                         WHERE e.id_expedientert=a.id_expedientert
-                        AND  ee.fecha_exp_est=(SELECT max(eee.fecha_exp_est) from sri_expediente_estado eee where eee.id_expedientert=e.id_expedientert))')
+                        AND  ee.id_expediente_estado=(SELECT max(eee.id_expediente_estado) from sri_expediente_estado eee where eee.id_expedientert=e.id_expedientert))')
                 ->where('b.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
                         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                         where se.id_expedientert = a.id_expedientert ))');

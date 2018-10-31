@@ -128,7 +128,7 @@ $color2 = array('#1e88e5', '#c8d5dc', '#7460ee', '#ffb22b', '#fc4b6c', '#99abb4'
         									}
 
         									$texto = ""; $i=0;
-        									if($sector_asociacion->num_rows() > 0){
+        									if($sector_asociacion->num_rows() > 0 && $total > 0){
         										foreach ($sector_asociacion->result() as $fila_sa) {
         											$porcentaje = number_format( (($fila_sa->cantidad/$total)*100), 2, '.', '');
 		                                			$split = explode('.',$porcentaje);
