@@ -159,8 +159,8 @@ class Reglamento_model extends CI_Model {
             $this->db->where('d.id_estadort', $tipo);
         }
         
-        print $this->db->get_compiled_select();
         $query=$this->db->get();
+        // print $this->db->get_compiled_select();
         if ($query->num_rows() > 0) {
             return  $query;
         }
