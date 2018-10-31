@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-$config['nombre_base'] = 'sarit'; //nombre base del proyecto (SICBAF, viaticos, seguridad, etc.)
+$config['nombre_base'] = 'sarita'; //nombre base del proyecto (SICBAF, viaticos, seguridad, etc.)
 $config['base_url'] = 'http://'.$_SERVER['SERVER_NAME'].'/'.$config['nombre_base'].'/'; //Ruta base del proyecto
 $config['id_sistema'] = "19"; //Id del sistema en la base de datos
 

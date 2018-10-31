@@ -18,7 +18,7 @@
                       if($reglamentos->num_rows() > 0){
                           foreach ($reglamentos->result() as $fila) {
                               echo "<tr>";
-                              echo "<td>".$fila->numexpediente_expedientert."</td>";
+                              echo "<td>".( ($fila->numeroexpediente_anterior != null) ? $fila->numexpediente_expedientert ." <br> ". $fila->numeroexpediente_anterior : $fila->numexpediente_expedientert )."</td>";
                               echo "<td>".$fila->nombre_empresa."</td>";
                               echo "<td>".$fila->nombre_empleado."</td>";
                               echo "<td>".$fila->tiposolicitud_expedientert."</td>";
