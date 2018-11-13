@@ -47,6 +47,9 @@ class Expediente_estado_model extends CI_Model {
     }
 
     public function obtener_entradas_reporte($data, $empleado = FALSE) {
+
+        ini_set('max_execution_time', 0); 
+
         /* Proyectos de Reglamentos Internos de Trabajo pendientes del mes anterior */
 
         $this->db->select('MAX(eee.id_expediente_estado)')
