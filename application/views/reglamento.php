@@ -204,9 +204,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <?php } ?>
   }
 
-  function tablaReglamentos(){
+  function tablaReglamentos(letra){
+    var letra = letra || 'A';
     var nr_empleado = $("#nr_search").val();
-    $( "#cnt_tabla_expedientes" ).load("<?php echo site_url(); ?>/reglamento/tabla_reglamento?nr="+nr_empleado+"&tipo="+estado_pestana, function() {
+    $( "#cnt_tabla_expedientes" ).load("<?php echo site_url(); ?>/reglamento/tabla_reglamento?nr="+nr_empleado+"&tipo="+estado_pestana+"&letra="+letra, function() {
       $('#myTable').DataTable();
       $('[data-toggle="tooltip"]').tooltip();
     });
@@ -902,6 +903,40 @@ function cambiar_pestana(tipo){
         </div>
         <div class="row" style="width: 100%"></div>
         <div class="row col-lg-12">
+          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+              <div class="btn-group mr-2" role="group" aria-label="First group">
+                  <button type="button" class="change-letter btn btn-info" data-letra="A">A</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="B">B</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="C">C</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="D">D</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="E">E</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="F">F</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="G">G</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="H">H</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="I">I</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="J">J</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="K">K</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="L">L</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="M">M</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="N">N</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="Ñ">Ñ</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="O">O</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="P">P</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="Q">Q</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="R">R</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="S">S</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="T">T</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="U">U</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="V">V</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="W">W</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="X">X</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="Y">Y</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="Z">Z</button>
+              </div>
+          </div>
+        </div>
+        <div class="row" style="width: 100%"><br></div>
+        <div class="row col-lg-12">
           <ul class="nav nav-tabs customtab2 <?php if($navegatorless){ echo " pull-left"; } ?>" role="tablist"
             style='width:
             100%;'>
@@ -1042,6 +1077,18 @@ $(function(){
         });
             
     });
+});
+
+$('.change-letter').click(function () {
+  $(this).siblings('button').each(function () {
+    $(this).removeClass('btn-info');
+    $(this).addClass('btn-secondary');
+  });
+
+  $(this).removeClass('btn-secondary');
+  $(this).addClass('btn-info');
+
+  tablaReglamentos($(this).data('letra'));
 });
 
 </script>

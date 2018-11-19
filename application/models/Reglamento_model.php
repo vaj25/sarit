@@ -100,66 +100,64 @@ class Reglamento_model extends CI_Model {
 
     }
 
-    public function obtener_reglamentos($nr = false, $tipo = false) {
+    public function obtener_reglamentos($nr = false, $tipo = false, $letra = false) {
         
         $this->db->select("
                 a.id_expedientert,
                 a.numexpediente_expedientert,
                 a.numeroexpediente_anterior,
-                h.nombre_tipo_solicitud tiposolicitud_expedientert,
-                a.fecharesolucion_expedientert,
-                a.fechacrea_expedientert,
-                bc.id_empleado id_personal,
                 a.archivo_expedientert,
-                concat_ws(' ', bc.primer_nombre, bc.segundo_nombre, bc.tercer_nombre, bc.primer_apellido, bc.segundo_apellido, bc.apellido_casada) as nombre_empleado,
+                b.id_solicitud,
+                b.fecharesolucion_solicitud,
+                b.fechacrea_solicitud,
                 c.nombre_empresa,
-                d.id_estadort,
-                d.estado_estadort,
-                f.fecha_exp_est,
-                f.etapa_exp_est,
-                g.id_representantert")
+                d.fecha_exp_est,
+                d.etapa_exp_est,
+                e.id_estadort,
+                e.estado_estadort,
+                i.id_empleado id_personal,
+                CASE f.id_empleado
+                    WHEN NULL THEN ''
+                    ELSE ( SELECT CONCAT_WS(' ', ba.primer_nombre, ba.segundo_nombre, ba.tercer_nombre, 
+                            ba.primer_apellido, ba.segundo_apellido, ba.apellido_casada) FROM sir_empleado ba
+                            WHERE ba.id_empleado = f.id_empleado )
+                END AS nombre_empleado,
+                g.id_representantert,
+                h.nombre_tipo_solicitud tiposolicitud_expedientert")
                ->from('sri_expedientert a')
-               ->join('sri_expediente_empleado b', 'b.id_expedientert = a.id_expedientert', 'left')
-               ->join('sir_empleado bc', 'bc.id_empleado = b.id_empleado', 'left')
-               ->join('sge_empresa c','c.id_empresa = a.id_empresart')
-               ->join('sri_expediente_estado f ', 'f.id_expedientert = a.id_expedientert')
-               ->join('sri_estadort d','d.id_estadort = f.id_estadort')
+               ->join('sri_solicitud b ', 'a.id_expedientert = b.id_expedientert')
+               ->join('sge_empresa c', 'c.id_empresa = a.id_empresart')
+               ->join('sri_expediente_estado d', 'd.id_expedientert = b.id_solicitud')
+               ->join('sri_estadort e', 'e.id_estadort = d.id_estadort')
+               ->join('sri_expediente_empleado f', 'f.id_expedientert = b.id_solicitud', 'left')
                ->join('sri_representantert g', 'a.id_empresart = g.id_empresart', 'left')
                ->join('sri_tipo_solicitud h', 'a.tiposolicitud_expedientert = h.id_tipo_solicitud')
-               ->where('a.id_expedientert IN 
-                        ( select max(aa.id_expedientert)
-                        from sri_expedientert aa
-                        join sri_expediente_estado fa on fa.id_expedientert = aa.id_expedientert
-                        join sri_estadort da on da.id_estadort = fa.id_estadort
-                        where fa.id_expediente_estado = (select eea.id_expediente_estado from sri_expedientert ea
-                                                join sri_expediente_estado eea on eea.id_expedientert=ea.id_expedientert
-                                                join sri_estadort esa on esa.id_estadort=eea.id_estadort
-                                                where ea.id_expedientert=aa.id_expedientert
-                                                and esa.id_estadort <> 9
-                                                and eea.id_expediente_estado=(select max(eeea.id_expediente_estado) from sri_expediente_estado eeea where eeea.id_expedientert=ea.id_expedientert))
-                        group by aa.numexpediente_expedientert )')
-               ->where('f.id_expediente_estado = (SELECT ee.id_expediente_estado FROM sri_expedientert e
-                        JOIN sri_expediente_estado ee on ee.id_expedientert=e.id_expedientert
-                        JOIN sri_estadort es on es.id_estadort=ee.id_estadort
-                        WHERE e.id_expedientert=a.id_expedientert
-                        AND  ee.id_expediente_estado=(SELECT max(eee.id_expediente_estado) from sri_expediente_estado eee where eee.id_expedientert=e.id_expedientert))')
-                ->where('b.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
-                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
-                        where se.id_expedientert = a.id_expedientert ))')
-                // ->or_where('b.id_empleado IS NULL')
-                //->where('g.id_representantert = (select max(ag.id_representantert) from sri_representantert ag where ag.id_empresart = g.id_empresart)')
-                ->where('f.etapa_exp_est <> 4')
-                ->order_by('f.fecha_exp_est', 'desc')
+               ->join('sir_empleado i', 'i.id_empleado = f.id_empleado', 'left')
+               ->where('b.id_solicitud = (
+                    SELECT max(aa.id_solicitud)
+                    FROM sri_solicitud aa
+                    WHERE aa.id_expedientert = a.id_expedientert
+                )')
+               ->where('d.id_expediente_estado = (
+                    SELECT max(ca.id_expediente_estado)
+                    FROM sri_expediente_estado ca
+                    WHERE ca.id_expedientert = b.id_solicitud
+                )')
+                ->order_by('d.fecha_exp_est', 'desc')
                 ->order_by('d.id_estadort', 'asc');
         if ($nr) {
-            $this->db->where('bc.nr', $nr);
+            $this->db->where('i.nr', $nr);
         }
         
         if ($tipo) {
             $this->db->where('d.id_estadort', $tipo);
         }
+
+        if ($letra) {
+            $this->db->like('c.nombre_empresa', $letra, 'after');
+        }
         
-        print $this->db->get_compiled_select();
+        // print $this->db->get_compiled_select();
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
             return  $query;
