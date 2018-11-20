@@ -7,6 +7,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 }
 ?>
 <script type="text/javascript">
+  var letra = 'A';
+
   function cambiar_editar(id_reglamento, bandera){
     $("#id_expedientert").val(id_reglamento);
 
@@ -204,10 +206,20 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     <?php } ?>
   }
 
-  function tablaReglamentos(letra){
-    var letra = letra || 'A';
+  function tablaReglamentos(){
     var nr_empleado = $("#nr_search").val();
-    $( "#cnt_tabla_expedientes" ).load("<?php echo site_url(); ?>/reglamento/tabla_reglamento?nr="+nr_empleado+"&tipo="+estado_pestana+"&letra="+letra, function() {
+
+    $.ajax({
+      url: "<?php echo site_url(); ?>/reglamento/tabla_reglamento",
+      type: "get",
+      dataType: "html",
+      data: {nr: nr_empleado, tipo: estado_pestana, letra: letra},
+      beforeSend: function(){
+        $( "#cnt_tabla_expedientes" ).html("<div style='width:100%; padding:0.5em; text-align:center;'><span class='fa fa-spinner fa-spin' style='font-size:2em;'></span></div>");
+      }
+    })
+    .done(function (result) {
+      $( "#cnt_tabla_expedientes" ).html(result);
       $('#myTable').DataTable();
       $('[data-toggle="tooltip"]').tooltip();
     });
@@ -935,7 +947,7 @@ function cambiar_pestana(tipo){
               </div>
           </div>
         </div>
-        <div class="row" style="width: 100%"><br></div>
+        <br>
         <div class="row col-lg-12">
           <ul class="nav nav-tabs customtab2 <?php if($navegatorless){ echo " pull-left"; } ?>" role="tablist"
             style='width:
@@ -1088,7 +1100,9 @@ $('.change-letter').click(function () {
   $(this).removeClass('btn-secondary');
   $(this).addClass('btn-info');
 
-  tablaReglamentos($(this).data('letra'));
+  letra = $(this).data('letra');
+
+  tablaReglamentos();
 });
 
 </script>

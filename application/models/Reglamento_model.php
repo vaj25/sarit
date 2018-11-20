@@ -168,47 +168,36 @@ class Reglamento_model extends CI_Model {
 
     }
 
-    public function obtener_reglamentos_numero($numero = false, $nr = false) {
+    public function obtener_reglamentos_numero( $numero = false ) {
         
         $this->db->select("
                 a.id_expedientert,
-                a.numexpediente_expedientert,
                 a.numeroexpediente_anterior,
-                g.nombre_tipo_solicitud tiposolicitud_expedientert,
-                a.fecharesolucion_expedientert,
-                bc.id_empleado id_personal,
-                a.archivo_expedientert,
-                concat_ws(' ', bc.primer_nombre, bc.segundo_nombre, bc.tercer_nombre, bc.primer_apellido, bc.segundo_apellido, bc.apellido_casada) as nombre_empleado,
+	            a.numexpediente_expedientert,
                 c.nombre_empresa,
-                d.id_estadort,
-                d.estado_estadort,
-                f.fecha_exp_est,
-                f.etapa_exp_est")
+                d.id_empleado,
+                CASE
+                    d.id_empleado
+                    WHEN NULL THEN ''
+                    ELSE (
+                    SELECT
+                        CONCAT_WS(' ', ba.primer_nombre, ba.segundo_nombre, ba.tercer_nombre, ba.primer_apellido, ba.segundo_apellido, ba.apellido_casada)
+                    FROM
+                        sir_empleado ba
+                    WHERE
+                        ba.id_empleado = d.id_empleado )
+                END AS nombre_empleado,
+                f.nombre_tipo_solicitud,
+                e.id_representantert,
+                CONCAT_WS(' ', e.nombres_representantert, e.apellidos_representantert) AS nombre_representante")
                ->from('sri_expedientert a')
-               ->join('sri_expediente_empleado b', 'b.id_expedientert = a.id_expedientert', 'left')
-               ->join('sir_empleado bc', 'bc.id_empleado = b.id_empleado', 'left')
-               ->join('sge_empresa c','c.id_empresa = a.id_empresart')
-               ->join('sri_expediente_estado f ', 'f.id_expedientert = a.id_expedientert')
-               ->join('sri_estadort d','d.id_estadort = f.id_estadort')
-               ->join('sri_tipo_solicitud g', 'g.id_tipo_solicitud = a.tiposolicitud_expedientert')
-               ->where('f.id_expediente_estado = (SELECT ee.id_expediente_estado FROM sri_expedientert e
-                        JOIN sri_expediente_estado ee on ee.id_expedientert=e.id_expedientert
-                        JOIN sri_estadort es on es.id_estadort=ee.id_estadort
-                        WHERE e.id_expedientert=a.id_expedientert
-                        AND  ee.id_expediente_estado=(SELECT max(eee.id_expediente_estado) from sri_expediente_estado eee where eee.id_expedientert=e.id_expedientert))')
-                ->where('b.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
-                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
-                        where se.id_expedientert = a.id_expedientert ))');
-        
-        if ($numero) {
-            $this->db->where('a.numexpediente_expedientert', $numero);
-        } else {
-            $this->db->where('a.id_expedientert IN ( SELECT MAX(e.id_expedientert) FROM sri_expedientert e GROUP BY e.numexpediente_expedientert )');
-        }
-
-        if ($nr) {
-            $this->db->where('bc.nr', $nr);
-        }
+               ->join('sri_solicitud b', 'a.id_expedientert = b.id_expedientert')
+               ->join('sge_empresa c', 'c.id_empresa = a.id_empresart')
+               ->join('sri_expediente_empleado d', 'd.id_expedientert = b.id_solicitud', 'left')
+               ->join('sri_representantert e', 'a.id_empresart = e.id_empresart', 'left')
+               ->join('sri_tipo_solicitud f', 'a.tiposolicitud_expedientert = f.id_tipo_solicitud')
+               ->join('sir_empleado g', 'g.id_empleado = d.id_empleado', 'left')
+               ->where('a.id_expedientert', $numero);
         
         $query=$this->db->get();
         if ($query->num_rows() > 0) {

@@ -33,6 +33,14 @@
         ?>
             <div class="row">
                 <div class="form-group col-lg-5" style="height: 20px;">
+                    Nombre Empresa:
+                </div>
+                <div class="form-group col-lg-5" syle="height: 20px;">
+                    <h5><?= $reglamento->nombre_empresa ?></h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-5" style="height: 20px;">
                     N&uacute;mero del expediente:
                 </div>
                 <div class="form-group col-lg-5" style="height: 20px;">
@@ -66,7 +74,7 @@
                         <thead class="bg-inverse text-white">
                             <tr>
                                 <th>N&uacute;mero</th>
-                                <th>Nombre del solicitante</th>
+                                <th>Nombre del representante</th>
                                 <th>Colaborador asignado </th>
                                 <th>Tipo de solicitud </th>
                                 <th>(*)</th>
@@ -82,9 +90,9 @@
                                     $array = array($fila->id_expedientert);
                                     echo "<tr>";
                                         echo "<td>".$i."</td>";
-                                        echo "<td>".$fila->nombre_empresa."</td>";
+                                        echo "<td>".$fila->nombre_representante."</td>";
                                         echo "<td>".$fila->nombre_empleado."</td>";
-                                        echo "<td>".$fila->tiposolicitud_expedientert."</td>";
+                                        echo "<td>".$fila->nombre_tipo_solicitud."</td>";
                                         echo "<td>".generar_boton($array,"detalle","btn-info","mdi mdi-details","Ver detalle")."</td>";
                                     echo "</tr>";
 

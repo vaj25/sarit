@@ -7,6 +7,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 }
 ?>
 <script type="text/javascript">
+  var letra = 'A';
 
   function cerrar_mantenimiento(){
     $("#cnt-tabla").show(0);
@@ -25,10 +26,22 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
   function tablaReglamentos(){
     var nr_empleado = $("#nr_search").val();
-    $( "#cnt-tabla-historial" ).load("<?php echo site_url(); ?>/historial/tabla_reglamento?nr="+nr_empleado, function() {
+
+    $.ajax({
+      url: "<?php echo site_url(); ?>/historial/tabla_reglamento",
+      type: "get",
+      dataType: "html",
+      data: {nr: nr_empleado, letra: letra},
+      beforeSend: function(){
+        $( "#cnt-tabla-historial" ).html("<div style='width:100%; padding:0.5em; text-align:center;'><span class='fa fa-spinner fa-spin' style='font-size:2em;'></span></div>");
+      }
+    })
+    .done(function (result) {
+      $( "#cnt-tabla-historial" ).html(result);
       $('#myTable').DataTable();
       $('[data-toggle="tooltip"]').tooltip();
     });
+
   }
 
   function visualizar(id_reglamento) {
@@ -274,6 +287,43 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           <?php }?>
         </div>
 
+        <div class="row" style="width: 100%"></div>
+        <div class="row col-lg-12">
+          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+              <div class="btn-group mr-2" role="group" aria-label="First group">
+                  <button type="button" class="change-letter btn btn-info" data-letra="A">A</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="B">B</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="C">C</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="D">D</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="E">E</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="F">F</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="G">G</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="H">H</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="I">I</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="J">J</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="K">K</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="L">L</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="M">M</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="N">N</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="Ñ">Ñ</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="O">O</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="P">P</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="Q">Q</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="R">R</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="S">S</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="T">T</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="U">U</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="V">V</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="W">W</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="X">X</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="Y">Y</button>
+                  <button type="button" class="change-letter btn btn-secondary" data-letra="Z">Z</button>
+              </div>
+          </div>
+        </div>
+
+        <br>
+
         <div id="cnt-tabla-historial"></div>
 
       </div>
@@ -285,3 +335,21 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 <div id="cnt_model_establecimiento"></div>
 <div id="cnt_modal_acciones"></div>
+
+<script>
+
+$('.change-letter').click(function () {
+  $(this).siblings('button').each(function () {
+    $(this).removeClass('btn-info');
+    $(this).addClass('btn-secondary');
+  });
+
+  $(this).removeClass('btn-secondary');
+  $(this).addClass('btn-info');
+
+  letra = $(this).data('letra');
+
+  tablaReglamentos();
+});
+
+</script>

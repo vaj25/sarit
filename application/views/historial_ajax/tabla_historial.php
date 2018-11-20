@@ -22,7 +22,7 @@
                               echo "<td>".$fila->nombre_empresa."</td>";
                               echo "<td>".$fila->nombre_empleado."</td>";
                               echo "<td>".$fila->tiposolicitud_expedientert."</td>";
-                              echo "<td>".$fila->fecharesolucion_expedientert."</td>";
+                              echo "<td>".$fila->fecharesolucion_solicitud."</td>";
                               echo ($fila->id_estadort != "9") ? '<td><span class="label label-success">'.$fila->estado_estadort.'</span></td>' : '<td><span class="label label-danger">'.$fila->estado_estadort.'</span></td>';
 
                               echo "<td>";
@@ -38,7 +38,7 @@
                 </button>
                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
                     <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedientert?>)">Visualizar</a>
-                    <a class="dropdown-item" href="javascript:;" onClick="historial('<?=$fila->numexpediente_expedientert?>')">Ver
+                    <a class="dropdown-item" href="javascript:;" onClick="historial('<?=$fila->id_expedientert?>')">Ver
                         historial</a>
                     <?php
                                               if ( $fila->id_estadort == 6 || $fila->id_estadort == 2 || $fila->id_estadort == 9 ) {
