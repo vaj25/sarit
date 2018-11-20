@@ -5,7 +5,8 @@ class Reglamento extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array("reglamento_model", "documento_model", "comisionado_model", "expediente_estado_model", "expediente_empleado_model", "login_model" ));
+		$this->load->model(array("reglamento_model", "documento_model", "comisionado_model", "expediente_estado_model", 
+									"expediente_empleado_model", "login_model", "solicitud_model"));
 	}
 
 	public function index(){
@@ -30,7 +31,7 @@ class Reglamento extends CI_Controller {
 				'id_personal' => '',
 				'numexpediente_expedientert' => 'N/A',
 				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
-				'tiposolicitud_expedientert' => $this->input->post('tipo_solicitud'),
+				'tiposolicitud_expedientert' => '',
 				'organizacionsocial_expedientert' => '',
 				'contratocolectivo_expedientert' => '',
 				'notificacion_expedientert' => '',
@@ -57,14 +58,29 @@ class Reglamento extends CI_Controller {
 				'sexo_representantert' => $this->input->post('sexo')
 			);
 
+			$data3 = array(
+				'id_personal' => '',
+				'tiposolicitud_expedientert' => $this->input->post('tipo_solicitud'),
+				'notificacion_solicitud' => '',
+				'fechanotificacion_solicitud' => '',
+				'resolucion_solicitud' => '',
+				'fecharesolucion_solicitud' => '',
+				'fechacrea_solicitud' => date("Y-m-d H:i:s"),
+				'obsergenero_expedientrt' => '',
+				'fecha_entrega_solicitud' => '',
+				'persona_recibe_solicitud' => ''
+			);
+
 			if ("exito" == $this->comisionado_model->insertar_comisionado($data2)) {
 				
 				$id = $this->reglamento_model->insertar_reglamento($data);
+
+				$id2 = $this->solicitud_model->insertar_solicitud($data3);
 				
 				$this->expediente_estado_model->insertar_expediente_estado(
 					array(
 					'id_estadort' => 1,
-					'id_expedientert' => $id,
+					'id_expedientert' => $id2,
 					'fecha_exp_est' => date("Y-m-d H:i:s"),
 					'fecha_ingresar_exp_est' => date("Y-m-d H:i:s"),
 					'etapa_exp_est' => 1
@@ -78,11 +94,14 @@ class Reglamento extends CI_Controller {
 
 		} else if($this->input->post('band1') == "edit"){
 
-			$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_expediente'))->result_array()[0];
+			$data3 = $this->solicitud_model->obtener_solicitud( $this->input->post('id_solicitud') )->result_array()[0];
+			
+			$data3['id_tipo_solicitud'] = $this->input->post('tipo_solicitud');
+			
+			$data = $this->reglamento_model->obtener_reglamento( $data['id_expedientert'] )->result_array()[0];
 
 			$data['id_empresart'] = $this->input->post('establecimiento');
 			$data['tipopersona_expedientert'] = $this->input->post('tipo_solicitante');
-			$data['tiposolicitud_expedientert'] = $this->input->post('tipo_solicitud');
 
 			$data2 = array(
 				'id_representantert' => $this->input->post('id_comisionado'),
@@ -98,6 +117,7 @@ class Reglamento extends CI_Controller {
 			);
 
 			if ("exito" == $this->comisionado_model->editar_comisionado($data2)) {
+				$this->solicitud_model->editar_solitud($data3);
 				echo $this->reglamento_model->editar_reglamento($data);
 			} else {
 				echo "fracaso";
@@ -129,11 +149,18 @@ class Reglamento extends CI_Controller {
 			}
 
 		} else if($this->input->post('band') == "delete"){
-			$data = array(
-				'id_expedientert' => $this->input->post('id_expedientert')
-			);
-			echo $this->reglamento_model->eliminar_documento($data);
-
+			
+			$solicitudes = $this->reglamento_model->obtener_reglamentos_numero($this->input->post('id_expedientert'));
+			if ($solicitudes > 0) {
+				$data = array(
+					'id_expedientert' => $this->input->post('id_expedientert')
+				);
+				echo $this->reglamento_model->eliminar_documento($data);
+	
+			} else {
+				echo 'fracaso';
+			}
+			
 		} else if($this->input->post('band1') == "reforma_parcial" || $this->input->post('band1') == "reforma_total"){
 			
 			$dui = $this->reglamento_model->obtener_reglamentos_documentos($this->input->post('id_expediente'))->result();
@@ -198,13 +225,13 @@ class Reglamento extends CI_Controller {
 
 	public function insertar_reglamentos_filtro() {
 		
-		$id = $this->reglamento_model->insertar_reglamento(
+		$id = $this->reglamento_model->insertar_reglamento (
 			array(
 				'id_empresart' => $this->input->post('establecimiento'),
 				'id_personal' => '',
 				'numexpediente_expedientert' => 'N/A',
 				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
-				'tiposolicitud_expedientert' => $this->input->post('tipo_solicitud'),
+				'tiposolicitud_expedientert' => '',
 				'organizacionsocial_expedientert' => '',
 				'contratocolectivo_expedientert' => '',
 				'notificacion_expedientert' => '',
@@ -220,10 +247,26 @@ class Reglamento extends CI_Controller {
 		);
 
 		if ($id != 'fracaso') {
+
+			$id2 = $this->solicitud_model->insertar_solicitud(
+				array(
+				'id_personal' => '',
+				'tiposolicitud_expedientert' => $this->input->post('tipo_solicitud'),
+				'notificacion_solicitud' => '',
+				'fechanotificacion_solicitud' => '',
+				'resolucion_solicitud' => '',
+				'fecharesolucion_solicitud' => '',
+				'fechacrea_solicitud' => date("Y-m-d H:i:s"),
+				'obsergenero_expedientrt' => '',
+				'fecha_entrega_solicitud' => '',
+				'persona_recibe_solicitud' => ''
+				)
+			);
+
 			$this->expediente_estado_model->insertar_expediente_estado(
 				array(
 				'id_estadort' => 1,
-				'id_expedientert' => $id,
+				'id_expedientert' => $id2,
 				'fecha_exp_est' => date("Y-m-d H:i:s"),
 				'fecha_ingresar_exp_est' => date("Y-m-d H:i:s"),
 				'etapa_exp_est' => 1
@@ -231,7 +274,7 @@ class Reglamento extends CI_Controller {
 	
 			$this->expediente_empleado_model->insertar_expediente_empleado(
 				array(
-				'id_expedientert' => $id,
+				'id_expedientert' => $id2,
 				'id_empleado' => $this->input->post('colaborador'),
 				'fecha_exp_emp ' => date("Y-m-d H:i:s")
 			));
@@ -249,7 +292,7 @@ class Reglamento extends CI_Controller {
 		print json_encode(
 			$this->reglamento_model->obtener_reglamentos_documentos(
 				$this->input->post('id'),
-				($this->input->post('id') == 'edit_new') ? FALSE : TRUE
+				($this->input->post('bandera') == 'edit_new') ? FALSE : TRUE
 				)->result()
 		);
 		
@@ -291,10 +334,10 @@ class Reglamento extends CI_Controller {
 	}
 
 	public function gestionar_resolucion_reglamento() {
-		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
-		$data['resolucion_expedientert'] = $this->input->post('resolucion');
-		$data['obsergenero_expedientrt'] = $this->input->post('ob_genero');
-		$data['fecharesolucion_expedientert'] = date("Y-m-d H:i:s");
+		$data = $this->solicitud_model->obtener_solicitud($this->input->post('id_reglamento_resolucion'))->result_array()[0];
+		$data['resolucion_solicud'] = $this->input->post('resolucion');
+		$data['obsergenero_solicitud'] = $this->input->post('ob_genero');
+		$data['fecharesolucion_solicitud'] = date("Y-m-d H:i:s");
 
 		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
 			echo "fracaso";

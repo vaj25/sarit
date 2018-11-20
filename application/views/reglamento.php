@@ -225,11 +225,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
-var estado_pestana = "";
-function cambiar_pestana(tipo){
-    estado_pestana = tipo;
-    tablaReglamentos();
-}
+  var estado_pestana = "";
+  function cambiar_pestana(tipo){
+      estado_pestana = tipo;
+      tablaReglamentos();
+  }
 
   function combo_establecimiento(seleccion, numero, disable=''){
     
@@ -306,12 +306,12 @@ function cambiar_pestana(tipo){
 
   }
 
-  function visualizar(id_reglamento) {
+  function visualizar(id_solicitud) {
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/ver_reglamento",
       type: "post",
       dataType: "html",
-      data: {id : id_reglamento}
+      data: {id : id_solicitud}
     })
     .done(function(res){
       $('#cnt_actions').html(res);

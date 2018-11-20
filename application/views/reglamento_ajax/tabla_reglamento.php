@@ -51,7 +51,7 @@
                     <i class="ti-settings"></i>
                 </button>
                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 37px, 0px); top: 0px; left: 0px; will-change: transform;">
-                    <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_expedientert?>)">Visualizar</a>
+                    <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_solicitud?>)">Visualizar</a>
                     <!-- <a class="dropdown-item" href="javascript:;" onClick="cambiar_editar(<?=$fila->id_expedientert?>, 'reforma_parcial')">Reforma Parcial</a>
                                                 <a class="dropdown-item" href="javascript:;" onClick="cambiar_editar(<?=$fila->id_expedientert?>, 'reforma_total')">Reforma Total</a> -->
                     <a class="dropdown-item" href="javascript:;" onClick="actualizar_estado(<?=$fila->id_expedientert?>)">Actualizar

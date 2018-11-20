@@ -20,25 +20,25 @@
 
 <script>
 
-$('#establecimiento').on('select2:select', function (e) {
-    var data = e.params.data;
+// $('#establecimiento').on('select2:select', function (e) {
+//     var data = e.params.data;
     
-    $.ajax({
-        url: "<?php echo site_url(); ?>/establecimiento/consultar_establecimiento_expediente",
-        type: "post",
-        dataType: "html",
-        data: {id: data['id']}
-    }).
-    done(function (data) {
-        if (data == "fracaso") {
-            swal({ title: "¡Ups!", text: "Esta empresa ya dispone de un expediente.", type: "warning", showConfirmButton: true });
-            $('#establecimiento').val("").trigger("change");
-        }
-    }).
-    fail(function (data) {
-        swal({ title: "¡Ups! Error", text: "Upps, ha ocurrido un error.", type: "error", showConfirmButton: true });
-    });
+//     $.ajax({
+//         url: "<?php echo site_url(); ?>/establecimiento/consultar_establecimiento_expediente",
+//         type: "post",
+//         dataType: "html",
+//         data: {id: data['id']}
+//     }).
+//     done(function (data) {
+//         if (data == "fracaso") {
+//             swal({ title: "¡Ups!", text: "Esta empresa ya dispone de un expediente.", type: "warning", showConfirmButton: true });
+//             $('#establecimiento').val("").trigger("change");
+//         }
+//     }).
+//     fail(function (data) {
+//         swal({ title: "¡Ups! Error", text: "Upps, ha ocurrido un error.", type: "error", showConfirmButton: true });
+//     });
 
-});
+// });
 
 </script>

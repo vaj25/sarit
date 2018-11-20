@@ -239,14 +239,15 @@ class Reglamento_model extends CI_Model {
     public function obtener_reglamento_empresa($id) {
         
         $this->db->select('')
-               ->from('sri_expedientert a')
-               ->join('sge_empresa b', 'b.id_empresa = a.id_empresart')
-               ->join('sge_catalogociiu c', 'c.id_catalogociiu = b.id_catalogociiu')
-               ->join('org_municipio d', 'd.id_municipio = b.id_municipio')
-               ->join('sri_representantert e', 'e.id_empresart = b.id_empresa', 'left')
-               ->join('sri_tipo_solicitud f', 'a.tiposolicitud_expedientert = f.id_tipo_solicitud', 'left')
-               ->join('sri_tipo_solicitante g', 'a.tipopersona_expedientert = g.id_tipo_solicitante')
-               ->where('a.id_expedientert', $id);
+               ->from('sri_solicitud a')
+               ->join('sri_expedientert b', 'a.id_expedientert = b.id_expedientert')
+               ->join('sge_empresa c', 'c.id_empresa = b.id_empresart')
+               ->join('sge_catalogociiu d', 'd.id_catalogociiu = c.id_catalogociiu')
+               ->join('org_municipio e', 'e.id_municipio = c.id_municipio')
+               ->join('sri_representantert f', 'f.id_empresart = c.id_empresa', 'left')
+               ->join('sri_tipo_solicitante g', 'b.tipopersona_expedientert = g.id_tipo_solicitante')
+               ->join('sri_tipo_solicitud h', 'a.id_tipo_solicitud = h.id_tipo_solicitud')
+               ->where('a.id_solicitud', $id);
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
             return $query;
