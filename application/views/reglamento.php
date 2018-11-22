@@ -210,6 +210,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
   function tablaReglamentos(){
     var nr_empleado = $("#nr_search").val();
+    $('#modal_loading').modal({backdrop: 'static', keyboard: false}) 
+    $(".modal-backdrop").hide(0);
 
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/tabla_reglamento",
@@ -218,6 +220,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       data: {nr: nr_empleado, tipo: estado_pestana, letra: letra},
       beforeSend: function(){
         $( "#cnt_tabla_expedientes" ).html("<div style='width:100%; padding:0.5em; text-align:center;'><span class='fa fa-spinner fa-spin' style='font-size:2em;'></span></div>");
+        $("#modal_loading").modal('hide'); 
       }
     })
     .done(function (result) {
@@ -535,6 +538,27 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   }
 
 </script>
+<style type="text/css">
+    #modal_loading.modal {
+  text-align: center;
+  padding: 0!important;
+}
+
+#modal_loading.modal:before {
+  content: '';
+  display: inline-block;
+  height: 80%;
+  text-align: center;
+  vertical-align: bottom;
+  margin-right: -4px; /* Adjusts for spacing */
+}
+
+#modal_loading.modal-dialog {
+  display: inline-block;
+  text-align: center;
+  vertical-align: bottom;
+}
+</style>
 
 <div class="page-wrapper">
   <div class="container-fluid">
@@ -990,6 +1014,21 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     </div>
     <div class="col-lg-12" id="cnt_actions" style="display:none;"></div>
   </div>
+</div>
+
+<div id="modal_loading" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" align="center" style="text-align: center;">
+          <!-- <input type="hidden" id="id_representante" name="id_representante" value=""> -->
+            <div class="modal-header bg-inverse" align="center" style="text-align: center;">
+                <h3 class="modal-title text-white" align="center" style="text-align: center;  width: 100%;"><span class="fa fa-spinner fa-spin"></span> Filtrando resultados ...</h3>
+
+            </div>
+            
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
 </div>
 
 <div id="cnt_model_establecimiento"></div>
