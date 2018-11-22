@@ -218,14 +218,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       type: "get",
       dataType: "html",
       data: {nr: nr_empleado, tipo: estado_pestana, letra: letra},
-      beforeSend: function(){
-        $( "#cnt_tabla_expedientes" ).html("<div style='width:100%; padding:0.5em; text-align:center;'><span class='fa fa-spinner fa-spin' style='font-size:2em;'></span></div>");
-        $("#modal_loading").modal('hide'); 
-      }
+      
     })
     .done(function (result) {
       $( "#cnt_tabla_expedientes" ).html(result);
       $('#myTable').DataTable();
+      $("#modal_loading").modal('hide'); 
       $('[data-toggle="tooltip"]').tooltip();
     });
   }
