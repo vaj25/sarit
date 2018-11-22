@@ -66,7 +66,7 @@
                         Resolución</a>
                     <a class="dropdown-item" href="javascript:;" onClick="notificacion_resolucion(<?=$fila->id_solicitud?>)">Registrar
                         Notificaci&oacute;n Resolución</a>
-                    <a class="dropdown-item" href="javascript:;" onClick="entrega_resolucion(<?=$fila->id_expedientert?>)">Entrega
+                    <a class="dropdown-item" href="javascript:;" onClick="entrega_resolucion(<?=$fila->id_solicitud?>)">Entrega
                         Resolución</a>
 
                     <!-- ?php
