@@ -41,7 +41,6 @@ class Reglamento extends CI_Controller {
 				'archivo_expedientert' => '',
 				'obsergenero_expedientrt' => '',
 				'contenidoTitulos_expedientert' => '',
-				'desistido_expedientert' => '',
 				'archivo_expedientert' => '',
 				'numeroexpediente_anterior' => null
 			);
@@ -73,7 +72,8 @@ class Reglamento extends CI_Controller {
 					'fechacrea_solicitud' => date("Y-m-d H:i:s"),
 					'obsergenero_solicitud' => '',
 					'fecha_entrega_solicitud' => '',
-					'persona_recibe_solicitud' => ''
+					'persona_recibe_solicitud' => '',
+					'desistido_solicitud' => '',
 				));
 				
 				$this->expediente_estado_model->insertar_expediente_estado(
@@ -116,8 +116,7 @@ class Reglamento extends CI_Controller {
 			);
 
 			if ("exito" == $this->comisionado_model->editar_comisionado($data2)) {
-				$this->solicitud_model->editar_solitud($data3);
-				echo $this->reglamento_model->editar_reglamento($data);
+				echo json_encode(array( 'expediente' => $this->reglamento_model->editar_reglamento($data) , 'solicitud' => $this->solicitud_model->editar_solitud($data3) ));
 			} else {
 				echo "fracaso";
 			}
@@ -130,7 +129,7 @@ class Reglamento extends CI_Controller {
 			$data['tipopersona_expedientert'] = $this->input->post('tipo_solicitante');
 
 			$data2 = array(
-				'id_empresart' =>$this->input->post('establecimiento'), 
+				'id_empresart' => $this->input->post('establecimiento'), 
 				'nombres_representantert' => $this->input->post('nombres'),
 				'apellidos_representantert' => $this->input->post('apellidos'),
 				'dui_representantert'  => $this->input->post('dui_comisionado'),
@@ -291,8 +290,8 @@ class Reglamento extends CI_Controller {
 		print json_encode(
 			$this->reglamento_model->obtener_reglamentos_documentos(
 				$this->input->post('id'),
-				($this->input->post('bandera') == 'edit_new') ? FALSE : TRUE
-				)->result()
+				($this->input->post('bandera') == 'edit_new') ? TRUE : FALSE
+			)->result()
 		);
 		
 	}
@@ -338,7 +337,7 @@ class Reglamento extends CI_Controller {
 		$data['obsergenero_solicitud'] = $this->input->post('ob_genero');
 		$data['fecharesolucion_solicitud'] = date("Y-m-d H:i:s");
 
-		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+		if ("fracaso" == $this->solicitud_model->editar_solitud($data)) {
 			echo "fracaso";
 		} else {
 			echo "exito";
@@ -352,11 +351,11 @@ class Reglamento extends CI_Controller {
 
 	public function gestionar_notificacion_reglamento() {
 
-		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
-		$data['notificacion_expedientert'] = $this->input->post('notificacion');
-		$data['fechanotificacion_expedientert'] = date("Y-m-d H:i:s", strtotime($this->input->post('fecha')));
+		$data = $this->solicitud_model->obtener_solicitud($this->input->post('id_reglamento_resolucion'))->result_array()[0];
+		$data['notificacion_solicitud'] = $this->input->post('notificacion');
+		$data['fechanotificacion_solicitud'] = date("Y-m-d H:i:s", strtotime($this->input->post('fecha')));
 
-		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+		if ("fracaso" == $this->solicitud_model->editar_solitud($data)) {
 			echo "fracaso";
 		} else {
 			echo "exito";
@@ -365,8 +364,8 @@ class Reglamento extends CI_Controller {
 
 	public function gestionar_desistir_reglamento() {
 
-		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
-		$data['desistido_expedientert'] = $this->input->post('mov_disistir');
+		$data = $this->solicitud_model->obtener_solicitud($this->input->post('id_reglamento_resolucion'))->result_array()[0];
+		$data['desistido_solicitud'] = $this->input->post('mov_disistir');
 
 		if ("fracaso" == $this->expediente_estado_model->insertar_expediente_estado(
 			array(
@@ -378,7 +377,7 @@ class Reglamento extends CI_Controller {
 		))) {
 			echo "fracaso";
 		} else {
-			$this->reglamento_model->editar_reglamento($data);
+			$this->solicitud_model->editar_solitud($data);
 			echo "exito";
 		}
 	}
@@ -401,7 +400,7 @@ class Reglamento extends CI_Controller {
 		$this->load->view('reglamento_ajax/estado_reglamento',
 			array(
 				'id' => 0,
-				'id_expediente' => $this->input->post('id'),
+				'id_solicitud' => $this->input->post('id'),
 				'estado' => $this->db->get('sri_estadort')
 			)
 		);
@@ -501,14 +500,14 @@ class Reglamento extends CI_Controller {
 	}
 
 	public function gestionar_reglamento_delegado() {
-		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento'))->result_array()[0];
+		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_solicitud'))->result_array()[0];
 		
 		if ($data['id_empleado'] != $this->input->post('id_personal_copia')) {
 			
 			if ("fracaso" == $this->expediente_empleado_model->
 				insertar_expediente_empleado(
 					array(
-						'id_expedientert' => $this->input->post('id_reglamento'),
+						'id_expedientert' => $this->input->post('id_solicitud'),
 						'id_empleado' => $this->input->post('id_personal_copia'),
 						'fecha_exp_emp ' => date("Y-m-d H:i:s")
 					)
@@ -540,15 +539,15 @@ class Reglamento extends CI_Controller {
 	}
 
 	public function entrega_resolucion() {
-		$this->load->view('reglamento_ajax/modal_entrega', array('id_expediente' => $this->input->post('id') ));
+		$this->load->view('reglamento_ajax/modal_entrega', array('id_solicitud' => $this->input->post('id') ));
 	}
 
 	public function gestionar_entrega_resolucion() {
-		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_reglamento_resolucion'))->result_array()[0];
-		$data['fecha_entrega'] = date('Y-m-d', strtotime($this->input->post('fecha_entrega')));
-		$data['persona_recibe'] = $this->input->post('recibe');
+		$data = $this->solicitud_model->obtener_solicitud($this->input->post('id_reglamento_resolucion'))->result_array()[0];
+		$data['fecha_entrega_solicitud'] = date('Y-m-d', strtotime($this->input->post('fecha_entrega')));
+		$data['persona_recibe_solicitud'] = $this->input->post('recibe');
 
-		if ("fracaso" == $this->reglamento_model->editar_reglamento($data)) {
+		if ("fracaso" == $this->solicitud_model->editar_solitud($data)) {
 			echo "fracaso";
 		} else {
 			echo "exito";

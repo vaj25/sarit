@@ -21,7 +21,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
           <hr class="m-t-0 m-b-30">
 
-          <input type="hidden" id="id_reglamento_resolucion" name="id_reglamento_resolucion" value="<?= $id_expediente ?>">
+          <input type="hidden" id="id_reglamento_resolucion" name="id_reglamento_resolucion" value="<?= $id_solicitud ?>">
 
           <div class="row">
             <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">

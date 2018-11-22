@@ -9,13 +9,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 <script type="text/javascript">
   var letra = 'A';
 
-  function cambiar_editar(id_reglamento, bandera){
-    $("#id_expedientert").val(id_reglamento);
+  function cambiar_editar(id_solicitud, bandera){
+
+    cambiar_nuevo();
 
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/registros_reglamentos_documentos",
       type: "POST",
-      data: {id : id_reglamento, bandera: bandera}
+      data: {id : id_solicitud, bandera: bandera}
     })
     .done(function(res){
       result = JSON.parse(res)[0];
@@ -55,7 +56,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
       } else {
         
-        combo_establecimiento(result.id_empresa, 1, 'readonly');
+        combo_establecimiento(result.id_empresa, 1, true);
         $("#tipo_solicitante").attr('readonly', 'readonly');
 
       }
@@ -129,6 +130,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
   function cambiar_nuevo(){
     $("#id_expediente").val("");
     $("#id_expedient").val("");
+    $("#id_solicitud").val("");
+    $("#id_solicitud2").val("");
     $("#tipo_solicitante").val("").trigger('change.select2');
     $("#tipo_solicitante").removeAttr('readonly');
     $("#tipo_solicitud").val('Registro');
@@ -234,7 +237,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       tablaReglamentos();
   }
 
-  function combo_establecimiento(seleccion, numero, disable=''){
+  function combo_establecimiento(seleccion, numero, disable){
+
+    var disable = disable || false;
     
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/combo_establecimiento",
@@ -259,7 +264,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         },
         'escapeMarkup': function (markup) {
           return markup;
-        }
+        },
+        'readonly': disable
       });
     });
 
@@ -324,12 +330,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
-  function resolucion(id_reglamento) {
+  function resolucion(id_solicitud) {
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/resolucion_reglamento",
       type: "post",
       dataType: "html",
-      data: {id : id_reglamento}
+      data: {id : id_solicitud}
     })
     .done(function(res){
       $('#cnt_modal_acciones').html(res);
@@ -337,12 +343,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
-  function notificacion_resolucion(id_reglamento) {
+  function notificacion_resolucion(id_solicitud) {
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/notificacion_reglamento",
       type: "post",
       dataType: "html",
-      data: {id : id_reglamento}
+      data: {id : id_solicitud}
     })
     .done(function(res){
       $('#cnt_modal_acciones').html(res);
@@ -350,12 +356,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
-  function actualizar_estado(id_reglamento) {
+  function actualizar_estado(id_solicitud) {
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/estado_reglamento",
       type: "post",
       dataType: "html",
-      data: {id : id_reglamento}
+      data: {id : id_solicitud}
     })
     .done(function(res){
       $('#cnt_modal_acciones').html(res);
@@ -364,12 +370,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
-  function entrega_resolucion(id_reglamento) {
+  function entrega_resolucion(id_solicitud) {
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/entrega_resolucion",
       type: "post",
       dataType: "html",
-      data: {id : id_reglamento}
+      data: {id : id_solicitud}
     })
     .done(function(res){
       $('#cnt_modal_acciones').html(res);
@@ -377,12 +383,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
-  function modal_delegado(id_reglamento, id_delegado) {
+  function modal_delegado(id_solicitud, id_delegado) {
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/delegado_reglamento",
       type: "post",
       dataType: "html",
-      data: {id : id_reglamento}
+      data: {id : id_solicitud}
     })
     .done(function(res){
       $('#cnt_modal_acciones').html(res);
@@ -433,7 +439,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
-  function desistir(id_reglamento) {
+  function desistir(id_solicitud) {
     swal({
       title: "Desistir de Expediente",
       text: "¿Motivo por el cual desiste? *",
@@ -452,7 +458,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
           type: "post",
           dataType: "html",
           data: {
-            id_reglamento_resolucion: id_reglamento,
+            id_reglamento_resolucion: id_solicitud,
             mov_disistir: inputValue
           }
         })

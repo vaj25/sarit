@@ -30,7 +30,7 @@
                                 $i++;
                                 echo "<td>";
 
-                                $array = array($fila->id_expedientert);
+                                $array = array($fila->id_solicitud);
 
                                 if(tiene_permiso($segmentos=1,$permiso=4)){
 
@@ -54,17 +54,17 @@
                     <a class="dropdown-item" href="javascript:;" onClick="visualizar(<?=$fila->id_solicitud?>)">Visualizar</a>
                     <!-- <a class="dropdown-item" href="javascript:;" onClick="cambiar_editar(<?=$fila->id_expedientert?>, 'reforma_parcial')">Reforma Parcial</a>
                                                 <a class="dropdown-item" href="javascript:;" onClick="cambiar_editar(<?=$fila->id_expedientert?>, 'reforma_total')">Reforma Total</a> -->
-                    <a class="dropdown-item" href="javascript:;" onClick="actualizar_estado(<?=$fila->id_expedientert?>)">Actualizar
+                    <a class="dropdown-item" href="javascript:;" onClick="actualizar_estado(<?=$fila->id_solicitud?>)">Actualizar
                         Estado</a>
                     <?php if (obtener_rango($segmentos=1, $permiso=1) > 1) { ?>
-                        <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_expedientert.','.$fila->id_personal?>)">Cambiar
+                        <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_solicitud.','.$fila->id_personal?>)">Cambiar
                         Delegado</a>
                     <?php }?>
                     <?= ($fila->id_estadort == 3) ? '<a class="dropdown-item" href="javascript:;" onClick="modal_acciones('.$fila->id_expedientert.')">Agregar Reforma</a>' : 
-                                                    '<a class="dropdown-item" href="javascript:;" onClick="desistir('.$fila->id_expedientert.')">Desistir</a>'?>
+                                                    '<a class="dropdown-item" href="javascript:;" onClick="desistir('.$fila->id_solicitud.')">Desistir</a>'?>
                     <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedientert?>)">Registrar
                         Resolución</a>
-                    <a class="dropdown-item" href="javascript:;" onClick="notificacion_resolucion(<?=$fila->id_expedientert?>)">Registrar
+                    <a class="dropdown-item" href="javascript:;" onClick="notificacion_resolucion(<?=$fila->id_solicitud?>)">Registrar
                         Notificaci&oacute;n Resolución</a>
                     <a class="dropdown-item" href="javascript:;" onClick="entrega_resolucion(<?=$fila->id_expedientert?>)">Entrega
                         Resolución</a>

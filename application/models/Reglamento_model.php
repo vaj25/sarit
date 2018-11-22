@@ -115,14 +115,18 @@ class Reglamento_model extends CI_Model {
                 d.etapa_exp_est,
                 e.id_estadort,
                 e.estado_estadort,
-                i.id_empleado id_personal,
+                f.id_empleado id_personal,
                 CASE f.id_empleado
                     WHEN NULL THEN ''
                     ELSE ( SELECT CONCAT_WS(' ', ba.primer_nombre, ba.segundo_nombre, ba.tercer_nombre, 
                             ba.primer_apellido, ba.segundo_apellido, ba.apellido_casada) FROM sir_empleado ba
                             WHERE ba.id_empleado = f.id_empleado )
                 END AS nombre_empleado,
-                g.id_representantert,
+                CASE g.id_representantert
+                    WHEN NULL THEN g.id_representantert
+                    ELSE ( SELECT max(ca.id_representantert) FROM sri_representantert ca
+                            WHERE ca.id_empresart = g.id_empresart )
+                END AS id_representantert,
                 h.nombre_tipo_solicitud tiposolicitud_expedientert")
                ->from('sri_expedientert a')
                ->join('sri_solicitud b ', 'a.id_expedientert = b.id_expedientert')
@@ -249,14 +253,10 @@ class Reglamento_model extends CI_Model {
                ->join('sri_expediente_empleado f', 'f.id_expedientert = a.id_expedientert', 'left')
                ->join('sir_empleado h', 'h.id_empleado = f.id_empleado', 'left')
                ->where('a.id_solicitud', $id)
-               ->where('f.id_empleado = (SELECT max(aa.id_empleado) FROM sri_expediente_empleado aa WHERE aa.id_expedientert = a.id_solicitud)')
-               ->where('c.id_representantert = (SELECT max(ab.id_representantert) FROM sri_representantert ab WHERE ab.id_empresart = e.id_empresa)');
-        
+               ->where('f.id_empleado = (SELECT max(aa.id_empleado) FROM sri_expediente_empleado aa WHERE aa.id_expedientert = a.id_solicitud)');
+               
         if (!$old) {
-            $this->db->where('b.ID_REPRESENTANTERT = ( SELECT MAX(c.ID_REPRESENTANTERT) FROM SRI_REPRESENTANTERT c WHERE c.ID_EMPRESART = a.ID_EMPRESART )')
-                   ->where('f.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
-                            where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
-                            where se.id_expedientert = a.id_expedientert ))');
+            $this->db->where('c.id_representantert = (SELECT max(ab.id_representantert) FROM sri_representantert ab WHERE ab.id_empresart = e.id_empresa)');
         }
         // print $this->db->get_compiled_select();
         $query=$this->db->get();
