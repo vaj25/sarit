@@ -58,24 +58,23 @@ class Reglamento extends CI_Controller {
 				'sexo_representantert' => $this->input->post('sexo')
 			);
 
-			$data3 = array(
-				'id_personal' => '',
-				'tiposolicitud_expedientert' => $this->input->post('tipo_solicitud'),
-				'notificacion_solicitud' => '',
-				'fechanotificacion_solicitud' => '',
-				'resolucion_solicitud' => '',
-				'fecharesolucion_solicitud' => '',
-				'fechacrea_solicitud' => date("Y-m-d H:i:s"),
-				'obsergenero_expedientrt' => '',
-				'fecha_entrega_solicitud' => '',
-				'persona_recibe_solicitud' => ''
-			);
-
 			if ("exito" == $this->comisionado_model->insertar_comisionado($data2)) {
 				
 				$id = $this->reglamento_model->insertar_reglamento($data);
 
-				$id2 = $this->solicitud_model->insertar_solicitud($data3);
+				
+				$id2 = $this->solicitud_model->insertar_solicitud(array(
+					'id_expedientert' => $id,
+					'id_tipo_solicitud' => $this->input->post('tipo_solicitud'),
+					'notificacion_solicitud' => '',
+					'fechanotificacion_solicitud' => '',
+					'resolucion_solicud' => '',
+					'fecharesolucion_solicitud' => '',
+					'fechacrea_solicitud' => date("Y-m-d H:i:s"),
+					'obsergenero_solicitud' => '',
+					'fecha_entrega_solicitud' => '',
+					'persona_recibe_solicitud' => ''
+				));
 				
 				$this->expediente_estado_model->insertar_expediente_estado(
 					array(
@@ -86,7 +85,7 @@ class Reglamento extends CI_Controller {
 					'etapa_exp_est' => 1
 				));
 
-				echo $id;
+				echo json_encode(array( 'expediente' => $id , 'solicitud' => $id2 ));
 
 			} else {
 				echo "fracaso";
@@ -98,7 +97,7 @@ class Reglamento extends CI_Controller {
 			
 			$data3['id_tipo_solicitud'] = $this->input->post('tipo_solicitud');
 			
-			$data = $this->reglamento_model->obtener_reglamento( $data['id_expedientert'] )->result_array()[0];
+			$data = $this->reglamento_model->obtener_reglamento( $data3['id_expedientert'] )->result_array()[0];
 
 			$data['id_empresart'] = $this->input->post('establecimiento');
 			$data['tipopersona_expedientert'] = $this->input->post('tipo_solicitante');

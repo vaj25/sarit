@@ -210,14 +210,47 @@ class Reglamento_model extends CI_Model {
 
     public function obtener_reglamentos_documentos($id, $old = TRUE) {
         
-        $this->db->select('')
-               ->from('sri_expedientert a')
-               ->join('sri_representantert b', 'a.id_empresart = b.id_empresart', 'left')
+        $this->db->select("
+                a.id_solicitud,
+                a.id_tipo_solicitud tiposolicitud_expedientert,
+                b.id_expedientert,
+                b.tipopersona_expedientert,
+                c.id_representantert,
+                c.nombres_representantert,
+                c.apellidos_representantert,
+                c.dui_representantert,
+                c.nit_representantert,
+                c.telefono_representantert,
+                c.correo_representantert,
+                c.cargo_representantert,
+                c.sexo_representantert,
+                d.docreglamento_documentort,
+                d.escritura_documentort,
+                d.credencial_documentort,
+                d.poder_documentort,
+                d.dui_documentort,
+                d.matricula_documentort,
+                d.estatutos_documentort,
+                d.acuerdoejec_documentort,
+                d.nominayfuncion_documentort,
+                d.leycreacionescritura_documentort,
+                d.acuerdoejecutivo_documentort,
+                e.id_empresa,
+                CASE f.id_empleado
+                    WHEN NULL THEN ''
+                    ELSE f.id_empleado
+                END AS id_empleado
+                ")
+               ->from('sri_solicitud a')
+               ->join('sri_expedientert b', 'b.id_expedientert = a.id_expedientert')
+               ->join('sri_representantert c', 'c.id_empresart = b.id_empresart', 'left')
                ->join('sri_documentort d', 'd.id_expedientert = a.id_expedientert', 'left')
-               ->join('sge_empresa e', 'e.id_empresa = a.id_empresart')
+               ->join('sge_empresa e', 'e.id_empresa = b.id_empresart')
                ->join('sri_expediente_empleado f', 'f.id_expedientert = a.id_expedientert', 'left')
                ->join('sir_empleado h', 'h.id_empleado = f.id_empleado', 'left')
-               ->where('a.id_expedientert', $id);
+               ->where('a.id_solicitud', $id)
+               ->where('f.id_empleado = (SELECT max(aa.id_empleado) FROM sri_expediente_empleado aa WHERE aa.id_expedientert = a.id_solicitud)')
+               ->where('c.id_representantert = (SELECT max(ab.id_representantert) FROM sri_representantert ab WHERE ab.id_empresart = e.id_empresa)');
         
         if (!$old) {
             $this->db->where('b.ID_REPRESENTANTERT = ( SELECT MAX(c.ID_REPRESENTANTERT) FROM SRI_REPRESENTANTERT c WHERE c.ID_EMPRESART = a.ID_EMPRESART )')
@@ -225,7 +258,7 @@ class Reglamento_model extends CI_Model {
                             where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
                             where se.id_expedientert = a.id_expedientert ))');
         }
-
+        // print $this->db->get_compiled_select();
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
             return  $query;

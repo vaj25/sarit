@@ -22,6 +22,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
       $("#id_expedientert").val(result.id_expedientert);
       $("#id_expediente").val(result.id_expedientert);
+      $("#id_solicitud").val(result.id_solicitud);
+      $("#id_solicitud2").val(result.id_solicitud);
       $("#tipo_solicitante").val(result.tipopersona_expedientert).trigger('change.select2');
 
       $("#reglamento_interno").attr('checked',result.docreglamento_documentort);
@@ -580,6 +582,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
               <input type="hidden" id="band1" name="band1">
               <input type="hidden" id="id_expediente" name="id_expediente">
+              <input type="hidden" id="id_solicitud" name="id_solicitud">
               <input type="hidden" id="id_comisionado" name="id_comisionado">
               <input type="hidden" id="tipo_solicitud" name="tipo_solicitud">
 
@@ -711,6 +714,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
               <input type="hidden" id="band2" name="band2" value="save">
               <input type="hidden" id="id_expedient" name="id_expedient">
+              <input type="hidden" id="id_solicitud2" name="id_solicitud2">
 
               <span class="etiqueta">Documentaci&oacute;n</span>
 
@@ -1003,7 +1007,7 @@ $(function(){
         $.ajax({
             url: "<?php echo site_url(); ?>/reglamento/gestionar_reglamento",
             type: "post",
-            dataType: "html",
+            dataType: "json",
             data: formData,
             cache: false,
             contentType: false,
@@ -1014,8 +1018,10 @@ $(function(){
               swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }else{
               open_form(2);
-              $("#id_expediente").val(res);
-              $("#id_expedient").val(res);
+              $("#id_solicitud").val(res.solicitud);
+              $("#id_solicitud2").val(res.solicitud);
+              $("#id_expedient").val(res.expediente);
+              $("#id_expediente").val(res.expediente);
               $("#band1").val( $("#band").val() );
               $("#band2").val( $("#band").val() );
               if($("#band").val() == "delete"){
