@@ -141,7 +141,7 @@ class Reglamento extends CI_Controller {
 			);
 
 			if ("exito" == $this->comisionado_model->insertar_comisionado($data2)) {
-				echo $this->reglamento_model->editar_reglamento($data);
+				echo json_encode(array( 'expediente' => $this->reglamento_model->editar_reglamento($data), 'solicitud' => $this->input->post('id_solicitud') ));
 			} else {
 				echo "fracaso";
 			}
@@ -187,20 +187,23 @@ class Reglamento extends CI_Controller {
 			}
 			
 			if ("exito" == $res) {
-				$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_expediente'))->result_array()[0];
+				$data = $this->solicitud_model->obtener_solicitud($this->input->post('id_solicitud'))->result_array()[0];
 
-				$data['id_expedientert'] = null;
-				$data['resolucion_expedientert'] = null;
-				$data['fecharesolucion_expedientert'] = 0;
-				$data['archivo_expedientert'] = null;
-				$data['desistido_expedientert'] = null;
-				$data['obsergenero_expedientrt'] = null;
-				$data['contenidoTitulos_expedientert'] = null;
-				$data['notificacion_expedientert'] = null;
-				$data['fechanotificacion_expedientert'] = 0;
-				$data['tiposolicitud_expedientert'] = $this->input->post('tipo_solicitud');
+				$data['id_solicitud'] = null;
+				$data['id_expedientert'] = $this->input->post('id_expediente');
+				$data['resolucion_solicud'] = null;
+				$data['fecharesolucion_solicitud'] = null;
+				$data['fechacrea_solicitud'] = date("Y-m-d H:i:s");
+				$data['desistido_solicitud'] = null;
+				$data['fechasignacion_solicitud'] = null;
+				$data['obsergenero_solicitud'] = null;
+				$data['fecha_entrega_solicitud'] = null;
+				$data['persona_recibe_solicitud'] = null;
+				$data['notificacion_solicitud'] = null;
+				$data['fechanotificacion_solicitud'] = 0;
+				$data['id_tipo_solicitud'] = $this->input->post('tipo_solicitud');
 					
-				$id = $this->reglamento_model->insertar_reglamento($data);
+				$id = $this->solicitud_model->insertar_solicitud($data);
 			
 				$this->expediente_estado_model->insertar_expediente_estado(
 					array(
@@ -211,7 +214,7 @@ class Reglamento extends CI_Controller {
 					'etapa_exp_est' => 1
 				));
 
-				echo $id;
+				echo json_encode(array( 'expediente' => $this->input->post('id_expediente'), 'solicitud' => $id ));
 
 			} else {
 				echo "fracaso";

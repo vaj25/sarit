@@ -398,12 +398,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
-  function modal_acciones(id_reglamento) {
+  function modal_acciones(id_solicitud) {
     $.ajax({
       url: "<?php echo site_url(); ?>/reglamento/modal_acciones",
       type: "post",
       dataType: "html",
-      data: {id : id_reglamento}
+      data: {id : id_solicitud}
     })
     .done(function(res){
       $('#cnt_modal_acciones').html(res);

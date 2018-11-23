@@ -147,6 +147,12 @@ class Reglamento_model extends CI_Model {
                     FROM sri_expediente_estado ca
                     WHERE ca.id_expedientert = b.id_solicitud
                 )')
+                ->where('CASE
+                        WHEN f.id_empleado IS NOT NULL THEN (
+                            f.id_exp_emp = (SELECT max(da.id_exp_emp)
+                            FROM sri_expediente_empleado da
+                            WHERE da.id_expedientert = a.id_expedientert ) )
+                        ELSE TRUE END')
                 ->order_by('d.fecha_exp_est', 'desc')
                 ->order_by('d.id_estadort', 'asc');
         if ($nr) {
@@ -212,7 +218,7 @@ class Reglamento_model extends CI_Model {
 
     }
 
-    public function obtener_reglamentos_documentos($id, $old = TRUE) {
+    public function obtener_reglamentos_documentos($id, $old = FALSE) {
         
         $this->db->select("
                 a.id_solicitud,
@@ -255,7 +261,7 @@ class Reglamento_model extends CI_Model {
                ->where('a.id_solicitud', $id)
                ->where('f.id_empleado = (SELECT max(aa.id_empleado) FROM sri_expediente_empleado aa WHERE aa.id_expedientert = a.id_solicitud)');
                
-        if (!$old) {
+        if ($old) {
             $this->db->where('c.id_representantert = (SELECT max(ab.id_representantert) FROM sri_representantert ab WHERE ab.id_empresart = e.id_empresa)');
         }
         // print $this->db->get_compiled_select();
