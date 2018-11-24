@@ -24,7 +24,21 @@ class Reglamento extends CI_Controller {
 
 	public function gestionar_reglamento() {
 
-		if($this->input->post('band1') == "save"){
+		if($this->input->post('band1') == "save"){ 
+
+			if ($this->input->post('nuevo_expediente') == 1) {
+				$id = $this->reglamento_model->obtener_expediente_cierre($this->input->post('establecimiento'));
+				if ($id) {
+					$this->expediente_estado_model->insertar_expediente_estado(
+						array(
+						'id_estadort' => 11,
+						'id_expedientert' => $id->row->id_solicitud,
+						'fecha_exp_est' => date("Y-m-d H:i:s"),
+						'fecha_ingresar_exp_est' => date("Y-m-d H:i:s"),
+						'etapa_exp_est' => 1
+					));
+				}
+			}
 
 			$data = array(
 				'id_empresart' => $this->input->post('establecimiento'),

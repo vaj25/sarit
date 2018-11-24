@@ -135,7 +135,7 @@ class Reglamento_model extends CI_Model {
                ->join('sri_estadort e', 'e.id_estadort = d.id_estadort')
                ->join('sri_expediente_empleado f', 'f.id_expedientert = b.id_solicitud', 'left')
                ->join('sri_representantert g', 'a.id_empresart = g.id_empresart', 'left')
-               ->join('sri_tipo_solicitud h', 'a.tiposolicitud_expedientert = h.id_tipo_solicitud')
+               ->join('sri_tipo_solicitud h', 'b.id_tipo_solicitud = h.id_tipo_solicitud')
                ->join('sir_empleado i', 'i.id_empleado = f.id_empleado', 'left')
                ->where('b.id_solicitud = (
                     SELECT max(aa.id_solicitud)
@@ -151,7 +151,7 @@ class Reglamento_model extends CI_Model {
                         WHEN f.id_empleado IS NOT NULL THEN (
                             f.id_exp_emp = (SELECT max(da.id_exp_emp)
                             FROM sri_expediente_empleado da
-                            WHERE da.id_expedientert = a.id_expedientert ) )
+                            WHERE da.id_expedientert = b.id_solicitud ) )
                         ELSE TRUE END')
                 ->order_by('d.fecha_exp_est', 'desc')
                 ->order_by('d.id_estadort', 'asc');
@@ -333,6 +333,50 @@ class Reglamento_model extends CI_Model {
 
         if ($query->num_rows() > 0) {
             return $query;
+        }
+        else {
+            return FALSE;
+        }
+    }
+
+    public function obtener_expediente_cierre($id_empresa) {
+        $this->db->select('
+                a.id_expedientert,
+                b.id_solicitud
+                ')
+                ->from('sri_expedientert a')
+                ->join('sri_solicitud b', 'b.id_expedientert = a.id_expedientert')
+                ->join('sri_expediente_estado c', 'c.id_expedientert = b.id_solicitud')
+                ->where('b.id_solicitud = (
+                    SELECT
+                        MAX(aa.id_solicitud)
+                    FROM
+                        sri_solicitud aa
+                    WHERE
+                        aa.id_expedientert = a.id_expedientert )')
+                ->where('c.id_expediente_estado = (
+                    SELECT
+                        MAX(ba.id_expediente_estado)
+                    FROM
+                        sri_expediente_estado ba
+                    WHERE
+                        ba.id_expedientert = b.id_solicitud )')
+                ->where('( c.id_estadort <> 3 OR c.id_estadort <> 9 )')
+                ->where('a.id_empresart', $id);
+        $sql =  '(' . $this->db->get_compiled_select() . ') z';
+        
+        $this->db->select('max(z.id_expedientert)')
+                ->where($sql);
+
+        $sql =  '(' . $this->db->get_compiled_select() . ')';
+
+        $this->db->select('max(y.id_solicitud)')
+                ->from('sri_solicitud y')
+                ->where('y.id_expedientert', $sql);
+        
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return  $query;
         }
         else {
             return FALSE;
