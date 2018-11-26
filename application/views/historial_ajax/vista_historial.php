@@ -87,7 +87,7 @@
                                 $i = 1;
                                 foreach ($historial->result() as $fila) {
 
-                                    $array = array($fila->id_expedientert);
+                                    $array = array($fila->id_solicitud);
                                     echo "<tr>";
                                         echo "<td>".$i."</td>";
                                         echo "<td>".$fila->nombre_representante."</td>";

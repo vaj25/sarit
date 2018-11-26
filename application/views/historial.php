@@ -75,12 +75,12 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     });
   }
 
-  function detalle(id_reglamento) {
+  function detalle(id_solicitud) {
     $.ajax({
       url: "<?php echo site_url(); ?>/historial/ver_detalle",
       type: "post",
       dataType: "html",
-      data: {id : id_reglamento}
+      data: {id : id_solicitud}
     })
     .done(function(res){
       $('#cnt_actions').html(res);

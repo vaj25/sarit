@@ -137,16 +137,10 @@ class Reglamento_model extends CI_Model {
                ->join('sri_representantert g', 'a.id_empresart = g.id_empresart', 'left')
                ->join('sri_tipo_solicitud h', 'b.id_tipo_solicitud = h.id_tipo_solicitud')
                ->join('sir_empleado i', 'i.id_empleado = f.id_empleado', 'left')
-               ->where('b.id_solicitud = (
-                    SELECT max(aa.id_solicitud)
-                    FROM sri_solicitud aa
-                    WHERE aa.id_expedientert = a.id_expedientert
-                )')
-               ->where('d.id_expediente_estado = (
-                    SELECT max(ca.id_expediente_estado)
-                    FROM sri_expediente_estado ca
-                    WHERE ca.id_expedientert = b.id_solicitud
-                )')
+               ->join('( SELECT max(aa.id_solicitud) id_solicitud, max(ab.id_expediente_estado) id_expediente_estado
+                        FROM sri_solicitud aa
+                        JOIN sri_expediente_estado ab ON ab.id_expedientert = aa.id_solicitud
+                        GROUP BY aa.id_expedientert ) j', 'j.id_solicitud = b.id_solicitud AND j.id_expediente_estado = d.id_expediente_estado')
                 ->where('CASE
                         WHEN f.id_empleado IS NOT NULL THEN (
                             f.id_exp_emp = (SELECT max(da.id_exp_emp)
@@ -183,7 +177,8 @@ class Reglamento_model extends CI_Model {
         $this->db->select("
                 a.id_expedientert,
                 a.numeroexpediente_anterior,
-	            a.numexpediente_expedientert,
+                a.numexpediente_expedientert,
+                b.id_solicitud,
                 c.nombre_empresa,
                 d.id_empleado,
                 CASE
@@ -347,20 +342,10 @@ class Reglamento_model extends CI_Model {
                 ->from('sri_expedientert a')
                 ->join('sri_solicitud b', 'b.id_expedientert = a.id_expedientert')
                 ->join('sri_expediente_estado c', 'c.id_expedientert = b.id_solicitud')
-                ->where('b.id_solicitud = (
-                    SELECT
-                        MAX(aa.id_solicitud)
-                    FROM
-                        sri_solicitud aa
-                    WHERE
-                        aa.id_expedientert = a.id_expedientert )')
-                ->where('c.id_expediente_estado = (
-                    SELECT
-                        MAX(ba.id_expediente_estado)
-                    FROM
-                        sri_expediente_estado ba
-                    WHERE
-                        ba.id_expedientert = b.id_solicitud )')
+                ->join('( SELECT max(aa.id_solicitud) id_solicitud, max(ab.id_expediente_estado) id_expediente_estado
+                        FROM sri_solicitud aa
+                        JOIN sri_expediente_estado ab ON ab.id_expedientert = aa.id_solicitud
+                        GROUP BY aa.id_expedientert ) d', 'd.id_solicitud = b.id_solicitud AND d.id_expediente_estado = c.id_expediente_estado')
                 ->where('( c.id_estadort <> 3 OR c.id_estadort <> 9 )')
                 ->where('a.id_empresart', $id);
         $sql =  '(' . $this->db->get_compiled_select() . ') z';

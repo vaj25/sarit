@@ -17,11 +17,11 @@ class Expediente_estado_model extends CI_Model {
         }
     }
 
-    public function obtener_reglamento_estados($id_exp) {
+    public function obtener_reglamento_estados($id_sol) {
         $this->db->select('')
                ->from('sri_expediente_estado a ')
                ->join('sri_estadort b', 'a.id_estadort = b.id_estadort')
-               ->where('a.id_expedientert', $id_exp);
+               ->where('a.id_expedientert', $id_sol);
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
             return $query;
