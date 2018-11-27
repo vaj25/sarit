@@ -16,7 +16,7 @@ class Historial extends CI_Controller {
 	}
     
 	public function tabla_reglamento(){
-		$data['reglamentos'] = $this->reglamento_model->obtener_reglamentos(false, $this->input->get('nr'), $this->input->get('letra'));
+		$data['reglamentos'] = $this->reglamento_model->obtener_reglamentos($this->input->get('nr'), false, $this->input->get('letra'));
 		$this->load->view('historial_ajax/tabla_historial', $data);
 	}
 

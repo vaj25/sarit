@@ -543,7 +543,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 </script>
 <style type="text/css">
-    #modal_loading.modal {
+#modal_loading.modal {
   text-align: center;
   padding: 0!important;
 }
