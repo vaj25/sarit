@@ -477,54 +477,26 @@ class Expediente_estado_model extends CI_Model {
 
     public function obtener_asignados_reporte($data, $empleado = FALSE) {
 
-        $fecha_ultima = new DateTime();
-
-        if($data["tipo"] == "mensual"){
-
-            $fecha_ultima->modify('last day of '. date('F', mktime(0, 0, 0, $data["value"], 1, $data["anio"])) .' '. $data["anio"]);
-
-        }else if($data["tipo"] == "trimestral"){
-
-            $tmfin = (intval($data["value"])*3);
-            $fecha_ultima->modify('last day of '. date('F', mktime(0, 0, 0, $tmfin, 1, $data["anio"])) .' '. $data["anio"]);
-
-        }else if($data["tipo"] == "semestral"){
-
-            $smfin = (intval($data["value"])*6);
-            $fecha_ultima->modify('last day of '. date('F', mktime(0, 0, 0, $tmfin, 1, $data["anio"])) .' '. $data["anio"]);
-
-        }else if($data["tipo"] == "periodo"){
-
-            $fecha_ultima->modify('last day of '. date('F', $data["value2"]) .' '. date('Y', $data["value2"]));
-
-        }else{
-
-            $this->db->where('YEAR(a.fecha_ingresar_exp_est)', $data["anio"]);
-
-        }
-
         $this->db->select("
-                    a.fecha_ingresar_exp_est, 
-                    b.estado_estadort, 
-                    c.numexpediente_expedientert, 
-                    c.fechacrea_expedientert, 
-                    d.nombre_empresa, 
+                    a.fecha_ingresar_exp_est,
+                    b.estado_estadort,
+                    g.numexpediente_expedientert,
+                    g.fechacrea_expedientert,
+                    d.nombre_empresa,
                     e.seccion_catalogociiu,
-                    DATEDIFF(a.fecha_ingresar_exp_est, c.fechacrea_expedientert) servicio")
+                    DATEDIFF(a.fecha_ingresar_exp_est,
+                    g.fechacrea_expedientert) servicio")
 				->from('sri_expediente_estado a')
                 ->join('sri_estadort b', 'b.id_estadort = a.id_estadort')
-                ->join('sri_expedientert c', 'c.id_expedientert = a.id_expedientert')
-                ->join('sge_empresa d', 'c.id_empresart = d.id_empresa')
+                ->join('sri_solicitud c', 'c.id_solicitud = a.id_expedientert')
+                ->join('sri_expedientert g', 'g.id_expedientert = c.id_solicitud')
+                ->join('sge_empresa d', 'g.id_empresart = d.id_empresa')
                 ->join('sge_catalogociiu e', 'e.id_catalogociiu = d.id_catalogociiu')
-                ->join('sri_expediente_empleado f', 'f.id_expedientert = c.id_expedientert')
-                ->where('f.id_empleado = (
-                        SELECT af.id_empleado
-                        FROM sri_expediente_empleado af
-                        WHERE af.id_exp_emp = (
-                            SELECT MAX(aaf.id_exp_emp)
-                            FROM sri_expediente_empleado aaf
-                            WHERE aaf.id_expedientert = c.id_expedientert AND aaf.fecha_exp_emp <= "'.$fecha_ultima->format('Y-m-d').'"))')
-                ->group_by('a.id_expedientert')
+                ->join('sri_expediente_empleado f', 'f.id_expedientert = c.id_expedientert', 'left')
+                ->join('( SELECT max(aa.id_solicitud) id_solicitud, max(ab.id_expediente_estado) id_expediente_estado
+                            FROM sri_solicitud aa
+                            JOIN sri_expediente_estado ab ON ab.id_expedientert = aa.id_solicitud
+                            GROUP BY aa.id_expedientert ) h', 'h.id_solicitud = c.id_solicitud AND h.id_expediente_estado = a.id_expediente_estado')
                 ->order_by('b.id_estadort DESC');
 
         if($data["tipo"] == "mensual"){
@@ -545,7 +517,34 @@ class Expediente_estado_model extends CI_Model {
         }
 
         if ( $data["empleado"] != '' ) {
-            $this->db->where('f.id_empleado', $data["empleado"]);
+
+            $fecha_ultima = new DateTime();
+
+            if($data["tipo"] == "mensual"){
+
+                $fecha_ultima->modify('last day of '. date('F', mktime(0, 0, 0, $data["value"], 1, $data["anio"])) .' '. $data["anio"]);
+
+            }else if($data["tipo"] == "trimestral"){
+
+                $tmfin = (intval($data["value"])*3);
+                $fecha_ultima->modify('last day of '. date('F', mktime(0, 0, 0, $tmfin, 1, $data["anio"])) .' '. $data["anio"]);
+
+            }else if($data["tipo"] == "semestral"){
+
+                $smfin = (intval($data["value"])*6);
+                $fecha_ultima->modify('last day of '. date('F', mktime(0, 0, 0, $tmfin, 1, $data["anio"])) .' '. $data["anio"]);
+
+            }else if($data["tipo"] == "periodo"){
+
+                $fecha_ultima->modify('last day of '. date('F', $data["value2"]) .' '. date('Y', $data["value2"]));
+
+            }
+
+            $this->db->where('f.id_empleado', $data["empleado"])
+                    ->join('( SELECT max(ac.id_exp_emp) id_expediente_empleado, ac.fecha_exp_emp
+                                FROM sri_solicitud aa
+                                JOIN sri_expediente_empleado ac ON ac.id_expedientert = aa.id_solicitud
+                                GROUP BY aa.id_expedientert) i', 'i.id_expediente_empleado = f.id_exp_emp AND i.fecha_exp_emp <= "'.$fecha_ultima->format('Y-m-d').'"');
         }
 
         $sql = $this->db->get_compiled_select();
@@ -562,8 +561,7 @@ class Expediente_estado_model extends CI_Model {
                 'expedientes' => $query->result(),
                 'duracion' => $query2->row()
             );
-		}
-		else {
+		} else {
 			return FALSE;
 		}
 
