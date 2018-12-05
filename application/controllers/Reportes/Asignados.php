@@ -15,7 +15,7 @@ class Asignados extends CI_Controller {
 		$this->load->view('templates/footer');
     }
 
-    public function asignados_report(){
+  public function asignados_report(){
 		$data = array(
 			'anio' => $this->input->post('anio'),
 			'tipo' => $this->input->post('tipo'),
@@ -37,7 +37,7 @@ class Asignados extends CI_Controller {
 			echo $body;
 		}else if($this->input->post('report_type') == "pdf"){
 			$this->load->library('mpdf');
-			$this->mpdf=new mPDF('c','A4','10','Arial',10,10,35,17,3,9);
+			$this->mpdf=new mPDF('c','letter','10','Arial',10,10,35,17,3,9);
 
 		 	$header = head_table_html($titles, 'pdf');
 
@@ -57,11 +57,11 @@ class Asignados extends CI_Controller {
 		}else if($this->input->post('report_type') == "excel"){
 			$this->asignados_excel($data);
 		}
-    }
+  }
     
-    public function asignados_html($data, $empleado = FALSE) {
+  public function asignados_html($data, $empleado = FALSE) {
 
-        return $this->load->view(
+    return $this->load->view(
 			'reportes/tabla_asignados',
 			$this->expediente_estado_model->obtener_asignados_reporte($data),
 			true

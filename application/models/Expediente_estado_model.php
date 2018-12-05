@@ -17,11 +17,11 @@ class Expediente_estado_model extends CI_Model {
         }
     }
 
-    public function obtener_reglamento_estados($id_exp) {
+    public function obtener_reglamento_estados($id_sol) {
         $this->db->select('')
                ->from('sri_expediente_estado a ')
                ->join('sri_estadort b', 'a.id_estadort = b.id_estadort')
-               ->where('a.id_expedientert', $id_exp);
+               ->where('a.id_expedientert', $id_sol);
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
             return $query;
@@ -47,73 +47,45 @@ class Expediente_estado_model extends CI_Model {
     }
 
     public function obtener_entradas_reporte($data, $empleado = FALSE) {
+
+        $data["empleado"] = $empleado;
+
+        ini_set('max_execution_time', 0); 
+
         /* Proyectos de Reglamentos Internos de Trabajo pendientes del mes anterior */
-
-        $this->db->select('MAX(eee.id_expediente_estado)')
-                ->from('sri_expediente_estado eee')
-                ->where('eee.id_expedientert = e.id_expedientert')
-                ->where('eee.id_estadort <> 1')
-                ->group_by('eee.id_expedientert');
-
-        if($data["tipo"] == "mensual"){
-            $this->db->where('YEAR(eee.fecha_exp_est) <=', $data["anio"])
-                    ->where('MONTH(eee.fecha_exp_est) <', $data["value"]);
-        }else if($data["tipo"] == "trimestral"){
-            $tmfin = (intval($data["value"])*3);	
-            $tminicio = $tmfin-2;
-            print('1-'.$tminicio.'-'.$data["anio"]);
-            $this->db->where('eee.fecha_exp_est <', $data["anio"].'-'.$tminicio.'-'.'01-');
-        }else if($data["tipo"] == "semestral"){
-            $smfin = (intval($data["value"])*6);	
-            $sminicio = $smfin-5;
-            $this->db->where('YEAR(eee.fecha_exp_est) <', $data["anio"].'-'.$sminicio.'-'.'01-');
-        }else if($data["tipo"] == "periodo"){
-            $this->db->where("eee.fecha_exp_est < ", $data["value"]);
-        }else{
-            $this->db->where('YEAR(eee.fecha_exp_est) <', $data["anio"]);
-        }
-
-        $query_interna = '( ' . $this->db->get_compiled_select() . ' )';
-
-        $this->db->select('e.id_expedientert')
-                ->from('sri_expedientert e')
-                ->join('sri_expediente_estado ee', 'ee.id_expedientert = e.id_expedientert')
-                ->where('ee.id_expediente_estado = ' . $query_interna);
-
-        $query_interna = '( ' . $this->db->get_compiled_select() . ' )';
         
         $this->db->select("'Proyectos de Reglamentos Internos de Trabajo pendientes del mes anterior' titulo,
                     count(*) cantidad")
 				->from('sri_expedientert a')
-                ->join('sri_expediente_estado b', 'a.id_expedientert = b.id_expedientert')
-                ->join('sri_expediente_empleado c', 'a.id_expedientert = c.id_expedientert')
-                ->where('a.id_expedientert NOT IN ' . $query_interna)
-                ->where('c.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
-                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
-                        where se.id_expedientert = a.id_expedientert ))')
-                ->where('b.etapa_exp_est <> 4')
-                ->where('b.id_estadort = 1');
+                ->join('sri_solicitud b', 'b.id_expedientert = a.id_expedientert')
+                ->join('sri_expediente_estado c', 'c.id_expedientert = b.id_solicitud')
+                ->join('sri_expediente_empleado d', 'd.id_expedientert = b.id_solicitud', 'left')
+                ->join('(SELECT max(aa.id_solicitud) id_solicitud, max(ab.id_expediente_estado) id_expediente_estado
+                        FROM sri_solicitud aa
+                        JOIN sri_expediente_estado ab ON ab.id_expedientert = aa.id_solicitud
+                        GROUP BY aa.id_expedientert ) e', 'e.id_solicitud = b.id_solicitud AND e.id_expediente_estado = c.id_expediente_estado')
+                ->where('c.id_estadort = 1');
                 
         if ($empleado) {
-            $this->db->where('c.id_empleado', $empleado);
+            $this->buscar_empleado('d', 'f', $data);
         }
 
         if($data["tipo"] == "mensual"){
-            $this->db->where('YEAR(b.fecha_exp_est) <=', $data["anio"])
-                    ->where('MONTH(b.fecha_exp_est) <', $data["value"]);
+            $this->db->where('YEAR(c.fecha_exp_est) <=', $data["anio"])
+                    ->where('MONTH(c.fecha_exp_est) <', $data["value"]);
         }else if($data["tipo"] == "trimestral"){
             $tmfin = (intval($data["value"])*3);	
             $tminicio = $tmfin-2;
             print('1-'.$tminicio.'-'.$data["anio"]);
-            $this->db->where('b.fecha_exp_est <', $data["anio"].'-'.$tminicio.'-'.'01-');
+            $this->db->where('c.fecha_exp_est <', $data["anio"].'-'.$tminicio.'-'.'01-');
         }else if($data["tipo"] == "semestral"){
             $smfin = (intval($data["value"])*6);	
             $sminicio = $smfin-5;
-            $this->db->where('YEAR(b.fecha_exp_est) <', $data["anio"].'-'.$sminicio.'-'.'01-');
+            $this->db->where('YEAR(c.fecha_exp_est) <', $data["anio"].'-'.$sminicio.'-'.'01-');
         }else if($data["tipo"] == "periodo"){
-            $this->db->where("b.fecha_exp_est < ", $data["value"]);
+            $this->db->where("c.fecha_exp_est < ", $data["value"]);
         }else{
-            $this->db->where('YEAR(b.fecha_exp_est) <', $data["anio"]);
+            $this->db->where('YEAR(c.fecha_exp_est) <', $data["anio"]);
         }
 
         $sql[] = '('.$this->db->get_compiled_select().')';
@@ -122,20 +94,16 @@ class Expediente_estado_model extends CI_Model {
 
         $this->db->select("aa.numexpediente_expedientert")
 				->from('sri_expedientert aa')
-                ->join('sri_expediente_estado ab', 'ab.id_expedientert = aa.id_expedientert')
-                ->join('sri_expediente_empleado ac', 'ac.id_expedientert = aa.id_expedientert')
-                ->join('sir_empleado ad', 'ad.id_empleado = ac.id_empleado')
+                ->join('sri_solicitud ab', 'ab.id_expedientert = aa.id_expedientert')
+                ->join('sri_expediente_estado ac', 'ac.id_expedientert = ab.id_solicitud')
+                ->join('sri_expediente_empleado ad', 'ad.id_expedientert = ab.id_solicitud', 'left')
+                ->join('sir_empleado ae', 'ae.id_empleado = ad.id_empleado', 'left')
                 ->where("aa.tiposolicitud_expedientert", 1)
-                //->where('(ab.id_estadort = 1 or ab.id_estadort = 3)')
-                // ->where('ad.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
-                //         where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
-                //         where se.id_expedientert = aa.id_expedientert ))')
-                ->group_by('aa.numexpediente_expedientert')
                 ->order_by('aa.numexpediente_expedientert desc')
-                ->order_by('ab.fecha_exp_est asc');
+                ->order_by('ac.fecha_exp_est asc');
 
         if ($empleado) {
-            $this->db->where('ad.id_empleado', $empleado);
+            $this->buscar_empleado('ad', 'af', $data);
         }
         
         if($data["tipo"] == "mensual"){
@@ -165,48 +133,42 @@ class Expediente_estado_model extends CI_Model {
 
         /* Reglamentos Internos de Trabajo Recibidos con Correcciones */
 
-        $where = '';
+        $this->db->select("id_expedientert")
+                ->from('sri_expediente_estado aab')
+                ->where("aab.id_estadort", 2);
 
         if($data["tipo"] == "mensual"){
-            $where = "AND YEAR(ab.fecha_exp_est) <= '". $data["anio"] . "'" .
-                     "AND MONTH(ab.fecha_exp_est) < '" . $data["value"] . "'";
+            $this->db->where('YEAR(aab.fecha_exp_est)', $data["anio"])
+                    ->where('MONTH(aab.fecha_exp_est)', $data["value"]);
         }else if($data["tipo"] == "trimestral"){
-            $tmfin = (intval($data["value"])*3);	
-            $tminicio = $tmfin-2;
-            $where = "AND ab.fecha_exp_est < '" . $data["anio"] . "'-'" . $tminicio . "'-" . "'01'";
+            $tmfin = (intval($data["value"])*3);	$tminicio = $tmfin-2;
+            $this->db->where('YEAR(aab.fecha_exp_est)', $data["anio"])
+                ->where("MONTH(aab.fecha_exp_est) BETWEEN '".$tminicio."' AND '".$tmfin."'");
         }else if($data["tipo"] == "semestral"){
-            $smfin = (intval($data["value"])*6);	
-            $sminicio = $smfin-5;
-            $where = "AND YEAR(ab.fecha_exp_est) < '" . $data["anio"] . "'-'" . $sminicio . "'-" . "'01'";
+            $smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
+            $this->db->where('YEAR(aab.fecha_exp_est)', $data["anio"])
+                ->where("MONTH(aab.fecha_exp_est) BETWEEN '".$sminicio."' AND '".$smfin."'");
         }else if($data["tipo"] == "periodo"){
-            $where = "AND ab.fecha_exp_est < '" . $data["value"] . "'";
+            $this->db->where("aab.fecha_exp_est BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
         }else{
-            $where = "AND YEAR(ab.fecha_exp_est) < '" . $data["anio"] . "'";
+            $this->db->where('YEAR(aab.fecha_exp_est)', $data["anio"]);
         }
+
+        $query_interna = '('.$this->db->get_compiled_select().') af';
 
         $this->db->select("aa.numexpediente_expedientert")
 				->from('sri_expedientert aa')
-                ->join('sri_expediente_estado ab', 'ab.id_expedientert = aa.id_expedientert')
-                ->join('sri_expediente_empleado ac', 'ac.id_expedientert = aa.id_expedientert')
-                ->join('sir_empleado ad', 'ad.id_empleado = ac.id_empleado')
+                ->join('sri_solicitud ab', 'ab.id_expedientert = aa.id_expedientert')
+                ->join('sri_expediente_estado ac', 'ac.id_expedientert = ab.id_solicitud')
+                ->join('sri_expediente_empleado ad', 'ad.id_expedientert = ab.id_solicitud', 'left')
+                ->join('sir_empleado ae', 'ae.id_empleado = ad.id_empleado', 'left')
+                ->join($query_interna, 'af.id_expedientert = ab.id_solicitud')
                 ->where("aa.tiposolicitud_expedientert", 1)
-                ->where('( 
-                    SELECT id_expedientert
-                    FROM sri_expediente_estado aab
-                    WHERE aab.id_expedientert = aa.id_expedientert
-                    AND aab.id_estadort = 2
-                    ' . $where . '
-                    GROUP BY aab.id_expedientert, aab.id_estadort
-                    ORDER BY aab.id_expediente_estado DESC ) IS NOT NULL')
-                ->where('ad.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
-                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
-                        where se.id_expedientert = aa.id_expedientert ))')
-                ->group_by('aa.numexpediente_expedientert')
                 ->order_by('aa.numexpediente_expedientert desc')
-                ->order_by('ab.fecha_exp_est asc');
+                ->order_by('ac.fecha_exp_est asc');
 
         if ($empleado) {
-            $this->db->where('ad.id_empleado', $empleado);
+            $this->buscar_empleado('ad', 'ag', $data);
         }
 
         if($data["tipo"] == "mensual"){
@@ -238,19 +200,16 @@ class Expediente_estado_model extends CI_Model {
 
         $this->db->select("aa.numexpediente_expedientert")
 				->from('sri_expedientert aa')
-                ->join('sri_expediente_estado ab', 'ab.id_expedientert = aa.id_expedientert')
-                ->join('sri_expediente_empleado ac', 'ac.id_expedientert = aa.id_expedientert')
-                ->join('sir_empleado ad', 'ad.id_empleado = ac.id_empleado')
+                ->join('sri_solicitud ab', 'ab.id_expedientert = aa.id_expedientert')
+                ->join('sri_expediente_estado ac', 'ac.id_expedientert = ab.id_solicitud')
+                ->join('sri_expediente_empleado ad', 'ad.id_expedientert = ab.id_solicitud', 'left')
+                ->join('sir_empleado ae', 'ae.id_empleado = ad.id_empleado', 'left')
                 ->where("(aa.tiposolicitud_expedientert = 2 or aa.tiposolicitud_expedientert = 3)")
-                ->where('ad.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
-                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
-                        where se.id_expedientert = aa.id_expedientert ))')
-                ->group_by('aa.numexpediente_expedientert')
                 ->order_by('aa.numexpediente_expedientert desc')
-                ->order_by('ab.fecha_exp_est asc');
+                ->order_by('ac.fecha_exp_est asc');
 
         if ($empleado) {
-            $this->db->where('ad.id_empleado', $empleado);
+            $this->buscar_empleado('ad', 'af', $data);
         }
         
         if($data["tipo"] == "mensual"){
@@ -291,64 +250,39 @@ class Expediente_estado_model extends CI_Model {
     }
 
     public function obtener_resultados_reporte($data, $empleado = FALSE) {
-       /* Reglamentos Internos de Trabajo Recibidos (nuevos) */
+        $data["empleado"] = $empleado;
+       
+        /* Reglamentos Internos de Trabajo Recibidos (nuevos) */
 
-       $this->db->select("aa.numexpediente_expedientert, ab.id_estadort")
-				->from('sri_expedientert aa')
-				->join('sri_expediente_estado ab', 'ab.id_expedientert = aa.id_expedientert')
-				->join('sri_expediente_empleado ac', 'ac.id_expedientert = aa.id_expedientert')
-                ->join('sir_empleado ad', 'ad.id_empleado = ac.id_empleado')
-                ->where('aa.id_expedientert in (
-                    select max(aaa.id_expedientert)
-                    from sri_expedientert aaa
-                    join sri_expediente_estado aab on aab.id_expedientert = aaa.id_expedientert
-                    where aab.id_expediente_estado = (
-                            select eea.id_expediente_estado
-                            from sri_expedientert ea
-                            join sri_expediente_estado eea on eea.id_expedientert = ea.id_expedientert
-                            join sri_estadort esa on esa.id_estadort = eea.id_estadort
-                            where ea.id_expedientert = aaa.id_expedientert
-                                and eea.id_expediente_estado =(
-                                    select max(eeea.id_expediente_estado)
-                                    from sri_expediente_estado eeea
-                                    where eeea.id_expedientert = ea.id_expedientert))
-                    group by aaa.numexpediente_expedientert )')
-                ->where('ad.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
-                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
-                        where se.id_expedientert = aa.id_expedientert ))')
-                ->where('ab.id_expediente_estado = (
-                        select ee.id_expediente_estado
-                        from sri_expedientert e
-                        join sri_expediente_estado ee on ee.id_expedientert = e.id_expedientert
-                        join sri_estadort es on es.id_estadort = ee.id_estadort
-                        where e.id_expedientert = aa.id_expedientert
-                        and ee.id_expediente_estado =(
-                            select max(eee.id_expediente_estado)
-                            from sri_expediente_estado eee
-                            where eee.id_expedientert = e.id_expedientert))')
-                ->group_by('ab.id_estadort')
-                ->group_by('aa.numexpediente_expedientert')
-                ->order_by('ab.fecha_exp_est asc');
+       $this->db->select("s.id_expedientert, f.id_estadort")
+				->from('sri_solicitud s')
+                ->join('sri_expediente_estado f', 'f.id_expedientert = s.id_solicitud')
+                ->join('sri_expediente_empleado g', 'g.id_expedientert = s.id_solicitud', 'left')
+				->join('( SELECT max(aa.id_solicitud) id_solicitud, max(ab.id_expediente_estado) id_expediente_estado
+                        FROM sri_solicitud aa
+                        JOIN sri_expediente_estado ab ON ab.id_expedientert = aa.id_solicitud
+                        GROUP BY aa.id_expedientert ) b', 's.id_solicitud = b.id_solicitud AND f.id_expediente_estado = b.id_expediente_estado')
+                ;
 
         if ($empleado) {
-            $this->db->where('ad.id_empleado', $empleado);
+            $this->buscar_empleado('g', 'h', $data);
         }
         
         if($data["tipo"] == "mensual"){
-            $this->db->where('YEAR(ab.fecha_exp_est)', $data["anio"])
-                    ->where('MONTH(ab.fecha_exp_est)', $data["value"]);
+            $this->db->where('YEAR(f.fecha_exp_est)', $data["anio"])
+                    ->where('MONTH(f.fecha_exp_est)', $data["value"]);
         }else if($data["tipo"] == "trimestral"){
             $tmfin = (intval($data["value"])*3);	$tminicio = $tmfin-2;
-            $this->db->where('YEAR(ab.fecha_exp_est)', $data["anio"])
-                ->where("MONTH(ab.fecha_exp_est) BETWEEN '".$tminicio."' AND '".$tmfin."'");
+            $this->db->where('YEAR(f.fecha_exp_est)', $data["anio"])
+                ->where("MONTH(f.fecha_exp_est) BETWEEN '".$tminicio."' AND '".$tmfin."'");
         }else if($data["tipo"] == "semestral"){
             $smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
-            $this->db->where('YEAR(ab.fecha_exp_est)', $data["anio"])
-                ->where("MONTH(ab.fecha_exp_est) BETWEEN '".$sminicio."' AND '".$smfin."'");
+            $this->db->where('YEAR(f.fecha_exp_est)', $data["anio"])
+                ->where("MONTH(f.fecha_exp_est) BETWEEN '".$sminicio."' AND '".$smfin."'");
         }else if($data["tipo"] == "periodo"){
-            $this->db->where("ab.fecha_exp_est BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
+            $this->db->where("f.fecha_exp_est BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
         }else{
-            $this->db->where('YEAR(ab.fecha_exp_est)', $data["anio"]);
+            $this->db->where('YEAR(f.fecha_exp_est)', $data["anio"]);
         }
 
         $query_interna = '(select count(*) cant from ('.$this->db->get_compiled_select().') b where b.id_estadort = a.id_estadort) cantidad';
@@ -403,63 +337,41 @@ class Expediente_estado_model extends CI_Model {
 
         /* Reformas de Reglamentos Internos Aprobados */
 
-        $this->db->select("aa.numexpediente_expedientert, ab.id_estadort")
-				->from('sri_expedientert aa')
-                ->join('sri_expediente_estado ab', 'ab.id_expedientert = aa.id_expedientert')
-                ->join('sri_expediente_empleado ac', 'ac.id_expedientert = aa.id_expedientert')
-                ->join('sir_empleado ad', 'ad.id_empleado = ac.id_empleado')
-                ->where('(aa.tiposolicitud_expedientert = "Reforma Parcial" or aa.tiposolicitud_expedientert = "Reforma Total")')
-                ->where('ab.id_estadort', '3')
-                ->where('aa.id_expedientert in (
-                    select max(aaa.id_expedientert)
-                    from sri_expedientert aaa
-                    join sri_expediente_estado aab on aab.id_expedientert = aaa.id_expedientert
-                    where aab.id_expediente_estado = (
-                            select eea.id_expediente_estado
-                            from sri_expedientert ea
-                            join sri_expediente_estado eea on eea.id_expedientert = ea.id_expedientert
-                            join sri_estadort esa on esa.id_estadort = eea.id_estadort
-                            where ea.id_expedientert = aaa.id_expedientert
-                                and eea.id_expediente_estado =(
-                                    select max(eeea.id_expediente_estado)
-                                    from sri_expediente_estado eeea
-                                    where eeea.id_expedientert = ea.id_expedientert))
-                    group by aaa.numexpediente_expedientert )')
-                ->where('ad.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
-                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
-                        where se.id_expedientert = aa.id_expedientert ))')
-                ->where('ab.id_expediente_estado = (
-                    select ee.id_expediente_estado from sri_expedientert e
-                    join sri_expediente_estado ee on ee.id_expedientert = e.id_expedientert
-                    join sri_estadort es on es.id_estadort = ee.id_estadort
-                    where e.id_expedientert = aa.id_expedientert
-                        and ee.id_expediente_estado =(
-                        select max(eee.id_expediente_estado)
-                        from sri_expediente_estado eee
-                        where eee.id_expedientert = e.id_expedientert))')
-                ->group_by('aa.numexpediente_expedientert')
-                ->order_by('aa.numexpediente_expedientert desc')
-                ->order_by('ab.fecha_exp_est asc');
+        $this->db->select("a.numexpediente_expedientert,
+                    c.id_estadort,
+                    c.fecha_exp_est")
+				->from('sri_expedientert a')
+                ->join('sri_solicitud b', 'a.id_expedientert = b.id_solicitud')
+                ->join('sri_expediente_estado c', 'c.id_expedientert = b.id_solicitud')
+                ->join('( SELECT max(aa.id_solicitud) id_solicitud, max(ab.id_expediente_estado) id_expediente_estado
+                        FROM sri_solicitud aa
+                        JOIN sri_expediente_estado ab ON ab.id_expedientert = aa.id_solicitud
+                        GROUP BY aa.id_expedientert ) d', 'd.id_solicitud = b.id_solicitud AND d.id_expediente_estado = c.id_expediente_estado')
+                ->join('sri_expediente_empleado e', 'e.id_expedientert = b.id_solicitud', 'left')
+                ->where('(b.id_tipo_solicitud = 2 OR b.id_tipo_solicitud = 3)')
+                ->where('c.id_estadort', '3')
+                ->order_by('a.numexpediente_expedientert desc')
+                ->order_by('c.fecha_exp_est asc');
 
         if ($empleado) {
-            $this->db->where('ad.id_empleado', $empleado);
+            $this->buscar_empleado('e', 'f', $data);
         }
         
         if($data["tipo"] == "mensual"){
-            $this->db->where('YEAR(ab.fecha_exp_est)', $data["anio"])
-                    ->where('MONTH(ab.fecha_exp_est)', $data["value"]);
+            $this->db->where('YEAR(c.fecha_exp_est)', $data["anio"])
+                    ->where('MONTH(c.fecha_exp_est)', $data["value"]);
         }else if($data["tipo"] == "trimestral"){
             $tmfin = (intval($data["value"])*3);	$tminicio = $tmfin-2;
-            $this->db->where('YEAR(ab.fecha_exp_est)', $data["anio"])
-                ->where("MONTH(ab.fecha_exp_est) BETWEEN '".$tminicio."' AND '".$tmfin."'");
+            $this->db->where('YEAR(c.fecha_exp_est)', $data["anio"])
+                ->where("MONTH(c.fecha_exp_est) BETWEEN '".$tminicio."' AND '".$tmfin."'");
         }else if($data["tipo"] == "semestral"){
             $smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
-            $this->db->where('YEAR(ab.fecha_exp_est)', $data["anio"])
-                ->where("MONTH(ab.fecha_exp_est) BETWEEN '".$sminicio."' AND '".$smfin."'");
+            $this->db->where('YEAR(c.fecha_exp_est)', $data["anio"])
+                ->where("MONTH(c.fecha_exp_est) BETWEEN '".$sminicio."' AND '".$smfin."'");
         }else if($data["tipo"] == "periodo"){
-            $this->db->where("ab.fecha_exp_est BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
+            $this->db->where("c.fecha_exp_est BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
         }else{
-            $this->db->where('YEAR(ab.fecha_exp_est)', $data["anio"]);
+            $this->db->where('YEAR(c.fecha_exp_est)', $data["anio"]);
         }
 
         $query_interna = '('.$this->db->get_compiled_select().') a';
@@ -472,63 +384,41 @@ class Expediente_estado_model extends CI_Model {
 
         /* Proyectos de Reglamentos Internos Aprobados */
 
-        $this->db->select("aa.numexpediente_expedientert, ab.id_estadort")
-				->from('sri_expedientert aa')
-                ->join('sri_expediente_estado ab', 'ab.id_expedientert = aa.id_expedientert')
-                ->join('sri_expediente_empleado ac', 'ac.id_expedientert = aa.id_expedientert')
-                ->join('sir_empleado ad', 'ad.id_empleado = ac.id_empleado')
-                ->where('aa.tiposolicitud_expedientert', 1)
-                ->where('ab.id_estadort', '3')
-                ->where('aa.id_expedientert in (
-                    select max(aaa.id_expedientert)
-                    from sri_expedientert aaa
-                    join sri_expediente_estado aab on aab.id_expedientert = aaa.id_expedientert
-                    where aab.id_expediente_estado = (
-                            select eea.id_expediente_estado
-                            from sri_expedientert ea
-                            join sri_expediente_estado eea on eea.id_expedientert = ea.id_expedientert
-                            join sri_estadort esa on esa.id_estadort = eea.id_estadort
-                            where ea.id_expedientert = aaa.id_expedientert
-                                and eea.id_expediente_estado =(
-                                    select max(eeea.id_expediente_estado)
-                                    from sri_expediente_estado eeea
-                                    where eeea.id_expedientert = ea.id_expedientert))
-                    group by aaa.numexpediente_expedientert )')
-                ->where('ad.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
-                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
-                        where se.id_expedientert = aa.id_expedientert ))')
-                ->where('ab.id_expediente_estado = (
-                    select ee.id_expediente_estado from sri_expedientert e
-                    join sri_expediente_estado ee on ee.id_expedientert = e.id_expedientert
-                    join sri_estadort es on es.id_estadort = ee.id_estadort
-                    where e.id_expedientert = aa.id_expedientert
-                        and ee.id_expediente_estado =(
-                        select max(eee.id_expediente_estado)
-                        from sri_expediente_estado eee
-                        where eee.id_expedientert = e.id_expedientert))')
-                ->group_by('aa.numexpediente_expedientert')
-                ->order_by('aa.numexpediente_expedientert desc')
-                ->order_by('ab.fecha_exp_est asc');
+        $this->db->select("a.numexpediente_expedientert,
+                    c.id_estadort,
+                    c.fecha_exp_est")
+				->from('sri_expedientert a')
+                ->join('sri_solicitud b', 'a.id_expedientert = b.id_solicitud')
+                ->join('sri_expediente_estado c', 'c.id_expedientert = b.id_solicitud')
+                ->join('( SELECT max(aa.id_solicitud) id_solicitud, max(ab.id_expediente_estado) id_expediente_estado
+                        FROM sri_solicitud aa
+                        JOIN sri_expediente_estado ab ON ab.id_expedientert = aa.id_solicitud
+                        GROUP BY aa.id_expedientert ) d', 'd.id_solicitud = b.id_solicitud AND d.id_expediente_estado = c.id_expediente_estado')
+                ->join('sri_expediente_empleado e', 'e.id_expedientert = b.id_solicitud', 'left')    
+                ->where('b.id_solicitud', 1)
+                ->where('c.id_estadort', '3')
+                ->order_by('a.numexpediente_expedientert desc')
+                ->order_by('c.fecha_exp_est asc');
 
         if ($empleado) {
-            $this->db->where('ad.id_empleado', $empleado);
+            $this->buscar_empleado('e', 'f', $data);
         }
         
         if($data["tipo"] == "mensual"){
-            $this->db->where('YEAR(ab.fecha_exp_est)', $data["anio"])
-                    ->where('MONTH(ab.fecha_exp_est)', $data["value"]);
+            $this->db->where('YEAR(c.fecha_exp_est)', $data["anio"])
+                    ->where('MONTH(c.fecha_exp_est)', $data["value"]);
         }else if($data["tipo"] == "trimestral"){
             $tmfin = (intval($data["value"])*3);	$tminicio = $tmfin-2;
-            $this->db->where('YEAR(ab.fecha_exp_est)', $data["anio"])
-                ->where("MONTH(ab.fecha_exp_est) BETWEEN '".$tminicio."' AND '".$tmfin."'");
+            $this->db->where('YEAR(c.fecha_exp_est)', $data["anio"])
+                ->where("MONTH(c.fecha_exp_est) BETWEEN '".$tminicio."' AND '".$tmfin."'");
         }else if($data["tipo"] == "semestral"){
             $smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
-            $this->db->where('YEAR(ab.fecha_exp_est)', $data["anio"])
-                ->where("MONTH(ab.fecha_exp_est) BETWEEN '".$sminicio."' AND '".$smfin."'");
+            $this->db->where('YEAR(c.fecha_exp_est)', $data["anio"])
+                ->where("MONTH(c.fecha_exp_est) BETWEEN '".$sminicio."' AND '".$smfin."'");
         }else if($data["tipo"] == "periodo"){
-            $this->db->where("ab.fecha_exp_est BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
+            $this->db->where("c.fecha_exp_est BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
         }else{
-            $this->db->where('YEAR(ab.fecha_exp_est)', $data["anio"]);
+            $this->db->where('YEAR(c.fecha_exp_est)', $data["anio"]);
         }
 
         $query_interna = '('.$this->db->get_compiled_select().') a';
@@ -541,43 +431,31 @@ class Expediente_estado_model extends CI_Model {
 
          /* Casos Reasignados (cambio de Colaborador) */
 
-         $this->db->select("aa.numexpediente_expedientert, count(*) cant, aa.id_expedientert")
-            ->from('sri_expedientert aa')
-            ->join('sri_expediente_empleado ab', 'aa.id_expedientert = ab.id_expedientert')
-            ->join('sri_expediente_estado ac', 'ac.id_expedientert = aa.id_expedientert')
-            ->where('aa.id_expedientert in (
-                select max(aaa.id_expedientert)
-                from sri_expedientert aaa
-                join sri_expediente_estado aab on aab.id_expedientert = aaa.id_expedientert
-                where aab.id_expediente_estado = (
-                        select eea.id_expediente_estado
-                        from sri_expedientert ea
-                        join sri_expediente_estado eea on eea.id_expedientert = ea.id_expedientert
-                        join sri_estadort esa on esa.id_estadort = eea.id_estadort
-                        where ea.id_expedientert = aaa.id_expedientert
-                            and eea.id_expediente_estado =(
-                                select max(eeea.id_expediente_estado)
-                                from sri_expediente_estado eeea
-                                where eeea.id_expedientert = ea.id_expedientert))
-                group by aaa.numexpediente_expedientert )')
-            ->group_by('aa.numexpediente_expedientert')
-            ->having('count(distinct aa.numexpediente_expedientert, ab.id_empleado) > 1');
+         $this->db->select("a.numexpediente_expedientert,
+                    count(*) cant,
+                    a.id_expedientert")
+            ->from('sri_expedientert a')
+            ->join('sri_solicitud b', 'a.id_expedientert = b.id_expedientert')
+            ->join('sri_expediente_empleado c', 'c.id_expedientert = b.id_solicitud')
+            ->join('sri_expediente_estado d', 'd.id_expedientert = b.id_solicitud')
+            ->group_by('b.id_solicitud')
+            ->having('count(distinct a.numexpediente_expedientert, c.id_empleado) > 1');
 
         if($data["tipo"] == "mensual"){
-            $this->db->where('YEAR(ac.fecha_exp_est)', $data["anio"])
-                    ->where('MONTH(ac.fecha_exp_est)', $data["value"]);
+            $this->db->where('YEAR(d.fecha_exp_est)', $data["anio"])
+                    ->where('MONTH(d.fecha_exp_est)', $data["value"]);
         }else if($data["tipo"] == "trimestral"){
             $tmfin = (intval($data["value"])*3);	$tminicio = $tmfin-2;
-            $this->db->where('YEAR(ac.fecha_exp_est)', $data["anio"])
-                ->where("MONTH(ac.fecha_exp_est) BETWEEN '".$tminicio."' AND '".$tmfin."'");
+            $this->db->where('YEAR(d.fecha_exp_est)', $data["anio"])
+                ->where("MONTH(d.fecha_exp_est) BETWEEN '".$tminicio."' AND '".$tmfin."'");
         }else if($data["tipo"] == "semestral"){
             $smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
-            $this->db->where('YEAR(ac.fecha_exp_est)', $data["anio"])
-                ->where("MONTH(ac.fecha_exp_est) BETWEEN '".$sminicio."' AND '".$smfin."'");
+            $this->db->where('YEAR(d.fecha_exp_est)', $data["anio"])
+                ->where("MONTH(d.fecha_exp_est) BETWEEN '".$sminicio."' AND '".$smfin."'");
         }else if($data["tipo"] == "periodo"){
-            $this->db->where("ac.fecha_exp_est BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
+            $this->db->where("d.fecha_exp_est BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
         }else{
-            $this->db->where('YEAR(ac.fecha_exp_est)', $data["anio"]);
+            $this->db->where('YEAR(d.fecha_exp_est)', $data["anio"]);
         }
 
         $query_interna = '('.$this->db->get_compiled_select().') a';
@@ -585,13 +463,10 @@ class Expediente_estado_model extends CI_Model {
         $this->db->select("'Casos Reasignados (cambio de Colaborador)' titulo,
                 count(*) cantidad")
                 ->from($query_interna)
-                ->join('sri_expediente_empleado b', 'b.id_expedientert = a.id_expedientert')
-                ->where('b.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
-                        where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
-                        where se.id_expedientert = a.id_expedientert ))');
+                ->join('sri_expediente_empleado b', 'b.id_expedientert = a.id_expedientert');
         
         if ($empleado) {
-            $this->db->where('b.id_empleado', $empleado);
+            $this->buscar_empleado('b', 'e', $data);
         }
         
         $sql[] = '('.$this->db->get_compiled_select().')';
@@ -609,54 +484,26 @@ class Expediente_estado_model extends CI_Model {
 
     public function obtener_asignados_reporte($data, $empleado = FALSE) {
 
-        $fecha_ultima = new DateTime();
-
-        if($data["tipo"] == "mensual"){
-
-            $fecha_ultima->modify('last day of '. date('F', mktime(0, 0, 0, $data["value"], 1, $data["anio"])) .' '. $data["anio"]);
-
-        }else if($data["tipo"] == "trimestral"){
-
-            $tmfin = (intval($data["value"])*3);
-            $fecha_ultima->modify('last day of '. date('F', mktime(0, 0, 0, $tmfin, 1, $data["anio"])) .' '. $data["anio"]);
-
-        }else if($data["tipo"] == "semestral"){
-
-            $smfin = (intval($data["value"])*6);
-            $fecha_ultima->modify('last day of '. date('F', mktime(0, 0, 0, $tmfin, 1, $data["anio"])) .' '. $data["anio"]);
-
-        }else if($data["tipo"] == "periodo"){
-
-            $fecha_ultima->modify('last day of '. date('F', $data["value2"]) .' '. date('Y', $data["value2"]));
-
-        }else{
-
-            $this->db->where('YEAR(a.fecha_ingresar_exp_est)', $data["anio"]);
-
-        }
-
         $this->db->select("
-                    a.fecha_ingresar_exp_est, 
-                    b.estado_estadort, 
-                    c.numexpediente_expedientert, 
-                    c.fechacrea_expedientert, 
-                    d.nombre_empresa, 
+                    a.fecha_ingresar_exp_est,
+                    b.estado_estadort,
+                    g.numexpediente_expedientert,
+                    g.fechacrea_expedientert,
+                    d.nombre_empresa,
                     e.seccion_catalogociiu,
-                    DATEDIFF(a.fecha_ingresar_exp_est, c.fechacrea_expedientert) servicio")
+                    DATEDIFF(a.fecha_ingresar_exp_est,
+                    g.fechacrea_expedientert) servicio")
 				->from('sri_expediente_estado a')
                 ->join('sri_estadort b', 'b.id_estadort = a.id_estadort')
-                ->join('sri_expedientert c', 'c.id_expedientert = a.id_expedientert')
-                ->join('sge_empresa d', 'c.id_empresart = d.id_empresa')
+                ->join('sri_solicitud c', 'c.id_solicitud = a.id_expedientert')
+                ->join('sri_expedientert g', 'g.id_expedientert = c.id_solicitud')
+                ->join('sge_empresa d', 'g.id_empresart = d.id_empresa')
                 ->join('sge_catalogociiu e', 'e.id_catalogociiu = d.id_catalogociiu')
-                ->join('sri_expediente_empleado f', 'f.id_expedientert = c.id_expedientert')
-                ->where('f.id_empleado = (
-                        SELECT af.id_empleado
-                        FROM sri_expediente_empleado af
-                        WHERE af.id_exp_emp = (
-                            SELECT MAX(aaf.id_exp_emp)
-                            FROM sri_expediente_empleado aaf
-                            WHERE aaf.id_expedientert = c.id_expedientert AND aaf.fecha_exp_emp <= "'.$fecha_ultima->format('Y-m-d').'"))')
-                ->group_by('a.id_expedientert')
+                ->join('sri_expediente_empleado f', 'f.id_expedientert = c.id_expedientert', 'left')
+                ->join('( SELECT max(aa.id_solicitud) id_solicitud, max(ab.id_expediente_estado) id_expediente_estado
+                            FROM sri_solicitud aa
+                            JOIN sri_expediente_estado ab ON ab.id_expedientert = aa.id_solicitud
+                            GROUP BY aa.id_expedientert ) h', 'h.id_solicitud = c.id_solicitud AND h.id_expediente_estado = a.id_expediente_estado')
                 ->order_by('b.id_estadort DESC');
 
         if($data["tipo"] == "mensual"){
@@ -677,7 +524,9 @@ class Expediente_estado_model extends CI_Model {
         }
 
         if ( $data["empleado"] != '' ) {
-            $this->db->where('f.id_empleado', $data["empleado"]);
+
+            $this->buscar_empleado('f', 'i', $data);
+
         }
 
         $sql = $this->db->get_compiled_select();
@@ -694,11 +543,41 @@ class Expediente_estado_model extends CI_Model {
                 'expedientes' => $query->result(),
                 'duracion' => $query2->row()
             );
-		}
-		else {
+		} else {
 			return FALSE;
 		}
 
+    }
+
+    private function buscar_empleado( $tabla_empleado, $alias, $data ) {
+        $fecha_ultima = new DateTime();
+
+        if($data["tipo"] == "mensual"){
+
+            $fecha_ultima->modify('last day of '. date('F', mktime(0, 0, 0, $data["value"], 1, $data["anio"])) .' '. $data["anio"]);
+
+        }else if($data["tipo"] == "trimestral"){
+
+            $tmfin = (intval($data["value"])*3);
+            $fecha_ultima->modify('last day of '. date('F', mktime(0, 0, 0, $tmfin, 1, $data["anio"])) .' '. $data["anio"]);
+
+        }else if($data["tipo"] == "semestral"){
+
+            $smfin = (intval($data["value"])*6);
+            $fecha_ultima->modify('last day of '. date('F', mktime(0, 0, 0, $tmfin, 1, $data["anio"])) .' '. $data["anio"]);
+
+        }else if($data["tipo"] == "periodo"){
+
+            $fecha_ultima->modify('last day of '. date('F', $data["value2"]) .' '. date('Y', $data["value2"]));
+
+        }
+
+        $this->db->where( $tabla_empleado . '.id_empleado', $data["empleado"])
+                ->join('( SELECT max(ac.id_exp_emp) id_expediente_empleado, ac.fecha_exp_emp
+                            FROM sri_solicitud aa
+                            JOIN sri_expediente_empleado ac ON ac.id_expedientert = aa.id_solicitud
+                            GROUP BY aa.id_expedientert) ' . $alias , 
+                            $alias . '.id_expediente_empleado = '. $tabla_empleado .'.id_exp_emp AND '. $alias .'.fecha_exp_emp <= "'.$fecha_ultima->format('Y-m-d').'"');
     }
 
 }

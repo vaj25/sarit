@@ -15,7 +15,7 @@ class Documentacion extends CI_Controller {
             || $this->input->post('band2') == "reforma_total"){
 
 			$data2 = array(
-                'id_expedientert' => $this->input->post('id_expedient'), 
+                'id_expedientert' => $this->input->post('id_solicitud2'), 
                 'docreglamento_documentort' => $this->input->post('reglamento_interno'),
                 'escritura_documentort' => $this->input->post('constitucion_sociedad'),
                 'credencial_documentort'  => $this->input->post('credencial_representante'),
@@ -33,12 +33,12 @@ class Documentacion extends CI_Controller {
                 
                 $this->expediente_empleado_model->insertar_expediente_empleado(
 					array(
-					'id_expedientert' => $this->input->post('id_expedient'),
+					'id_expedientert' => $this->input->post('id_solicitud2'),
 					'id_empleado' => $this->input->post('colaborador'),
 					'fecha_exp_emp ' => date("Y-m-d H:i:s")
 				));
 
-                echo $this->input->post('id_expedient');
+                echo $this->input->post('id_solicitud2');
             } else {
                 echo "fracaso";
             }
@@ -46,7 +46,7 @@ class Documentacion extends CI_Controller {
 		} else if($this->input->post('band2') == "edit"){
 
 			$data2 = array(
-				'id_expedientert' => $this->input->post('id_expedient'), 
+				'id_expedientert' => $this->input->post('id_solicitud2'), 
                 'docreglamento_documentort' => $this->input->post('reglamento_interno'),
                 'escritura_documentort' => $this->input->post('constitucion_sociedad'),
                 'credencial_documentort'  => $this->input->post('credencial_representante'),
@@ -61,7 +61,7 @@ class Documentacion extends CI_Controller {
 			);
 
 			if ("fracaso" != $this->documento_model->editar_documento($data2)) {
-				echo $this->input->post('id_expedient');
+				echo $this->input->post('id_solicitud2');
 			} else {
 				echo "fracaso";
 			}
@@ -69,7 +69,7 @@ class Documentacion extends CI_Controller {
 		} else if($this->input->post('band2') == "edit_new"){
 
 			$data2 = array(
-				'id_expedientert' => $this->input->post('id_expedient'), 
+				'id_expedientert' => $this->input->post('id_solicitud2'), 
                 'docreglamento_documentort' => $this->input->post('reglamento_interno'),
                 'escritura_documentort' => $this->input->post('constitucion_sociedad'),
                 'credencial_documentort'  => $this->input->post('credencial_representante'),
@@ -84,14 +84,14 @@ class Documentacion extends CI_Controller {
 			);
 
 			if ("fracaso" != $this->documento_model->insertar_documento($data2)) {
-				echo $this->input->post('id_expedient');
+				echo $this->input->post('id_solicitud2');
 			} else {
 				echo "fracaso";
 			}
 
 		} else if($this->input->post('band') == "delete"){
 			$data = array(
-				'id_expedientert' => $this->input->post('id_expedientert')
+				'id_expedientert' => $this->input->post('id_solicitud2')
 			);
 			echo $this->reglamento_model->eliminar_documento($data);
 

@@ -16,7 +16,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <div class="modal-body" id="">
                 <?php echo form_open('', array('id' => 'formajax9', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
                 <div class="row">
-                    <input type="hidden" id="id_reglamento" name="id_reglamento" value="<?=$id?>">
+                    <input type="hidden" id="id_solicitud" name="id_solicitud" value="<?=$id?>">
                     <div class="form-group col-lg-12 col-sm-12">
                         <div class="form-group">
                             <h5>Delegado/a:<span class="text-danger">*</h5>

@@ -35,27 +35,34 @@ class Documento_model extends CI_Model {
     }
 
     public function editar_documento($data){
-		$this->db->where('id_expedientert', $data['id_expedientert']);
-		if($this->db->update(
-            'sri_documentort', 
-            array( 
-                'docreglamento_documentort' => $data['docreglamento_documentort'],
-                'escritura_documentort' => $data['escritura_documentort'],
-                'credencial_documentort' => $data['credencial_documentort'],
-                'poder_documentort' => $data['poder_documentort'],
-                'dui_documentort' => $data['dui_documentort'],
-                'matricula_documentort' => $data['matricula_documentort'],
-                'estatutos_documentort' => $data['estatutos_documentort'],
-                'acuerdoejec_documentort' => $data['acuerdoejec_documentort'],
-                'nominayfuncion_documentort' => $data['nominayfuncion_documentort'],
-                'leycreacionescritura_documentort' => $data['leycreacionescritura_documentort'],
-                'acuerdoejecutivo_documentort' => $data['acuerdoejecutivo_documentort']
-                )
-           )){
-			return "exito";
-		}else{
-			return "fracaso";
-		}
+        if ($this->obtener_documentos($data['id_expedientert'])) {
+            
+            $this->db->where('id_expedientert', $data['id_expedientert']);
+            if($this->db->update(
+                'sri_documentort', 
+                array( 
+                    'docreglamento_documentort' => $data['docreglamento_documentort'],
+                    'escritura_documentort' => $data['escritura_documentort'],
+                    'credencial_documentort' => $data['credencial_documentort'],
+                    'poder_documentort' => $data['poder_documentort'],
+                    'dui_documentort' => $data['dui_documentort'],
+                    'matricula_documentort' => $data['matricula_documentort'],
+                    'estatutos_documentort' => $data['estatutos_documentort'],
+                    'acuerdoejec_documentort' => $data['acuerdoejec_documentort'],
+                    'nominayfuncion_documentort' => $data['nominayfuncion_documentort'],
+                    'leycreacionescritura_documentort' => $data['leycreacionescritura_documentort'],
+                    'acuerdoejecutivo_documentort' => $data['acuerdoejecutivo_documentort']
+                    )
+            )){
+                return "exito";
+            }else{
+                return "fracaso";
+            }
+
+        } else {
+            $this->insertar_documento($data);
+        }
+		
     }
     
     public function eliminar_documento($data){
@@ -65,6 +72,17 @@ class Documento_model extends CI_Model {
             return "exito";
         }else{
             return "fracaso";
+        }
+    }
+
+    public function obtener_documentos($id_solicitud) {
+        $this->db->where('id_expedientert', $id);
+        $query = $this->db->get('sri_documentort');
+        if ($query->num_rows() > 0) {
+            return  $query->row();
+        }
+        else {
+            return FALSE;
         }
     }
     
