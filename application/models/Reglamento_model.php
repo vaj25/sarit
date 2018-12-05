@@ -219,7 +219,11 @@ class Reglamento_model extends CI_Model {
                 a.id_solicitud,
                 a.id_tipo_solicitud tiposolicitud_expedientert,
                 b.id_expedientert,
+                b.tiposolicitud_expedientert,
+                b.numexpediente_expedientert,
+                b.numeroexpediente_anterior,
                 b.tipopersona_expedientert,
+                b.fechacrea_expedientert,
                 c.id_representantert,
                 c.nombres_representantert,
                 c.apellidos_representantert,
@@ -254,7 +258,12 @@ class Reglamento_model extends CI_Model {
                ->join('sri_expediente_empleado f', 'f.id_expedientert = a.id_expedientert', 'left')
                ->join('sir_empleado h', 'h.id_empleado = f.id_empleado', 'left')
                ->where('a.id_solicitud', $id)
-               ->where('f.id_empleado = (SELECT max(aa.id_empleado) FROM sri_expediente_empleado aa WHERE aa.id_expedientert = a.id_solicitud)');
+               ->where('CASE
+                        WHEN f.id_empleado IS NOT NULL THEN (
+                            f.id_exp_emp = (SELECT max(da.id_exp_emp)
+                            FROM sri_expediente_empleado da
+                            WHERE da.id_expedientert = a.id_solicitud ) )
+                        ELSE TRUE END');
                
         if ($old) {
             $this->db->where('c.id_representantert = (SELECT max(ab.id_representantert) FROM sri_representantert ab WHERE ab.id_empresart = e.id_empresa)');
