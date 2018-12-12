@@ -657,8 +657,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <div class="controls">
                       <select id="sexo" name="sexo" class="form-control" required>
                         <option value="">[Seleccione]</option>
-                        <option value="1">Masculino</option>
-                        <option value="2">Femenino</option>
+                        <option value="1">Hombre</option>
+                        <option value="2">Mujer</option>
                       </select>
                     </div>
                   </div>
@@ -704,8 +704,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <select id="tipo_representante" name="tipo_representante" class="form-control" required>
                         <option value="">[Seleccione]</option>
                         <option value="Representante Legal">Representante Legal</option>
-                        <option value="Propietario">Propietario</option>
-                        <option value="Apoderado">Apoderado</option>
+                        <option value="Propietario">Persona propietaria</option>
+                        <option value="Apoderado">Persona apoderada</option>
                       </select>
                     </div>
                   </div>
@@ -915,7 +915,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <?php if (obtener_rango($segmentos=1, $permiso=1) > 1) { ?>
             <div class="form-group" style="width: 400px;">
               <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablaReglamentos();">
-                <option value="">[Todos los empleados]</option>
+                <option value="">[Todos los colaboradores]</option>
                 <?php
                 if($delegados){
                   var_dump($delegados);

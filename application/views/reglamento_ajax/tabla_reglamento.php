@@ -5,8 +5,8 @@
             <tr>
                 <th>N&uacute;mero</th>
                 <th>N&uacute;mero de expediente</th>
-                <th>Nombre del solicitante</th>
-                <th>Colaborador Asignado (a) </th>
+                <th>Persona solicitante</th>
+                <th>Persona Colaboradora</th>
                 <th>Tipo Solicitud </th>
                 <th>Fecha Modificación </th>
                 <th>Estado </th>
