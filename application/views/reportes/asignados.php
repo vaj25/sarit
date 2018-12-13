@@ -217,9 +217,9 @@
 	                        </div>
                         </div>
 						<div class="form-group" style="width: 350px;">
-							<h5>Delegados: <span class="text-danger">*</span></h5>
+							<h5>Persona colaboradora: <span class="text-danger">*</span></h5>
 							<select id="empleado" name="empleado" class="select2" style="width: 100%" required="" >
-								<option value="">[Todos los delegados]</option>
+								<option value="">[Todos los colaboradores]</option>
 								<?php
 								if($delegados){
 									foreach ($delegados->result() as $fila) {

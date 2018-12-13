@@ -23,7 +23,8 @@ class Expediente_empleado_model extends CI_Model {
                 e.nr,
                 upper(concat_ws(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) as nombre_completo,
                 r.nombre_rol,
-                r.id_rol
+                r.id_rol,
+                u.sexo
                 ")
                ->from('sir_empleado e')
                ->join('org_usuario u', 'e.nr = u.nr')

@@ -38,7 +38,7 @@ class Inicio_model extends CI_Model {
 	}
 
 	public function obtener_estadistica_sexo_comisionado(){
-		$query=$this->db->query("SELECT 'MASCULINO' AS nombre, COUNT(*) AS cantidad FROM sri_representantert AS a WHERE a.sexo_representantert = '1' UNION SELECT 'FEMENINO' AS nombre, COUNT(*) AS cantidad FROM sri_representantert AS a WHERE a.sexo_representantert = '2'");
+		$query=$this->db->query("SELECT 'HOMBRE' AS nombre, COUNT(*) AS cantidad FROM sri_representantert AS a WHERE a.sexo_representantert = '1' UNION SELECT 'MUJER' AS nombre, COUNT(*) AS cantidad FROM sri_representantert AS a WHERE a.sexo_representantert = '2'");
 		if ($query->num_rows() > 0) { return $query;
 		}else{ return FALSE; }
 	}

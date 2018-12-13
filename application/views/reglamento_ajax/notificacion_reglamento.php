@@ -19,8 +19,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
           <form id="formajax5" method="post" class="m-t-40">
 
-            <hr class="m-t-0 m-b-30">
-
             <input type="hidden" id="id_reglamento_resolucion" name="id_reglamento_resolucion" value="<?= $id?>">
 
             <div class="row">

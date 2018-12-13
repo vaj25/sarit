@@ -19,7 +19,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <input type="hidden" id="id_solicitud" name="id_solicitud" value="<?=$id?>">
                     <div class="form-group col-lg-12 col-sm-12">
                         <div class="form-group">
-                            <h5>Delegado/a:<span class="text-danger">*</h5>
+                            <h5>Persona delegada:<span class="text-danger">*</h5>
                             <select id="id_personal_copia" name="id_personal_copia" class="select2" style="width: 100%"
                                 required="">
                                 <option value="">[Todos los empleados]</option>
