@@ -8,21 +8,13 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 ?>
 <script type="text/javascript">
 
-  function cerrar_mantenimiento(){
-    $("#cnt-tabla").show(0);
-    $("#cnt_form_main").hide(0);
-    $("#cnt_form_main2").hide(0);
-    $("#cnt_actions").hide(0);
-    $("#cnt_actions").remove('.card');
-    open_form(1);
-  }
-
   function iniciar(){
     <?php //if(tiene_permiso($segmentos=1,$permiso=1)){ ?>
     <?php if(true){ ?>
       $("#cnt_form_main").show();
       $("#tipo_expediente").val(<?= $solicitud->tiposolicitud_expedientert ?>).trigger('change.select2');
       combo_establecimiento( '<?= $solicitud->id_empresa ?>', 1 );
+      combo_delegado( '<?= $solicitud->id_empleado ?>', 1);
     <?php }else{ ?>
       $("#cnt-tabla").html("Usted no tiene permiso para este formulario.");     
     <?php } ?>
@@ -126,24 +118,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
   }
 
-  function open_form(num){
-    $(".cnt_form").hide(0);
-    $("#cnt_form"+num).show(0);
-
-    if($("#band"+num).val() == "save"){
-        $("#btnadd"+num).show(0);
-        $("#btnedit"+num).hide(0);
-    }else{
-        $("#btnadd"+num).hide(0);
-        $("#btnedit"+num).show(0);
-    }
-  }
-
-  function volver(num) {
-    open_form(num);
-    $("#band"+num).val("edit")
-  }
-
 </script>
 
 <div class="page-wrapper">
@@ -193,7 +167,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               <input type="hidden" id="band1" name="band1">
               <input type="hidden" id="id_expediente" name="id_expediente" value="<?= $solicitud->id_expedientert ?>">
               <input type="hidden" id="id_solicitud" name="id_solicitud">
-              <input type="hidden" id="id_comisionado" name="id_comisionado">
+              <input type="hidden" id="id_representante" name="id_representantert">
               <input type="hidden" id="tipo_solicitud" name="tipo_solicitud">
 
             <!-- Inicio del formulario del expediente -->
@@ -238,6 +212,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
               </blockquote>
 
               <!-- Finalización del formulario del expediente -->
+              
+              <!-- Inicia del formulario del establecimiento -->
 
               <span class="etiqueta">Establecimiento</span>
 
@@ -250,7 +226,11 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <select id="tipo_solicitante" name="tipo_solicitante" class="form-control" required>
                         <option value="">[Seleccione]</option>
                         <?php foreach ($tipo_persona->result() as $fila) {
-                          echo "<option value=$fila->id_tipo_solicitante >$fila->nombre_tipo_solicitante</option>";
+                          if ($fila->id_tipo_solicitante == $solicitud->tipopersona_expedientert) {
+                            echo "<option value=$fila->id_tipo_solicitante selected >$fila->nombre_tipo_solicitante</option>";
+                          } else {
+                            echo "<option value=$fila->id_tipo_solicitante >$fila->nombre_tipo_solicitante</option>";
+                          }
                         } ?>
                       </select>
                     </div>
@@ -258,32 +238,37 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
               </blockquote>
 
+              <!-- Finalización del formulario del establecimiento -->
+
+              <!-- Inicia el formulario del representante -->
+
               <span class="etiqueta">Representante Legal o Apoderado</span>
 
               <blockquote class="m-t-0">
                 <div class="row">
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Nombres: <span class="text-danger">*</span></h5>
+                    <h5>Nombres: </h5>
                     <div class="controls">
-                      <input type="text" id="nombres" name="nombres" class="form-control" required="" placeholder="Nombres">
+                      <input type="text" id="nombres" name="nombres" class="form-control" placeholder="Nombres" 
+                        value="<?= $solicitud->nombres_representantert ?>">
                       <div class="help-block"></div>
                     </div>
                   </div>
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Apellidos: <span class="text-danger">*</span></h5>
+                    <h5>Apellidos: </h5>
                     <div class="controls">
                       <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos"
-                        required="" data-validation-required-message="Este campo es requerido">
+                        value="<?= $solicitud->apellidos_representantert ?>">
                       <div class="help-block"></div>
                     </div>
                   </div>
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Sexo: <span class="text-danger">*</span></h5>
+                    <h5>Sexo: </h5>
                     <div class="controls">
-                      <select id="sexo" name="sexo" class="form-control" required>
+                      <select id="sexo" name="sexo" class="form-control" >
                         <option value="">[Seleccione]</option>
-                        <option value="1">Masculino</option>
-                        <option value="2">Femenino</option>
+                        <option value="1" <?= ($solicitud->sexo_representantert == 1) ? "selected" : "" ?> >Hombre</option>
+                        <option value="2" <?= ($solicitud->sexo_representantert == 2) ? "selected" : "" ?>>Mujer</option>
                       </select>
                     </div>
                   </div>
@@ -291,10 +276,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 <div class="row">
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>DUI: <span class="text-danger">*</span></h5>
+                    <h5>DUI: </h5>
                     <div class="controls">
                       <input type="text" placeholder="Documento Unico de Identidad" id="dui_comisionado" name="dui_comisionado"
-                        class="form-control" required="" data-mask="99999999-9">
+                        class="form-control" data-mask="99999999-9" value="<?= $solicitud->dui_representantert ?>">
                       <div class="help-block"></div>
                     </div>
                   </div>
@@ -302,14 +287,15 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <h5>NIT: </h5>
                     <div class="controls">
                       <input type="text" id="nit" name="nit" class="form-control" placeholder="No. De Idententificaci&oacute;n Tributaria"
-                        data-mask="9999-999999-999-9">
+                        data-mask="9999-999999-999-9" value="<?= $solicitud->nit_representantert ?>">
                       <div class="help-block"></div>
                     </div>
                   </div>
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Telefono: </h5>
                     <div class="controls">
-                      <input type="text" placeholder="Telefono" id="telefono" name="telefono" class="form-control" data-mask="9999-9999">
+                      <input type="text" placeholder="Telefono" id="telefono" name="telefono" class="form-control" data-mask="9999-9999"
+                        value="<?= $solicitud->telefono_representantert ?>">
                       <div class="help-block"></div>
                     </div>
                   </div>
@@ -319,18 +305,19 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Correo:</h5>
                     <div class="controls">
-                      <input type="text" id="correo" name="correo" class="form-control" placeholder="Correo">
+                      <input type="text" id="correo" name="correo" class="form-control" placeholder="Correo" 
+                        value="<?= $solicitud->correo_representantert ?>">
                       <div class="help-block"></div>
                     </div>
                   </div>
                   <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>Tipo representante: <span class="text-danger">*</span></h5>
+                    <h5>Tipo representante: </h5>
                     <div class="controls">
-                      <select id="tipo_representante" name="tipo_representante" class="form-control" required>
+                      <select id="tipo_representante" name="tipo_representante" class="form-control" >
                         <option value="">[Seleccione]</option>
-                        <option value="Representante Legal">Representante Legal</option>
-                        <option value="Propietario">Propietario</option>
-                        <option value="Apoderado">Apoderado</option>
+                        <option value="Representante Legal" <?= ($solicitud->cargo_representantert == "Representante Legal") ? "selected" : "" ?> >Representante Legal</option>
+                        <option value="Propietario" <?= ($solicitud->cargo_representantert == "Propietario") ? "selected" : "" ?> >Propietario</option>
+                        <option value="Apoderado" <?= ($solicitud->cargo_representantert == "Apoderado") ? "selected" : "" ?> >Apoderado</option>
                       </select>
                     </div>
                   </div>
@@ -338,36 +325,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
               </blockquote>
 
-              <div align="right" id="btnadd1">
-                <button type="reset" class="btn waves-effect waves-light btn-success">
-                  <i class="mdi mdi-recycle"></i> Limpiar</button>
-                <button type="submit" class="btn waves-effect waves-light btn-success2">
-                  Siguiente <i class="mdi mdi-chevron-right"></i>
-                </button>
-              </div>
-              <div align="right" id="btnedit1" style="display: none;">
-                <button type="reset" class="btn waves-effect waves-light btn-success">
-                  <i class="mdi mdi-recycle"></i> Limpiar</button>
-                <button type="submit" class="btn waves-effect waves-light btn-info">
-                  Siguiente <i class="mdi mdi-chevron-right"></i>
-                </button>
-              </div>
-              <?php echo form_close(); ?>
-            </div>
+              <!-- Finalización del formulario del representante -->
 
-            <div id="cnt_form2" class="cnt_form" style="display: none;">
-              <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
-
-              <h3 class="box-title" style="margin: 0px;">
-                <button type="button" class="btn waves-effect waves-light btn-lg btn-danger" style="padding: 1px 10px 1px 10px;">Paso
-                  2</button>&emsp;
-                Documentaci&oacute;n y designados:
-              </h3>
-              <hr class="m-t-0 m-b-30">
-
-              <input type="hidden" id="band2" name="band2" value="save">
-              <input type="hidden" id="id_expedient" name="id_expedient">
-              <input type="hidden" id="id_solicitud2" name="id_solicitud2">
+              <!-- Inicia el formulario del documento -->
 
               <span class="etiqueta">Documentaci&oacute;n</span>
 
@@ -382,48 +342,59 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <div class="row">
                         <div class="col-lg-6">
 
-                          <input type="checkbox" id="reglamento_interno" name="reglamento_interno" class="filled-in chk-col-light-blue">
+                          <input type="checkbox" id="reglamento_interno" name="reglamento_interno" class="filled-in chk-col-light-blue"
+                            value="<?= ($solicitud->docreglamento_documentort) ? "checked" : "b" ?>" >
                           <label for="reglamento_interno">Reglamento Interno de Trabajo</label>
 
-                          <input type="checkbox" id="constitucion_sociedad" name="constitucion_sociedad" class="filled-in chk-col-light-blue">
+                          <input type="checkbox" id="constitucion_sociedad" name="constitucion_sociedad" class="filled-in chk-col-light-blue"
+                            value="<?= ($solicitud->escritura_documentort) ? "checked" : "b" ?>" >
                           <label for="constitucion_sociedad">Escritura de Constituci&oacute;n de la Sociedad</label>
 
-                          <input type="checkbox" id="credencial_representante" name="credencial_representante" class="filled-in chk-col-light-blue">
+                          <input type="checkbox" id="credencial_representante" name="credencial_representante" class="filled-in chk-col-light-blue"
+                            value="<?= ($solicitud->credencial_documentort) ? "checked" : "b" ?>" >
                           <label for="credencial_representante">Credencial Vigente del Representante Legal</label>
 
                           <br>
-                          <input type="checkbox" id="dui" name="dui" class="filled-in chk-col-light-blue">
+                          <input type="checkbox" id="dui" name="dui" class="filled-in chk-col-light-blue"
+                            value="<?= ($solicitud->dui_documentort) ? "checked" : "b" ?>" >
                           <label for="dui">DUI</label>
 
                           <br>
-                          <input type="checkbox" id="poder" name="poder" class="filled-in chk-col-light-blue">
+                          <input type="checkbox" id="poder" name="poder" class="filled-in chk-col-light-blue"
+                            value="<?= ($solicitud->poder_documentort) ? "checked" : "b" ?>" >
                           <label for="poder">Poder</label>
 
                           <br>
-                          <input type="checkbox" id="matricula" name="matricula" class="filled-in chk-col-light-blue">
+                          <input type="checkbox" id="matricula" name="matricula" class="filled-in chk-col-light-blue"
+                            value="<?= ($solicitud->matricula_documentort) ? "checked" : "b" ?>" >
                           <label for="matricula">Matricula de Comercio</label>
                         </div>
 
                         <div class="col-lg-6">
 
                           <br>
-                          <input type="checkbox" id="estatutos" name="estatutos" class="filled-in chk-col-light-blue">
+                          <input type="checkbox" id="estatutos" name="estatutos" class="filled-in chk-col-light-blue"
+                            value="<?= ($solicitud->estatutos_documentort) ? "checked" : "b" ?>" >
                           <label for="estatutos">Estatutos</label>
 
                           <br>
-                          <input type="checkbox" id="acuerdo_creacion" name="acuerdo_creacion" class="filled-in chk-col-light-blue">
+                          <input type="checkbox" id="acuerdo_creacion" name="acuerdo_creacion" class="filled-in chk-col-light-blue"
+                            value="<?= ($solicitud->acuerdoejec_documentort) ? "checked" : "b" ?>" >
                           <label for="acuerdo_creacion">Acuerdo Ejecutivo de Creaci&oacute;n</label>
 
                           <br>
-                          <input type="checkbox" id="nominacion" name="nominacion" class="filled-in chk-col-light-blue">
+                          <input type="checkbox" id="nominacion" name="nominacion" class="filled-in chk-col-light-blue"
+                            value="<?= ($solicitud->nominayfuncion_documentort) ? "checked" : "b" ?>" >
                           <label for="nominacion">Nominaci&oacute;n y Funcionamiento del Centro Educativo</label>
 
                           <br>
-                          <input type="checkbox" id="creacion_escritura" name="creacion_escritura" class="filled-in chk-col-light-blue">
+                          <input type="checkbox" id="creacion_escritura" name="creacion_escritura" class="filled-in chk-col-light-blue"
+                            value="<?= ($solicitud->leycreacionescritura_documentort) ? "checked" : "b" ?>" >
                           <label for="creacion_escritura">Ley de creación de la escritura</label>
 
                           <br>
-                          <input type="checkbox" id="acuerdo_ejecutivo" name="acuerdo_ejecutivo" class="filled-in chk-col-light-blue">
+                          <input type="checkbox" id="acuerdo_ejecutivo" name="acuerdo_ejecutivo" class="filled-in chk-col-light-blue"
+                            value="<?= ($solicitud->acuerdoejecutivo_documentort) ? "checked" : "b" ?>" >
                           <label for="acuerdo_ejecutivo">Acuerdo ejecutivo de nombramiento</label>
                         </div>
                       </div>
@@ -434,6 +405,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
               </blockquote>
 
+              <!-- Finaliza el formulario del documento -->
+
+              <!-- Inicia el formulario del delegado -->
+
               <span class="etiqueta">Delegado</span>
 
               <blockquote class="m-t-0">
@@ -443,6 +418,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 </div>
 
               </blockquote>
+
+              <!-- Finaliza el formulario del delegado -->
 
               <div class="pull-left">
                 <button type="button" class="btn waves-effect waves-light btn-default" onclick="volver(1)"><i class="mdi mdi-chevron-left"></i>
