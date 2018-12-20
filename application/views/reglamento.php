@@ -49,19 +49,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#tipo_representante").val(result.cargo_representantert).trigger('change.select2');
       $("#sexo").val(result.sexo_representantert).trigger('change.select2');
 
+      combo_establecimiento(result.id_empresa, 1, 'disabled');
       if(bandera == "edit"){
 
         $("#tipo_solicitud").val(result.tiposolicitud_expedientert);
-        combo_establecimiento(result.id_empresa, 1);
 
       } else {
         
-        combo_establecimiento(result.id_empresa, 1, true);
         $("#tipo_solicitante").attr('readonly', 'readonly');
 
       }
 
-      combo_delegado(result.id_empleado, 1, 'readonly');
+      combo_delegado(result.id_empleado, 1, 'disabled');
 
     });
 
@@ -918,7 +917,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 <option value="">[Todos los colaboradores]</option>
                 <?php
                 if($delegados){
-                  var_dump($delegados);
                   foreach ($delegados->result() as $fila) {
                     if($nr_usuario == $fila->nr){
                       echo '<option class="m-l-50" value="'.$fila->nr.'" selected>'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
@@ -948,35 +946,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <div class="row" style="width: 100%"></div>
         <div class="row col-lg-12">
           <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-              <div class="btn-group mr-2" role="group" aria-label="First group">
-                  <button type="button" class="change-letter btn btn-info" data-letra="A">A</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="B">B</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="C">C</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="D">D</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="E">E</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="F">F</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="G">G</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="H">H</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="I">I</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="J">J</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="K">K</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="L">L</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="M">M</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="N">N</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="Ñ">Ñ</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="O">O</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="P">P</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="Q">Q</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="R">R</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="S">S</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="T">T</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="U">U</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="V">V</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="W">W</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="X">X</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="Y">Y</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="Z">Z</button>
-              </div>
+            <button type="button" class="change-letter btn btn-info" data-letra="A">A</button>
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+              <?php
+                foreach (range('B', 'Z') as $letra) {
+                  echo '<button type="button" class="change-letter btn btn-secondary" data-letra="'.$letra.'">'.$letra.'</button>';
+                }
+              ?>
+            </div>
           </div>
         </div>
         <br>
@@ -1045,7 +1022,7 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax"));
-        formData.append("dato", "valor");
+        formData.append("establecimiento", $('#establecimiento').val());
         
         $.ajax({
             url: "<?php echo site_url(); ?>/reglamento/gestionar_reglamento",

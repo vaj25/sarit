@@ -134,19 +134,19 @@ class Reglamento_model extends CI_Model {
                ->join('sri_expediente_estado d', 'd.id_expedientert = b.id_solicitud')
                ->join('sri_estadort e', 'e.id_estadort = d.id_estadort')
                ->join('sri_expediente_empleado f', 'f.id_expedientert = b.id_solicitud', 'left')
+               ->join('( SELECT MAX(ba.id_solicitud) id_solicitud, MAX(bb.id_exp_emp) id_exp_emp
+                        FROM sri_solicitud ba
+                        JOIN sri_expediente_empleado bb ON ba.id_solicitud = bb.id_expedientert
+                        GROUP BY ba.id_expedientert) k', 
+                    'k.id_solicitud = b.id_solicitud AND k.id_exp_emp = f.id_exp_emp', 'left')
                ->join('sri_representantert g', 'a.id_empresart = g.id_empresart', 'left')
                ->join('sri_tipo_solicitud h', 'b.id_tipo_solicitud = h.id_tipo_solicitud')
                ->join('sir_empleado i', 'i.id_empleado = f.id_empleado', 'left')
                ->join('( SELECT max(aa.id_solicitud) id_solicitud, max(ab.id_expediente_estado) id_expediente_estado
                         FROM sri_solicitud aa
                         JOIN sri_expediente_estado ab ON ab.id_expedientert = aa.id_solicitud
-                        GROUP BY aa.id_expedientert ) j', 'j.id_solicitud = b.id_solicitud AND j.id_expediente_estado = d.id_expediente_estado')
-                ->where('CASE
-                        WHEN f.id_empleado IS NOT NULL THEN (
-                            f.id_exp_emp = (SELECT max(da.id_exp_emp)
-                            FROM sri_expediente_empleado da
-                            WHERE da.id_expedientert = b.id_solicitud ) )
-                        ELSE TRUE END')
+                        GROUP BY aa.id_expedientert ) j',
+                    'j.id_solicitud = b.id_solicitud AND j.id_expediente_estado = d.id_expediente_estado')
                 ->order_by('d.fecha_exp_est', 'desc')
                 ->order_by('d.id_estadort', 'asc');
         if ($nr) {
