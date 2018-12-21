@@ -26,6 +26,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#id_solicitud").val(result.id_solicitud);
       $("#id_solicitud2").val(result.id_solicitud);
       $("#tipo_solicitante").val(result.tipopersona_expedientert).trigger('change.select2');
+      $("#tipo_solicitante").attr('disabled', 'disabled').trigger('change.select2');
 
       $("#reglamento_interno").attr('checked',result.docreglamento_documentort);
       $("#constitucion_sociedad").attr('checked',result.escritura_documentort);
@@ -248,13 +249,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     })
     .done(function(res){
 
-      if (numero == 1) {
-        $('#div_combo_establecimiento').html(res);
-      } else {
-        $('#div_combo_establecimiento'+numero).html(res);
-      }
+      $('#div_combo_establecimiento'+numero).html(res);
 
-      $("#establecimiento").select2({
+      $('#div_combo_establecimiento'+numero+" #establecimiento").select2({
         'minimumInputLength': 3,
         'language': {
           noResults: function () {
@@ -263,8 +260,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         },
         'escapeMarkup': function (markup) {
           return markup;
-        },
-        'readonly': disable
+        }
       });
     });
 
@@ -628,7 +624,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </select>
                     </div>
                   </div>
-                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento1"></div>
                 </div>
               </blockquote>
 
@@ -1022,7 +1018,8 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax"));
-        formData.append("establecimiento", $('#establecimiento').val());
+        formData.append("establecimiento", $('#div_combo_establecimiento1 #establecimiento').val());
+        formData.append("tipo_solicitante", $('#tipo_solicitante').val());
         
         $.ajax({
             url: "<?php echo site_url(); ?>/reglamento/gestionar_reglamento",
@@ -1058,6 +1055,7 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax2"));
+        formData.append('colaborador', $('#colaborador').val());
         
         $.ajax({
           url: "<?php echo site_url(); ?>/documentacion/gestionar_documentacion",

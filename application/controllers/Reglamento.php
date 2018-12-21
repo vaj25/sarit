@@ -24,7 +24,7 @@ class Reglamento extends CI_Controller {
 
 	public function gestionar_reglamento() {
 
-		if($this->input->post('band1') == "save"){ 
+		if($this->input->post('band1') == "save"){
 
 			if ($this->input->post('nuevo_expediente') == 1) {
 				$id = $this->reglamento_model->obtener_expediente_cierre($this->input->post('establecimiento'));
@@ -307,7 +307,7 @@ class Reglamento extends CI_Controller {
 		print json_encode(
 			$this->reglamento_model->obtener_reglamentos_documentos(
 				$this->input->post('id'),
-				($this->input->post('bandera') == 'edit_new') ? TRUE : FALSE
+				($this->input->post('bandera') == 'edit') ? TRUE : FALSE
 			)->result()
 		);
 		
