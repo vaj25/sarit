@@ -1,10 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-if("192.168.1.200" == $_SERVER['SERVER_NAME']){
-	define("SERVER_MTPS","192.168.1.200");
-}else if("192.168.11.239" == $_SERVER['SERVER_NAME']){
-	define("SERVER_MTPS","192.168.11.239");
+if("192.168.1.43" == $_SERVER['SERVER_NAME']){
+	define("SERVER_MTPS","192.168.1.43");
 }else{
 	define("SERVER_MTPS","MI IP");
 }
@@ -115,13 +113,13 @@ class Login extends CI_Controller {
 
 	function ldap_login($user,$pass){
 		error_reporting(0); $ldaprdn = $user.'@mtps.local'; $ldappass = $pass; $ds = 'mtps.local'; $dn = 'dc=mtps,dc=local'; $puertoldap = 389;  $ldapconn = @ldap_connect($ds,$puertoldap); 
-		if ($ldapconn){ 
+		if ($ldapconn){
 			ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION,3);  ldap_set_option($ldapconn, LDAP_OPT_REFERRALS,0); 
 			$ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
 			if ($ldapbind){  return "login";
 			}else{  return "error"; } 
 		}else{ 
-			return "error";
+			return "errores";
 		}
 		ldap_close($ldapconn);
 	}
