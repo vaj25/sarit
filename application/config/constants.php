@@ -84,6 +84,6 @@ defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-define('ADMIN', 70);      //id del rol administrador o jefe de unidad
-define('FILTRO', 71);     //id del rol filtro
-define('COLABORADOR', 72); //id del rol colaborador
+define('ADMIN', 81);      //id del rol administrador o jefe de unidad
+define('FILTRO', 82);     //id del rol filtro
+define('COLABORADOR', 83); //id del rol colaborador
