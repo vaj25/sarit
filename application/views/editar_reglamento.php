@@ -192,20 +192,35 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 <div class="row">
                   <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Archivo del expediente: </h5>
+                    <div class="controls">
+                      <input type="text" id="archivo_expedientert" name="archivo_expedientert" class="form-control" 
+                        placeholder="Archivo del expediente"  value="<?= $solicitud->archivo_expedientert ?>">
+                    </div>
+                  </div>
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Tipo de Expediente: <span class="text-danger">*</span></h5>
                     <div class="controls">
                     <select id="tipo_expediente" name="tipo_expediete" class="form-control" required>
                         <option value="">[Seleccione]</option>
                         <?php foreach ($tipo_expediente->result() as $fila) {
-                          echo "<option value=$fila->id_tipo_solicitud >$fila->nombre_tipo_solicitud</option>";
+                          if ($solicitud->tiposolicitud_expedientert == $fila->id_tipo_solicitud) {
+                            echo "<option value=$fila->id_tipo_solicitud selected>$fila->nombre_tipo_solicitud</option>";
+                          } else {
+                            echo "<option value=$fila->id_tipo_solicitud >$fila->nombre_tipo_solicitud</option>";
+                          }
                         } ?>
                       </select>
                     </div>
                   </div>
+                </div>
+
+                <div class="row">
                   <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
                     <h5>Fecha de Creación: </h5>
                     <div class="controls">
-                      <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_creacion" name="fecha_creacion" placeholder="dd/mm/yyyy" readonly="">
+                      <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" id="fecha_creacion" 
+                        name="fecha_creacion" placeholder="dd/mm/yyyy" readonly="">
                     </div>
                   </div>
                 </div>
@@ -421,6 +436,78 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
               <!-- Finaliza el formulario del delegado -->
 
+              <!-- Inicia el formulario de resultado -->
+
+              <span class="etiqueta">Resultado</span>
+
+              <blockquote class="m-t-0">
+
+                <div class="row">
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Resoluci&oacute;n: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <select id="resolucion" name="resolucion" class="form-control" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="Aprobado" <?= ($solicitud->resolucion_solicud == "Aprobado") ? "selected" : "" ?>>Aprobado</option>
+                        <option value="Denegado" <?= ($solicitud->resolucion_solicud == "Denegado") ? "selected" : "" ?>>Denegado</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Reglamento con Observaci&oacute;n de Genero: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <select id="ob_genero" name="ob_genero" class="form-control" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="Si" <?= ($solicitud->obsergenero_solicitud == "Si") ? "selected" : "" ?>>Si</option>
+                        <option value="No" <?= ($solicitud->obsergenero_solicitud == "No") ? "selected" : "" ?>>No</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Fecha de Resolución: </h5>
+                    <div class="controls">
+                      <input type="text" pattern="\d{1,2}-\d{1,2}-\d{4}" required="" class="form-control" 
+                        id="fecha_resolucion" name="fecha_resolucion" placeholder="dd/mm/yyyy" readonly="">
+                    </div>
+                  </div>
+                </div>
+
+              </blockquote>
+
+              <!-- Finaliza el formulario de resultado -->
+
+              <!-- Inicia el formulario de notificaciones -->
+
+              <span class="etiqueta">Notificaciones</span>
+
+              <blockquote class="m-t-0">
+
+                <div class="row">
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
+                    <h5>Notificaci&oacute;n de resultado de estudio: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <select id="notificacion" name="notificacion" class="form-control" required>
+                        <option value="">[Seleccione]</option>
+                        <option value="Si" <?= ($solicitud->notificacion_solicitud == "Si") ? "selected" : "" ?>>Si</option>
+                        <option value="No" <?= ($solicitud->notificacion_solicitud == "No") ? "selected" : "" ?>>No</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>" id="notificacion_container">
+                    <h5>Fecha y Hora de Notificaci&oacute;n: <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                      <input type="datetime-local" class="form-control" id="notificacion_fecha" nombre="notificacion_fecha"
+                      value="<?= $solicitud->fechanotificacion_solicitud?>" required>
+                    </div>
+                  </div>
+                </div>
+
+              </blockquote>
+
+              <!-- Finaliza el formulario de notificaciones -->
+
               <div class="pull-left">
                 <button type="button" class="btn waves-effect waves-light btn-default" onclick="volver(1)"><i class="mdi mdi-chevron-left"></i>
                   Volver</button>
@@ -514,116 +601,28 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
 $(function(){
     $("#formajax").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax"));
-        formData.append("dato", "valor");
-        
-        $.ajax({
-            url: "<?php echo site_url(); ?>/reglamento/gestionar_reglamento",
-            type: "post",
-            dataType: "json",
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false
-        })
-        .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }else{
-              open_form(2);
-              $("#id_solicitud").val(res.solicitud);
-              $("#id_solicitud2").val(res.solicitud);
-              $("#id_expedient").val(res.expediente);
-              $("#id_expediente").val(res.expediente);
-              $("#band1").val( $("#band").val() );
-              $("#band2").val( $("#band").val() );
-              if($("#band").val() == "delete"){
-                swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
-              }
-            }
-        });
+      e.preventDefault();
+      var formData = new FormData(document.getElementById("formajax"));
+      formData.append("fecha", $("#notificacion_fecha").val());
+      
+      $.ajax({
+        url: "<?php echo site_url(); ?>/editar_reglamento/gestionar_reglamento",
+        type: "post",
+        dataType: "json",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false
+      })
+      .done(function(res){
+        if(res == "fracaso"){
+          swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+        }else{
+          swal({ title: "¡Reglamento actualizado exitosamente!", type: "success", showConfirmButton: true });
+        }
+      });
             
     });
-});
-
-$(function(){
-    $("#formajax2").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax2"));
-        
-        $.ajax({
-          url: "<?php echo site_url(); ?>/documentacion/gestionar_documentacion",
-          type: "post",
-          dataType: "html",
-          data: formData,
-          cache: false,
-          contentType: false,
-          processData: false
-        })
-        .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }else{
-              cerrar_mantenimiento();
-              if($("#band2").val() == "save"){
-                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-              }else if($("#band2").val() == "edit"){
-                  swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-              }else{
-                  swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
-              }
-              tablaReglamentos();
-            }
-        });
-            
-    });
-});
-
-$(function(){
-    $("#formajax11").on("submit", function(e){
-        e.preventDefault();
-        var f = $(this);
-        var formData = new FormData(document.getElementById("formajax11"));
-        
-        $.ajax({
-          url: "<?php echo site_url(); ?>/reglamento/insertar_reglamentos_filtro",
-          type: "post",
-          dataType: "html",
-          data: formData,
-          cache: false,
-          contentType: false,
-          processData: false
-        })
-        .done(function(res){
-            if(res == "fracaso"){
-              swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }else{
-              cerrar_mantenimiento();
-              if($("#band11").val() == "save"){
-                  swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-              }
-              tablaReglamentos();
-            }
-        });
-            
-    });
-});
-
-$('.change-letter').click(function () {
-  $(this).siblings('button').each(function () {
-    $(this).removeClass('btn-info');
-    $(this).addClass('btn-secondary');
-  });
-
-  $(this).removeClass('btn-secondary');
-  $(this).addClass('btn-info');
-
-  letra = $(this).data('letra');
-
-  tablaReglamentos();
 });
 
 $(function () {
@@ -634,6 +633,24 @@ $(function () {
           todayHighlight: true
       }).datepicker("setDate", new Date('<?= $solicitud->fechacrea_expedientert ?>'));
     });
+});
+
+$(function () {
+    $(document).ready(function () {
+      $('#fecha_resolucion').datepicker({
+          format: 'dd-mm-yyyy',
+          autoclose: true,
+          todayHighlight: true
+      }).datepicker("setDate", new Date('<?= $solicitud->fecharesolucion_solicitud ?>'));
+    });
+});
+
+$('#notificacion').change(function () {
+  if ($('#notificacion').val() == 'No') {
+    $('#notificacion_container').hide();
+  } else {
+    $('#notificacion_container').show();
+  }
 });
 
 </script>

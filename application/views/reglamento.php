@@ -942,8 +942,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <div class="row" style="width: 100%"></div>
         <div class="row col-lg-12">
           <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <button type="button" class="change-letter btn btn-info" data-letra="A">A</button>
             <div class="btn-group mr-2" role="group" aria-label="First group">
+              <button type="button" class="change-letter btn btn-info" data-letra="A">A</button>
               <?php
                 foreach (range('B', 'Z') as $letra) {
                   echo '<button type="button" class="change-letter btn btn-secondary" data-letra="'.$letra.'">'.$letra.'</button>';
