@@ -5,7 +5,8 @@ class Editar_reglamento extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array('reglamento_model','expediente_empleado_model'));
+		$this->load->model(array('reglamento_model','solicitud_model', 'expediente_empleado_model', 
+			'documento_model', 'comisionado_model', 'expediente_empleado_model'));
 	}
 
 	public function index() {
@@ -29,18 +30,71 @@ class Editar_reglamento extends CI_Controller {
 			'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
 			'numexpediente_expedientert' => $this->input->post('num_expediente'),
 			'numeroexpediente_anterior' => $this->input->post('num_expediente_anterior'),
-			'tiposolicitud_expedientert' => $this->input->post('tipo_expediente'),
 			'organizacionsocial_expedientert' => '',
 			'contratocolectivo_expedientert' => '',
-			// 'notificacion_expedientert' => $this->input->post('notificacion'),
-			// 'fechanotificacion_expedientert' => $this->input->post('notificacion_fecha'),
-			// 'resolucion_expedientert' => $this->input->post('resolucion'),
-			// 'obsergenero_expedientrt' => $this->input->post('ob_genero'),
-			// 'fecharesolucion_expedientert' => $this->input->post('fecha_resolucion'),
 			'archivo_expedientert' => $this->input->post('archivo_expedientert'),
 			'contenidoTitulos_expedientert' => '',
 			'fechacrea_expedientert' => $this->input->post('fecha_creacion')
 		);
+
+		$solicitud = array(
+			'id_solicitud' => $this->input->post('id_solicitud'),
+			'id_expedientert' => $this->input->post('id_expediente'),
+			'id_tipo_solicitud' => $this->input->post('tipo_expediente'),
+			'notificacion_solicitud' => $this->input->post('notificacion'),
+			'fechanotificacion_solicitud' => date("Y-m-d H:i:s", strtotime($this->input->post('notificacion_fecha'))),
+			'resolucion_solicud' => $this->input->post('resolucion'),
+			'fecharesolucion_solicitud' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_resolucion'))),
+			'obsergenero_solicitud' => $this->input->post('ob_genero')
+		);
+
+		$representante = array(
+			'id_representantert' => $this->input->post('id_representantert'),
+			'id_empresart' => $this->input->post('establecimiento'),
+			'nombres_representantert' => $this->input->post('nombres'),
+			'apellidos_representantert' => $this->input->post('apellidos'),
+			'dui_representantert' => $this->input->post('dui'),
+			'nit_representantert' => $this->input->post('nit'),
+			'telefono_representantert' => $this->input->post('telefono'),
+			'correo_representantert' => $this->input->post('correo'),
+			'cargo_representantert' => $this->input->post('tipo_representante'),
+			'sexo_representantert' => $this->input->post('sexo')
+		);
+
+		$documentacion = array(
+			'id_expedientert' => $this->input->post('id_solicitud'), 
+			'docreglamento_documentort' => $this->input->post('reglamento_interno'),
+			'escritura_documentort' => $this->input->post('constitucion_sociedad'),
+			'credencial_documentort'  => $this->input->post('credencial_representante'),
+			'dui_documentort' => $this->input->post('dui_doc'),
+			'poder_documentort' => $this->input->post('poder'),
+			'matricula_documentort' => $this->input->post('matricula'),
+			'estatutos_documentort' => $this->input->post('estatutos'),
+			'acuerdoejec_documentort' => $this->input->post('acuerdo_creacion'),
+			'nominayfuncion_documentort' => $this->input->post('nominacion'),
+			'leycreacionescritura_documentort' => $this->input->post('creacion_escritura'),
+			'acuerdoejecutivo_documentort' => $this->input->post('acuerdo_ejecutivo')
+		);
+
+		$delegado = array(
+			'id_expedientert' => $this->input->post('id_solicitud'),
+			'id_empleado' => $this->input->post('colaborador'),
+			'fecha_exp_emp ' => date("Y-m-d H:i:s")
+		);
+
+		if ($this->input->post('dui_representante') === $this->input->post('dui')) {
+			$this->comisionado_model->editar_comisionado($representante);
+		} else {
+			$this->comisionado_model->insertar_comisionado($representante);
+		}
+		
+		$this->reglamento_model->editar_reglamento($reglamentos);
+
+		$this->documento_model->editar_documento($documentacion);
+
+		$this->solicitud_model->editar_solitud($solicitud);
+
+		$this->expediente_empleado_model->insertar_expediente_empleado($delegado);
 
 	}
 

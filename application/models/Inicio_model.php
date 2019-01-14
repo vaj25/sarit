@@ -26,7 +26,7 @@ class Inicio_model extends CI_Model {
 	}
 
 	public function obtener_estadistica_tipo_asociacion(){
-		$query=$this->db->query("SELECT 'Con resolución' AS nombre, COUNT(*) AS cantidad, (SELECT count(*) FROM sri_expedientert) AS total FROM sri_expedientert AS a WHERE a.resolucion_expedientert = 'Aprobado' UNION SELECT 'Sin resolución' AS nombre, COUNT(*) AS cantidad, (SELECT count(*) FROM sri_expedientert) AS total FROM sri_expedientert AS a WHERE a.resolucion_expedientert <> 'Aprobado'");
+		$query=$this->db->query("SELECT 'Con resolución' AS nombre, COUNT(*) AS cantidad, (SELECT count(*) FROM sri_solicitud) AS total FROM sri_solicitud AS a WHERE a.resolucion_solicud = 'Aprobado' UNION SELECT 'Sin resolución' AS nombre, COUNT(*) AS cantidad, (SELECT count(*) FROM sri_solicitud) AS total FROM sri_solicitud AS a WHERE a.resolucion_solicud <> 'Aprobado'");
 		if ($query->num_rows() > 0) { return $query;
 		}else{ return FALSE; }
 	}

@@ -16,18 +16,10 @@ class Reglamento_model extends CI_Model {
                     'id_empresart' => $data['id_empresart'],
                     'numexpediente_expedientert' => $data['numexpediente_expedientert'],
                     'tipopersona_expedientert' => $data['tipopersona_expedientert'],
-                    'tiposolicitud_expedientert' => $data['tiposolicitud_expedientert'],
                     'organizacionsocial_expedientert' => $data['organizacionsocial_expedientert'],
                     'contratocolectivo_expedientert' => $data['contratocolectivo_expedientert'],
-                    'notificacion_expedientert' => $data['notificacion_expedientert'],
-                    'fechanotificacion_expedientert' => $data['fechanotificacion_expedientert'],
-                    'resolucion_expedientert' => $data['resolucion_expedientert'],
-                    'fecharesolucion_expedientert' => $data['fecharesolucion_expedientert'],
                     'archivo_expedientert' => $data['archivo_expedientert'],
-                    'obsergenero_expedientrt' => $data['obsergenero_expedientrt'],
                     'contenidoTitulos_expedientert' => $data['contenidoTitulos_expedientert'],
-                    'desistido_expedientert' => $data['desistido_expedientert'],
-                    'archivo_expedientert' => $data['archivo_expedientert'],
                     'fechacrea_expedientert' => date("Y-m-d H:i:s"),
                     'numeroexpediente_anterior' => $data['numeroexpediente_anterior']
                 )
@@ -47,20 +39,12 @@ class Reglamento_model extends CI_Model {
                 'id_empresart' => $data['id_empresart'],
                 'numexpediente_expedientert' => $data['numexpediente_expedientert'],
                 'tipopersona_expedientert' => $data['tipopersona_expedientert'],
-                'tiposolicitud_expedientert' => $data['tiposolicitud_expedientert'],
                 'organizacionsocial_expedientert' => $data['organizacionsocial_expedientert'],
                 'contratocolectivo_expedientert' => $data['contratocolectivo_expedientert'],
-                'notificacion_expedientert' => $data['notificacion_expedientert'],
-                'fechanotificacion_expedientert' => $data['fechanotificacion_expedientert'],
-                'resolucion_expedientert' => $data['resolucion_expedientert'],
-                'fecharesolucion_expedientert' => $data['fecharesolucion_expedientert'],
                 'archivo_expedientert' => $data['archivo_expedientert'],
-                'obsergenero_expedientrt' => $data['obsergenero_expedientrt'],
                 'contenidoTitulos_expedientert' => $data['contenidoTitulos_expedientert'],
-                'desistido_expedientert' => $data['desistido_expedientert'],
-                'archivo_expedientert' => $data['archivo_expedientert'],
-                'fecha_entrega' => $data['fecha_entrega'],
-                'persona_recibe' => $data['persona_recibe']
+                'fechacrea_expedientert' => date("Y-m-d H:i:s"),
+                'numeroexpediente_anterior' => $data['numeroexpediente_anterior']
                 )
             )){
 			return $data["id_expedientert"];
@@ -219,12 +203,12 @@ class Reglamento_model extends CI_Model {
                 a.id_solicitud,
                 a.id_tipo_solicitud tiposolicitud_expedientert,
                 a.resolucion_solicud,
+                a.id_tipo_solicitud,
                 a.obsergenero_solicitud,
                 a.fecharesolucion_solicitud,
                 a.notificacion_solicitud,
                 a.fechanotificacion_solicitud,
                 b.id_expedientert,
-                b.tiposolicitud_expedientert,
                 b.numexpediente_expedientert,
                 b.numeroexpediente_anterior,
                 b.tipopersona_expedientert,
@@ -261,15 +245,14 @@ class Reglamento_model extends CI_Model {
                ->join('sri_representantert c', 'c.id_empresart = b.id_empresart', 'left')
                ->join('sri_documentort d', 'd.id_expedientert = a.id_expedientert', 'left')
                ->join('sge_empresa e', 'e.id_empresa = b.id_empresart')
-               ->join('sri_expediente_empleado f', 'f.id_expedientert = a.id_expedientert', 'left')
+               ->join('sri_expediente_empleado f', 'f.id_expedientert = a.id_solicitud', 'left')
+               ->join('( SELECT MAX(ba.id_solicitud) id_solicitud, MAX(bb.id_exp_emp) id_exp_emp
+                        FROM sri_solicitud ba
+                        JOIN sri_expediente_empleado bb ON ba.id_solicitud = bb.id_expedientert
+                        GROUP BY ba.id_expedientert ) g',
+                    'g.id_solicitud = a.id_solicitud AND g.id_exp_emp = f.id_exp_emp', 'left')
                ->join('sir_empleado h', 'h.id_empleado = f.id_empleado', 'left')
-               ->where('a.id_solicitud', $id)
-               ->where('CASE
-                        WHEN f.id_empleado IS NOT NULL THEN (
-                            f.id_exp_emp = (SELECT max(da.id_exp_emp)
-                            FROM sri_expediente_empleado da
-                            WHERE da.id_expedientert = a.id_solicitud ) )
-                        ELSE TRUE END');
+               ->where('a.id_solicitud', $id);
                
         if ($old) {
             $this->db->where('c.id_representantert = (SELECT max(ab.id_representantert) FROM sri_representantert ab WHERE ab.id_empresart = e.id_empresa)');
