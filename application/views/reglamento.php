@@ -133,8 +133,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#id_solicitud").val("");
     $("#id_solicitud2").val("");
     $("#tipo_solicitante").val("").trigger('change.select2');
-    $("#tipo_solicitante").removeAttr('readonly');
-    $("#tipo_solicitud").val('Registro');
+    $("#tipo_solicitante").removeAttr('disabled').trigger('change.select2');
+    $("#tipo_solicitud").val('1');
 
     $("#reglamento_interno").prop('checked',false);
     $("#constitucion_sociedad").attr('checked',false);

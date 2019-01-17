@@ -61,25 +61,30 @@ class Establecimiento extends CI_Controller {
 		$count = $this->establecimiento_model->cantidad_expediente_establecimiento($this->input->post('id'));
 
 		if ($count) {
-
 			$count = $count->row();
 			if ( $count->meses >= 7 ) {
-
 				echo 1;
-
 			} else {
-				
 				echo 2;
-			
 			}
-
 		} else {
-
 			echo 0;
-
 		}
 		
-		
 	}
+
+	public function tabla_representante() {
+		$this->load->view(
+			'establecimiento_ajax/tabla_representante', 
+			array(
+				'representantes' => $this->representante_model->obtenerRepresentantesEmpresa($this->input->post('id')), 
+			)
+		);
+	}
+
+	public function obtener_representante() {
+		echo json_encode($this->representante_model->obtenerRepresentante($this->input->post('id_representante_modal')));
+	}
+
 }
 ?>

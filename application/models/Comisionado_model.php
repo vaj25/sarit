@@ -24,7 +24,7 @@ class Comisionado_model extends CI_Model {
                     'sexo_representantert' => $data['sexo_representantert']
                 )
             )) {
-            return "exito";
+            return $this->db->insert_id();
         } else{
             return "fracaso";
         }
@@ -47,10 +47,32 @@ class Comisionado_model extends CI_Model {
                 'sexo_representantert' => $data['sexo_representantert']
                 )
             )){
-			return "exito";
+            return $data["id_representantert"];
 		}else{
 			return "fracaso";
 		}
+    }
+
+    public function insert_or_update_comisinado($data, $dui) {
+        
+        if ($data['id_representantert'] != 0) {
+            if ($dui == $data['dui_representantert']) {
+                return $this->editar_comisionado($data);
+            }
+        }
+        
+        $data['id_representantert'] = null;
+        return $this->insertar_comisionado($data);
+    }
+
+    public function obtener_comisionado($id) {
+        $this->db->where("id_representantert",$id);
+        $query = $this->db->get('sri_representantert');
+        if($query->num_rows() > 0) {
+            return $query->row();
+        } else {
+            return false;
+        }
     }
     
 }

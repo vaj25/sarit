@@ -43,5 +43,25 @@ class Solicitud_model extends CI_Model {
     }
   }
 
+  public function obtener_solicitud_detallada($id_solicitud) {
+    $this->db->select('')
+          ->from('sri_expedientert a')
+          ->join('sri_solicitud b', 'b.id_expedientert = a.id_expedientert')
+          ->join('sri_expediente_empleado f', 'f.id_expedientert = b.id_solicitud')
+          ->join('sir_empleado h', 'h.id_empleado = f.id_empleado')
+          ->where('b.id_solicitud', $id_solicitud)
+          ->where('h.id_empleado = ( select see.id_empleado from sri_expediente_empleado see
+                    where see.id_exp_emp = ( select max(se.id_exp_emp) from sri_expediente_empleado se 
+                    where se.id_expedientert = b.id_solicitud ))');
+    
+    $query = $this->db->get();
+    if ($query->num_rows() > 0) {
+      return $query->row();
+    }
+    else {
+      return FALSE;
+    }
+  }
+
 }
 ?>
