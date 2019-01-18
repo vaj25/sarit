@@ -72,6 +72,8 @@
                         <a class="dropdown-item" href="javascript:;" onClick="entrega_resolucion(<?=$fila->id_solicitud?>)">Entrega
                             Resolución</a>
                     <?php }?>
+                    <a class="dropdown-item" href="<?= base_url('index.php/Editar_reglamento?id_solicitud='.$fila->id_solicitud)?>" >Editar
+                            Historial</a>
                 </div>
             </div>
             <?php
