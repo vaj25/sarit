@@ -26,6 +26,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#id_solicitud").val(result.id_solicitud);
       $("#id_solicitud2").val(result.id_solicitud);
       $("#tipo_solicitante").val(result.tipopersona_expedientert).trigger('change.select2');
+      $("#tipo_solicitante").attr('disabled', 'disabled').trigger('change.select2');
 
       $("#reglamento_interno").attr('checked',result.docreglamento_documentort);
       $("#constitucion_sociedad").attr('checked',result.escritura_documentort);
@@ -49,19 +50,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#tipo_representante").val(result.cargo_representantert).trigger('change.select2');
       $("#sexo").val(result.sexo_representantert).trigger('change.select2');
 
+      combo_establecimiento(result.id_empresa, 1, 'disabled');
       if(bandera == "edit"){
 
         $("#tipo_solicitud").val(result.tiposolicitud_expedientert);
-        combo_establecimiento(result.id_empresa, 1);
 
       } else {
         
-        combo_establecimiento(result.id_empresa, 1, true);
         $("#tipo_solicitante").attr('readonly', 'readonly');
 
       }
 
-      combo_delegado(result.id_empleado, 1, 'readonly');
+      combo_delegado(result.id_empleado, 1, 'disabled');
 
     });
 
@@ -133,8 +133,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     $("#id_solicitud").val("");
     $("#id_solicitud2").val("");
     $("#tipo_solicitante").val("").trigger('change.select2');
-    $("#tipo_solicitante").removeAttr('readonly');
-    $("#tipo_solicitud").val('Registro');
+    $("#tipo_solicitante").removeAttr('disabled').trigger('change.select2');
+    $("#tipo_solicitud").val('1');
 
     $("#reglamento_interno").prop('checked',false);
     $("#constitucion_sociedad").attr('checked',false);
@@ -249,13 +249,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
     })
     .done(function(res){
 
-      if (numero == 1) {
-        $('#div_combo_establecimiento').html(res);
-      } else {
-        $('#div_combo_establecimiento'+numero).html(res);
-      }
+      $('#div_combo_establecimiento'+numero).html(res);
 
-      $("#establecimiento").select2({
+      $('#div_combo_establecimiento'+numero+" #establecimiento").select2({
         'minimumInputLength': 3,
         'language': {
           noResults: function () {
@@ -264,8 +260,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         },
         'escapeMarkup': function (markup) {
           return markup;
-        },
-        'readonly': disable
+        }
       });
     });
 
@@ -629,7 +624,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       </select>
                     </div>
                   </div>
-                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento"></div>
+                  <div class="form-group col-lg-6 col-sm-12 <?php if($navegatorless){ echo " pull-left "; } ?>" id="div_combo_establecimiento1"></div>
                 </div>
               </blockquote>
 
@@ -657,8 +652,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                     <div class="controls">
                       <select id="sexo" name="sexo" class="form-control" required>
                         <option value="">[Seleccione]</option>
-                        <option value="1">Masculino</option>
-                        <option value="2">Femenino</option>
+                        <option value="1">Hombre</option>
+                        <option value="2">Mujer</option>
                       </select>
                     </div>
                   </div>
@@ -704,8 +699,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                       <select id="tipo_representante" name="tipo_representante" class="form-control" required>
                         <option value="">[Seleccione]</option>
                         <option value="Representante Legal">Representante Legal</option>
-                        <option value="Propietario">Propietario</option>
-                        <option value="Apoderado">Apoderado</option>
+                        <option value="Propietario">Persona propietaria</option>
+                        <option value="Apoderado">Persona apoderada</option>
                       </select>
                     </div>
                   </div>
@@ -915,10 +910,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <?php if (obtener_rango($segmentos=1, $permiso=1) > 1) { ?>
             <div class="form-group" style="width: 400px;">
               <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablaReglamentos();">
-                <option value="">[Todos los empleados]</option>
+                <option value="">[Todos los colaboradores]</option>
                 <?php
                 if($delegados){
-                  var_dump($delegados);
                   foreach ($delegados->result() as $fila) {
                     if($nr_usuario == $fila->nr){
                       echo '<option class="m-l-50" value="'.$fila->nr.'" selected>'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
@@ -948,35 +942,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <div class="row" style="width: 100%"></div>
         <div class="row col-lg-12">
           <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-              <div class="btn-group mr-2" role="group" aria-label="First group">
-                  <button type="button" class="change-letter btn btn-info" data-letra="A">A</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="B">B</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="C">C</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="D">D</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="E">E</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="F">F</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="G">G</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="H">H</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="I">I</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="J">J</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="K">K</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="L">L</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="M">M</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="N">N</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="Ñ">Ñ</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="O">O</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="P">P</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="Q">Q</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="R">R</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="S">S</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="T">T</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="U">U</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="V">V</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="W">W</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="X">X</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="Y">Y</button>
-                  <button type="button" class="change-letter btn btn-secondary" data-letra="Z">Z</button>
-              </div>
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+              <button type="button" class="change-letter btn btn-info" data-letra="A">A</button>
+              <?php
+                foreach (range('B', 'Z') as $letra) {
+                  echo '<button type="button" class="change-letter btn btn-secondary" data-letra="'.$letra.'">'.$letra.'</button>';
+                }
+              ?>
+            </div>
           </div>
         </div>
         <br>
@@ -1045,7 +1018,8 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax"));
-        formData.append("dato", "valor");
+        formData.append("establecimiento", $('#div_combo_establecimiento1 #establecimiento').val());
+        formData.append("tipo_solicitante", $('#tipo_solicitante').val());
         
         $.ajax({
             url: "<?php echo site_url(); ?>/reglamento/gestionar_reglamento",
@@ -1081,6 +1055,7 @@ $(function(){
         e.preventDefault();
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax2"));
+        formData.append('colaborador', $('#colaborador').val());
         
         $.ajax({
           url: "<?php echo site_url(); ?>/documentacion/gestionar_documentacion",

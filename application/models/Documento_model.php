@@ -76,7 +76,7 @@ class Documento_model extends CI_Model {
     }
 
     public function obtener_documentos($id_solicitud) {
-        $this->db->where('id_expedientert', $id);
+        $this->db->where('id_expedientert', $id_solicitud);
         $query = $this->db->get('sri_documentort');
         if ($query->num_rows() > 0) {
             return  $query->row();

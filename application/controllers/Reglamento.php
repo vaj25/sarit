@@ -24,7 +24,14 @@ class Reglamento extends CI_Controller {
 
 	public function gestionar_reglamento() {
 
-		if($this->input->post('band1') == "save"){ 
+		$representante_empresa = $this->comisionado_model->obtener_comisionado($this->input->post('id_comisionado'));
+		$dui = '';
+		if ($representante_empresa) {
+			$dui = $representante_empresa->dui_representantert;
+		}
+		
+
+		if($this->input->post('band1') == "save"){
 
 			if ($this->input->post('nuevo_expediente') == 1) {
 				$id = $this->reglamento_model->obtener_expediente_cierre($this->input->post('establecimiento'));
@@ -32,7 +39,7 @@ class Reglamento extends CI_Controller {
 					$this->expediente_estado_model->insertar_expediente_estado(
 						array(
 						'id_estadort' => 11,
-						'id_expedientert' => $id->row->id_solicitud,
+						'id_expedientert' => $id->row()->id_solicitud,
 						'fecha_exp_est' => date("Y-m-d H:i:s"),
 						'fecha_ingresar_exp_est' => date("Y-m-d H:i:s"),
 						'etapa_exp_est' => 1
@@ -40,27 +47,9 @@ class Reglamento extends CI_Controller {
 				}
 			}
 
-			$data = array(
-				'id_empresart' => $this->input->post('establecimiento'),
-				'id_personal' => '',
-				'numexpediente_expedientert' => 'N/A',
-				'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
-				'tiposolicitud_expedientert' => '',
-				'organizacionsocial_expedientert' => '',
-				'contratocolectivo_expedientert' => '',
-				'notificacion_expedientert' => '',
-				'fechanotificacion_expedientert' => '',
-				'resolucion_expedientert' => '',
-				'fecharesolucion_expedientert' => '',
-				'archivo_expedientert' => '',
-				'obsergenero_expedientrt' => '',
-				'contenidoTitulos_expedientert' => '',
-				'archivo_expedientert' => '',
-				'numeroexpediente_anterior' => null
-			);
-
-			$data2 = array(
-				'id_empresart' =>$this->input->post('establecimiento'), 
+			$comisionado = array(
+				'id_representantert' => $this->input->post('id_comisionado'),
+				'id_empresart' => $this->input->post('establecimiento'), 
 				'nombres_representantert' => $this->input->post('nombres'),
 				'apellidos_representantert' => $this->input->post('apellidos'),
 				'dui_representantert'  => $this->input->post('dui_comisionado'),
@@ -71,13 +60,26 @@ class Reglamento extends CI_Controller {
 				'sexo_representantert' => $this->input->post('sexo')
 			);
 
-			if ("exito" == $this->comisionado_model->insertar_comisionado($data2)) {
-				
-				$id = $this->reglamento_model->insertar_reglamento($data);
+			$id_representante = $this->comisionado_model->insert_or_update_comisinado($comisionado, $dui);
 
+			if ("fracaso" != $id_representante) {
 				
-				$id2 = $this->solicitud_model->insertar_solicitud(array(
-					'id_expedientert' => $id,
+				$expediente = array(
+					'id_empresart' => $this->input->post('establecimiento'),
+					'id_representante' => $id_representante,
+					'numexpediente_expedientert' => 'N/A',
+					'numeroexpediente_anterior' => null,
+					'tipopersona_expedientert' => $this->input->post('tipo_solicitante'),
+					'organizacionsocial_expedientert' => '',
+					'contratocolectivo_expedientert' => '',
+					'archivo_expedientert' => '',
+					'contenidoTitulos_expedientert' => ''
+				);
+
+				$id_expediente = $this->reglamento_model->insertar_reglamento($expediente);
+				
+				$id_solicitud = $this->solicitud_model->insertar_solicitud(array(
+					'id_expedientert' => $id_expediente,
 					'id_tipo_solicitud' => $this->input->post('tipo_solicitud'),
 					'notificacion_solicitud' => '',
 					'fechanotificacion_solicitud' => '',
@@ -93,13 +95,13 @@ class Reglamento extends CI_Controller {
 				$this->expediente_estado_model->insertar_expediente_estado(
 					array(
 					'id_estadort' => 1,
-					'id_expedientert' => $id2,
+					'id_expedientert' => $id_solicitud,
 					'fecha_exp_est' => date("Y-m-d H:i:s"),
 					'fecha_ingresar_exp_est' => date("Y-m-d H:i:s"),
 					'etapa_exp_est' => 1
 				));
 
-				echo json_encode(array( 'expediente' => $id , 'solicitud' => $id2 ));
+				echo json_encode(array( 'expediente' => $id_expediente , 'solicitud' => $id_solicitud ));
 
 			} else {
 				echo "fracaso";
@@ -107,16 +109,7 @@ class Reglamento extends CI_Controller {
 
 		} else if($this->input->post('band1') == "edit"){
 
-			$data3 = $this->solicitud_model->obtener_solicitud( $this->input->post('id_solicitud') )->result_array()[0];
-			
-			$data3['id_tipo_solicitud'] = $this->input->post('tipo_solicitud');
-			
-			$data = $this->reglamento_model->obtener_reglamento( $data3['id_expedientert'] )->result_array()[0];
-
-			$data['id_empresart'] = $this->input->post('establecimiento');
-			$data['tipopersona_expedientert'] = $this->input->post('tipo_solicitante');
-
-			$data2 = array(
+			$representante = array(
 				'id_representantert' => $this->input->post('id_comisionado'),
 				'id_empresart' =>$this->input->post('establecimiento'), 
 				'nombres_representantert' => $this->input->post('nombres'),
@@ -129,21 +122,35 @@ class Reglamento extends CI_Controller {
 				'sexo_representantert' => $this->input->post('sexo')
 			);
 
-			if ("exito" == $this->comisionado_model->editar_comisionado($data2)) {
-				echo json_encode(array( 'expediente' => $this->reglamento_model->editar_reglamento($data) , 'solicitud' => $this->solicitud_model->editar_solitud($data3) ));
+			$id_representante = $this->comisionado_model->insert_or_update_comisinado($representante, $dui);
+
+			if ("fracaso" != $id_representante) {
+				
+				$solicitud = $this->solicitud_model->obtener_solicitud( $this->input->post('id_solicitud') )->result_array()[0];
+				
+				$solicitud['id_tipo_solicitud'] = $this->input->post('tipo_solicitud');
+				
+				$reglamento = $this->reglamento_model->obtener_reglamento( $solicitud['id_expedientert'] )->result_array()[0];
+	
+				$reglamento['id_empresart'] = $this->input->post('establecimiento');
+				$reglamento['tipopersona_expedientert'] = $this->input->post('tipo_solicitante');
+				$reglamento['id_representante'] = $id_representante;
+
+				echo json_encode(array( 'expediente' => $this->reglamento_model->editar_reglamento($reglamento) , 'solicitud' => $this->solicitud_model->editar_solitud($solicitud) ));
 			} else {
 				echo "fracaso";
 			}
 
 		} else if($this->input->post('band1') == "edit_new"){
 
-			$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_expediente'))->result_array()[0];
+			$reglamento = $this->reglamento_model->obtener_reglamento($this->input->post('id_expediente'))->result_array()[0];
 
-			$data['id_empresart'] = $this->input->post('establecimiento');
-			$data['tipopersona_expedientert'] = $this->input->post('tipo_solicitante');
+			$reglamento['id_empresart'] = $this->input->post('establecimiento');
+			$reglamento['tipopersona_expedientert'] = $this->input->post('tipo_solicitante');
 
-			$data2 = array(
-				'id_empresart' => $this->input->post('establecimiento'), 
+			$representante = array(
+				'id_representantert' => $this->input->post('id_comisionado'),
+				'id_empresart' => $this->input->post('establecimiento'),
 				'nombres_representantert' => $this->input->post('nombres'),
 				'apellidos_representantert' => $this->input->post('apellidos'),
 				'dui_representantert'  => $this->input->post('dui_comisionado'),
@@ -154,13 +161,15 @@ class Reglamento extends CI_Controller {
 				'sexo_representantert' => $this->input->post('sexo')
 			);
 
-			if ("exito" == $this->comisionado_model->insertar_comisionado($data2)) {
-				echo json_encode(array( 'expediente' => $this->reglamento_model->editar_reglamento($data), 'solicitud' => $this->input->post('id_solicitud') ));
+			$id_representante = $this->comisionado_model->insert_or_update_comisinado($representante, $dui);
+
+			if ("fracaso" != $id_representante) {
+				echo json_encode(array( 'expediente' => $this->reglamento_model->editar_reglamento($reglamento), 'solicitud' => $this->input->post('id_solicitud') ));
 			} else {
 				echo "fracaso";
 			}
 
-		} else if($this->input->post('band') == "delete"){
+		} else if($this->input->post('band') == "delete") {
 			
 			$solicitudes = $this->reglamento_model->obtener_reglamentos_numero($this->input->post('id_expedientert'));
 			if ($solicitudes > 0) {
@@ -174,11 +183,10 @@ class Reglamento extends CI_Controller {
 			}
 			
 		} else if($this->input->post('band1') == "reforma_parcial" || $this->input->post('band1') == "reforma_total"){
-			
-			$dui = $this->reglamento_model->obtener_reglamentos_documentos($this->input->post('id_expediente'))->result();
-			$dui = $dui[0]->dui_representantert;
-
-			$data2 = array(
+			/** 
+			 * Crea o actualiza al representante de la empresa
+			*/
+			$representante = array(
 				'id_representantert' => $this->input->post('id_comisionado'),
 				'id_empresart' =>$this->input->post('establecimiento'), 
 				'nombres_representantert' => $this->input->post('nombres'),
@@ -190,17 +198,21 @@ class Reglamento extends CI_Controller {
 				'cargo_representantert' => $this->input->post('tipo_representante'),
 				'sexo_representantert' => $this->input->post('sexo')
 			);
-
-			$res = "fracaso";
-
-			if ($dui == $this->input->post('dui_comisionado')) {
-				$res = $this->comisionado_model->editar_comisionado($data2);
-			} else {
-				$data2['id_representantert'] = null;
-				$res = $this->comisionado_model->insertar_comisionado($data2);
-			}
 			
-			if ("exito" == $res) {
+			$id_representante = $this->comisionado_model->insert_or_update_comisinado($representante, $dui);
+
+			if ("fracaso" != $id_representante) {
+				/** 
+				 * Cambia representante del reglamento 
+				*/
+				$reglamento = $this->reglamento_model->obtener_reglamento($this->input->post('id_expediente'))->result_array()[0];
+				$reglamento['id_representante'] = $id_representante;
+
+				$this->reglamento_model->editar_reglamento($reglamento);
+
+				/** 
+				 * Crea una nueva solicitud
+				*/
 				$data = $this->solicitud_model->obtener_solicitud($this->input->post('id_solicitud'))->result_array()[0];
 
 				$data['id_solicitud'] = null;
@@ -217,18 +229,18 @@ class Reglamento extends CI_Controller {
 				$data['fechanotificacion_solicitud'] = 0;
 				$data['id_tipo_solicitud'] = $this->input->post('tipo_solicitud');
 					
-				$id = $this->solicitud_model->insertar_solicitud($data);
+				$id_solicitud = $this->solicitud_model->insertar_solicitud($data);
 			
 				$this->expediente_estado_model->insertar_expediente_estado(
 					array(
 					'id_estadort' => 1,
-					'id_expedientert' => $id,
+					'id_expedientert' => $id_solicitud,
 					'fecha_exp_est' => date("Y-m-d H:i:s"),
 					'fecha_ingresar_exp_est' => date("Y-m-d H:i:s"),
 					'etapa_exp_est' => 1
 				));
 
-				echo json_encode(array( 'expediente' => $this->input->post('id_expediente'), 'solicitud' => $id ));
+				echo json_encode(array( 'expediente' => $this->input->post('id_expediente'), 'solicitud' => $id_solicitud ));
 
 			} else {
 				echo "fracaso";
@@ -307,7 +319,7 @@ class Reglamento extends CI_Controller {
 		print json_encode(
 			$this->reglamento_model->obtener_reglamentos_documentos(
 				$this->input->post('id'),
-				($this->input->post('bandera') == 'edit_new') ? TRUE : FALSE
+				($this->input->post('bandera') == 'edit') ? TRUE : FALSE
 			)->result()
 		);
 		
@@ -354,9 +366,22 @@ class Reglamento extends CI_Controller {
 		$data['obsergenero_solicitud'] = $this->input->post('ob_genero');
 		$data['fecharesolucion_solicitud'] = date("Y-m-d H:i:s");
 
+		$estado = 6;
+		if ($data['resolucion_solicud'] == 'Aprobado') {
+			$estado = 3;
+		}
+
 		if ("fracaso" == $this->solicitud_model->editar_solitud($data)) {
 			echo "fracaso";
 		} else {
+			$this->expediente_estado_model->insertar_expediente_estado(
+				array(
+				'id_estadort' => $estado,
+				'id_expedientert' => $data['id_solicitud'],
+				'fecha_exp_est' => $data['fecharesolucion_solicitud'],
+				'fecha_ingresar_exp_est' => $data['fecharesolucion_solicitud'],
+				'etapa_exp_est' => 1
+			));
 			echo "exito";
 		}
 		
@@ -517,9 +542,9 @@ class Reglamento extends CI_Controller {
 	}
 
 	public function gestionar_reglamento_delegado() {
-		$data = $this->reglamento_model->obtener_reglamento($this->input->post('id_solicitud'))->result_array()[0];
+		$data = $this->solicitud_model->obtener_solicitud_detallada($this->input->post('id_solicitud'));
 		
-		if ($data['id_empleado'] != $this->input->post('id_personal_copia')) {
+		if ($data->id_empleado != $this->input->post('id_personal_copia')) {
 			
 			if ("fracaso" == $this->expediente_empleado_model->
 				insertar_expediente_empleado(

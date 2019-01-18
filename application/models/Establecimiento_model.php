@@ -39,20 +39,16 @@ class Establecimiento_model extends CI_Model {
                 ->from('sri_expedientert a')
                 ->join('sri_solicitud b', 'b.id_expedientert = a.id_expedientert')
                 ->join('sri_expediente_estado c', 'c.id_expedientert = b.id_solicitud')
-                ->where('b.id_solicitud = (
-                    SELECT
-                        MAX(aa.id_solicitud)
-                    FROM
-                        sri_solicitud aa
-                    WHERE
-                        aa.id_expedientert = a.id_expedientert )')
-                ->where('c.id_expediente_estado = (
-                    SELECT
-                        MAX(ba.id_expediente_estado)
-                    FROM
-                        sri_expediente_estado ba
-                    WHERE
-                        ba.id_expedientert = b.id_solicitud )')
+                ->join('(SELECT MAX(aa.id_solicitud) id_solicitud
+                        FROM sri_solicitud aa
+                        JOIN sri_expedientert ab ON ab.id_expedientert = aa.id_expedientert
+                        GROUP BY ab.id_expedientert
+                    ) d', 'd.id_solicitud = b.id_solicitud')
+                ->join('( SELECT MAX(ba.id_expediente_estado) id_expediente_estado
+                        FROM sri_expediente_estado ba
+                        JOIN sri_solicitud bb ON bb.id_solicitud = ba.id_expedientert
+                        GROUP BY bb.id_solicitud
+                    ) e ', ' e.id_expediente_estado = c.id_expediente_estado')
                 ->where('( c.id_estadort <> 3 OR c.id_estadort <> 9 )')
                 ->where('a.id_empresart', $id);
 

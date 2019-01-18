@@ -49,7 +49,19 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                         ?>
                         <div class="row">
                           <div class="col-8">
-                            <?= $fila->nombre_rol?>
+                            <?php
+                              if ($fila->sexo == 'M') {
+                                echo $fila->nombre_rol;
+                              } else {
+                                if ($fila->nombre_rol == 'Colaborador SARIT') {
+                                  echo 'Colaboradora SARIT';
+                                } else {
+                                  echo 'Filtro SARIT';
+                                }
+                                
+                              }
+                              
+                            ?>
                             <h5><?= $fila->nombre_completo?></h5>
                           </div>
                           <div class="col-4">

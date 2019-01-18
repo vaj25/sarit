@@ -5,8 +5,8 @@
             <tr>
                 <th>N&uacute;mero</th>
                 <th>N&uacute;mero de expediente</th>
-                <th>Nombre del solicitante</th>
-                <th>Colaborador Asignado (a) </th>
+                <th>Persona solicitante</th>
+                <th>Persona Colaboradora</th>
                 <th>Tipo Solicitud </th>
                 <th>Fecha Modificación </th>
                 <th>Estado </th>
@@ -18,6 +18,8 @@
                     if ($reglamentos) {
                         if($reglamentos->num_rows() > 0){
                             $i=1;
+                            $permiso_actualizar = tiene_permiso($segmentos=1,$permiso=4);
+                            $permiso_personal = obtener_rango($segmentos=1, $permiso=1);
                             foreach ($reglamentos->result() as $fila) {
                                 echo "<tr>";
                                 echo "<td>".$i."</td>";
@@ -32,7 +34,7 @@
 
                                 $array = array($fila->id_solicitud);
 
-                                if(tiene_permiso($segmentos=1,$permiso=4)){
+                                if($permiso_actualizar){
 
                                     if ($fila->id_estadort != "9") {
 
@@ -56,7 +58,7 @@
                                                 <a class="dropdown-item" href="javascript:;" onClick="cambiar_editar(<?=$fila->id_expedientert?>, 'reforma_total')">Reforma Total</a> -->
                     <a class="dropdown-item" href="javascript:;" onClick="actualizar_estado(<?=$fila->id_solicitud?>)">Actualizar
                         Estado</a>
-                    <?php if (obtener_rango($segmentos=1, $permiso=1) > 1) { ?>
+                    <?php if ($permiso_personal > 1) { ?>
                         <a class="dropdown-item" href="javascript:;" onClick="modal_delegado(<?=$fila->id_solicitud.','.$fila->id_personal?>)">Cambiar
                         Delegado</a>
                     <?php }?>
@@ -64,32 +66,14 @@
                                                     '<a class="dropdown-item" href="javascript:;" onClick="desistir('.$fila->id_solicitud.')">Desistir</a>'?>
                     <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedientert?>)">Registrar
                         Resolución</a>
-                    <a class="dropdown-item" href="javascript:;" onClick="notificacion_resolucion(<?=$fila->id_solicitud?>)">Registrar
-                        Notificaci&oacute;n Resolución</a>
-                    <a class="dropdown-item" href="javascript:;" onClick="entrega_resolucion(<?=$fila->id_solicitud?>)">Entrega
-                        Resolución</a>
-
-                    <!-- ?php
-                                                    if ( $fila->id_estadort == 6 || $fila->id_estadort == 2 || $fila->id_estadort == 9 ) {
-                                                ?>
-                                                        <a class="dropdown-item"href="<?=base_url('index.php/acta/generar_acta/'.$fila->id_expedientert.'/asdfa')?>">Generar Acta</a>
-                                                <php    
-                                                    } elseif ($fila->id_estadort == 3) {
-                                                ?>
-                                                        <a class="dropdown-item" href="javascript:;" onClick="modal_acta_aprobada(<?=$fila->id_expedientert?>)">Generar Acta</a>
-                                                <php
-                                                    }
-                                                ?>                                                
-                                                
-                                                <php
-                                                    if ($fila->archivo_expedientert != "") {
-                                                ?>
-                                                        <a class="dropdown-item" href="<?=base_url('index.php/reglamento/descargar_reglamento/'.$fila->id_expedientert)?>" >Descargar Reglamento</a>
-                                                <php
-                                                    }
-                                                ? -->
-                    <!-- <a class="dropdown-item" href="javascript:;" onClick="adjuntar_reglamento(<?=$fila->id_expedientert?>)">Adjuntar Reglamento</a> -->
-                    <!-- <a class="dropdown-item" href="javascript:;" onClick="inhabilitar(<?=$fila->id_expedientert?>)">Inhabilitar Expediente</a> -->
+                    <?php if ($fila->id_estadort > 1) { ?>
+                        <a class="dropdown-item" href="javascript:;" onClick="notificacion_resolucion(<?=$fila->id_solicitud?>)">Registrar
+                            Notificaci&oacute;n Resolución</a>
+                        <a class="dropdown-item" href="javascript:;" onClick="entrega_resolucion(<?=$fila->id_solicitud?>)">Entrega
+                            Resolución</a>
+                    <?php }?>
+                    <a class="dropdown-item" href="<?= base_url('index.php/Editar_reglamento?id_solicitud='.$fila->id_solicitud)?>" >Editar
+                            Historial</a>
                 </div>
             </div>
             <?php

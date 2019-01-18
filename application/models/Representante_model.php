@@ -23,6 +23,30 @@ class Representante_model extends CI_Model {
         }
 
     }
+
+    public function obtenerRepresentantesEmpresa($id_empresa) {
+        $this->db->select('a.*')
+                ->from('sri_representantert a')
+                ->where('a.id_empresart', $id_empresa);
+        $query=$this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return FALSE;
+        }
+    }
+
+    public function obtenerRepresentante($id) {
+        $this->db->select('a.*')
+                ->from('sri_representantert a')
+                ->where('a.id_representantert', $id);
+        $query=$this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->row_array();
+        } else {
+            return FALSE;
+        }
+    }
     
 }
 

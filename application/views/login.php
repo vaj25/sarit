@@ -56,7 +56,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
             <div class="pull-left">
                 
-                <span class="nav-item" style="position: inline-block;"> <a class="nav-link sidebartoggler text-white waves-effect waves-dark" href="javascript:void(0)" style="font-size: 20px;"> <span class="mdi mdi-login-variant"></span> INICIO DE SESIÓN</a> </span>
+                <span class="nav-item" style="position: inline-block;"> <a class="nav-link sidebartoggler text-white waves-effect waves-dark"
+                        href="javascript:void(0)" style="font-size: 20px;"> <span class="mdi mdi-login-variant"></span> INICIO DE
+                        SESIÓN</a>
+                </span>
             </div>
             <div class="pull-right">
                 <div class="navbar-collapse">
@@ -66,9 +69,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                             <a id="initial_user" data-toggle="tooltip" title="" data-original-title="Acerca de SARIT" class="nav-link waves-effect waves-dark"
                                 onclick="swal({ title: 'SARIT V1.0', text: 'Su nombre proviene de las siglas de Sistema de Aprobaci&oacute;n de Reglamentos Internos de Trabajo', showConfirmButton: true });"
                                 href="javascript:void(0)">
-                                <span class="round round-inverse bg-inverse">
+                                <!-- span class="round round-inverse bg-inverse">
                                     <span class="mdi mdi-help" style="font-size: 35px;"></span>
-                                </span>
+                                </span -->
                             </a>
                         </li>
                     </ul>
@@ -88,9 +91,9 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             echo form_open('', array('id' => 'loginform', 'style' => 'margin-top: 0px;', 'class' => 'form-horizontal form-material'));
         } 
      ?>
-        <a href="javascript:void(0)" class="text-center db"><img height="160px;" src="<?php echo base_url(); ?>assets/images/Logo-min.png" alt="Home" /></a>
+        <a href="javascript:void(0)" class="text-center db"><img height="160px;" src="<?php echo base_url(); ?>assets/images/Logo.png" alt="Home" /></a>
        <div class="form-group m-t-40">
-          <div class="col-lg-12"><input class="form-control" type="text" name="usuario" required="" placeholder="Usuario"></div>
+          <div class="col-lg-12"><input class="form-control" type="text" name="usuario" required="" placeholder="Persona usuaria"></div>
         </div>
         <div class="form-group" style="margin-bottom: 10px;">
           <div class="col-lg-12"><input class="form-control" type="password" id="password" name="password" required="" placeholder="Contraseña"></div>
