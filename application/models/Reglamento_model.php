@@ -125,7 +125,7 @@ class Reglamento_model extends CI_Model {
                         FROM sri_solicitud ba
                         JOIN sri_expediente_empleado bb ON ba.id_solicitud = bb.id_expedientert
                         GROUP BY ba.id_expedientert) k', 
-                    'k.id_solicitud = b.id_solicitud AND k.id_exp_emp = f.id_exp_emp', 'left')
+                    'k.id_solicitud = b.id_solicitud AND k.id_exp_emp = f.id_exp_emp')
                ->join('sri_representantert g', 'a.id_representante = g.id_representantert', 'left')
                ->join('sri_tipo_solicitud h', 'b.id_tipo_solicitud = h.id_tipo_solicitud')
                ->join('sir_empleado i', 'i.id_empleado = f.id_empleado', 'left')

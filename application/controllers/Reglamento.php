@@ -366,9 +366,22 @@ class Reglamento extends CI_Controller {
 		$data['obsergenero_solicitud'] = $this->input->post('ob_genero');
 		$data['fecharesolucion_solicitud'] = date("Y-m-d H:i:s");
 
+		$estado = 6;
+		if ($data['resolucion_solicud'] == 'Aprobado') {
+			$estado = 3;
+		}
+
 		if ("fracaso" == $this->solicitud_model->editar_solitud($data)) {
 			echo "fracaso";
 		} else {
+			$this->expediente_estado_model->insertar_expediente_estado(
+				array(
+				'id_estadort' => $estado,
+				'id_expedientert' => $data['id_solicitud'],
+				'fecha_exp_est' => $data['fecharesolucion_solicitud'],
+				'fecha_ingresar_exp_est' => $data['fecharesolucion_solicitud'],
+				'etapa_exp_est' => 1
+			));
 			echo "exito";
 		}
 		
@@ -531,7 +544,7 @@ class Reglamento extends CI_Controller {
 	public function gestionar_reglamento_delegado() {
 		$data = $this->solicitud_model->obtener_solicitud_detallada($this->input->post('id_solicitud'));
 		
-		if ($data['id_empleado'] != $this->input->post('id_personal_copia')) {
+		if ($data->id_empleado != $this->input->post('id_personal_copia')) {
 			
 			if ("fracaso" == $this->expediente_empleado_model->
 				insertar_expediente_empleado(

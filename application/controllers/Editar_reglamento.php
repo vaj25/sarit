@@ -6,7 +6,7 @@ class Editar_reglamento extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model(array('reglamento_model','solicitud_model', 'expediente_empleado_model', 
-			'documento_model', 'comisionado_model', 'expediente_empleado_model'));
+			'documento_model', 'comisionado_model', 'expediente_estado_model'));
 	}
 
 	public function index() {
@@ -95,6 +95,20 @@ class Editar_reglamento extends CI_Controller {
 		$this->solicitud_model->editar_solitud($solicitud);
 
 		$this->expediente_empleado_model->insertar_expediente_empleado($delegado);
+
+		$estado = 6;
+		if ($this->input->post('resolucion') == 'Aprobado') {
+			$estado = 3;
+		}
+
+		$this->expediente_estado_model->insertar_expediente_estado(
+			array(
+			'id_estadort' => $estado,
+			'id_expedientert' => $this->input->post('id_solicitud'),
+			'fecha_exp_est' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_resolucion'))),
+			'fecha_ingresar_exp_est' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_resolucion'))),
+			'etapa_exp_est' => 1
+		));
 
 	}
 

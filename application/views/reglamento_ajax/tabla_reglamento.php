@@ -66,10 +66,12 @@
                                                     '<a class="dropdown-item" href="javascript:;" onClick="desistir('.$fila->id_solicitud.')">Desistir</a>'?>
                     <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedientert?>)">Registrar
                         Resolución</a>
-                    <a class="dropdown-item" href="javascript:;" onClick="notificacion_resolucion(<?=$fila->id_solicitud?>)">Registrar
-                        Notificaci&oacute;n Resolución</a>
-                    <a class="dropdown-item" href="javascript:;" onClick="entrega_resolucion(<?=$fila->id_solicitud?>)">Entrega
-                        Resolución</a>
+                    <?php if ($fila->id_estadort > 1) { ?>
+                        <a class="dropdown-item" href="javascript:;" onClick="notificacion_resolucion(<?=$fila->id_solicitud?>)">Registrar
+                            Notificaci&oacute;n Resolución</a>
+                        <a class="dropdown-item" href="javascript:;" onClick="entrega_resolucion(<?=$fila->id_solicitud?>)">Entrega
+                            Resolución</a>
+                    <?php }?>
                 </div>
             </div>
             <?php

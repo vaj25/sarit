@@ -6,10 +6,10 @@ class Carga_laboral extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model(array("expediente_empleado_model", "expediente_estado_model"));
-    }
+  }
 
-    public function index() {
-        $this->load->view('templates/header');
+  public function index() {
+    $this->load->view('templates/header');
 		$this->load->view('reportes/carga_laboral');
 		$this->load->view('templates/footer');
 	}
