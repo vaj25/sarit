@@ -74,8 +74,8 @@ switch ($_SERVER['SERVER_NAME']) {
 	case "192.168.1.200":
 		$active_group = '240';
 		break;
-	case "192.168.11.240":
-		$active_group = '240';
+	case "192.168.1.43":
+		$active_group = '43';
 		break;
 	default:
 		$active_group = 'default';
@@ -106,11 +106,11 @@ $db['default'] = array(
 	'save_queries' => TRUE
 );
 
-$db['240'] = array(
+$db['43'] = array(
 	'dsn'	=> '',
-	'hostname' => '192.168.11.240',
-	'username' => 'root',
-	'password' => 'Prueba$1',
+	'hostname' => '192.168.1.42',
+	'username' => 'reglamentos',
+	'password' => 'Sarit#$%18',
 	'database' => 'mtps',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

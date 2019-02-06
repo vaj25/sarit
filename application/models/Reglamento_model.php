@@ -148,8 +148,8 @@ class Reglamento_model extends CI_Model {
             $this->db->like('c.nombre_empresa', $letra, 'after');
         }
         
-        // print $this->db->get_compiled_select();
         $query=$this->db->get();
+        // print $this->db->get_compiled_select();
         if ($query->num_rows() > 0) {
             return  $query;
         }
