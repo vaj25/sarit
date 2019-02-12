@@ -34,7 +34,7 @@ class Establecimiento extends CI_Controller {
 		if($this->input->post('band3') == "save"){
 
 			$data = array(
-                'numinscripcion_empresa' => '1-2018 SS', 
+                'numinscripcion_empresa' => '0-0 SS',
                 'nombre_empresa' => $this->input->post('nombre_establecimiento'),
                 'abreviatura_empresa' => $this->input->post('abre_establecimiento'),
                 'direccion_empresa'  => $this->input->post('dir_establecimiento'),
@@ -43,16 +43,7 @@ class Establecimiento extends CI_Controller {
                 'id_municipio' => $this->input->post('municipio')
             );
 
-			$id_establecimiento = $this->establecimiento_model->insertar_empresa($data);
-			
-			$data = array(
-				'nombres_representante' => $this->input->post('nombre_representante'),
-				'id_empresa' => $id_establecimiento
-			);
-			
-			$this->representante_model->insertar_representante($data);
-
-			echo $id_establecimiento;
+			echo $this->establecimiento_model->insertar_empresa($data);
 
 		}
 	}

@@ -6,6 +6,7 @@
     if(floatval($ua['version']) < $this->config->item("last_version")){
         $navegatorless = true;
     }
+    date_default_timezone_set('America/El_Salvador');
 ?>
                
 <div class="card">
@@ -144,7 +145,7 @@
             </div>
 
             <?php
-                if (strtotime($reglamento->fecharesolucion_expedientert) != null) {
+                if (strtotime($reglamento->fecharesolucion_solicitud) != null) {
             ?>
 
                 <div class="row">
@@ -152,7 +153,7 @@
                         Resolución del expediente:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                        <h5><?= $reglamento->resolucion_expedientert ?></h5>
+                        <h5><?= $reglamento->resolucion_solicud ?></h5>
                     </div>
                 </div>
 
@@ -161,7 +162,7 @@
                         Fecha y Hora de resolución del expediente:
                     </div>
                     <div class="form-group col-lg-5" style="height: 20px;">
-                        <h5><?= date("d-M-Y g:i:s A", strtotime($reglamento->fecharesolucion_expedientert)) ?></h5>
+                        <h5><?= date("d-M-Y g:i:s A", strtotime($reglamento->fecharesolucion_solicitud)) ?></h5>
                     </div>
                 </div>
 
@@ -170,7 +171,7 @@
             ?>
 
             <?php
-                if (strtotime($reglamento->fecha_entrega) != null) {
+                if (strtotime($reglamento->fecha_entrega_solicitud) != null) {
             ?>
 
                 <div class="row">

@@ -82,11 +82,14 @@ class Editar_reglamento extends CI_Controller {
 			'fecha_exp_emp ' => date("Y-m-d H:i:s")
 		);
 
+		$id_representante = 0;
 		if ($this->input->post('dui_representante') === $this->input->post('dui')) {
-			$this->comisionado_model->editar_comisionado($representante);
+			$id_representante = $this->comisionado_model->editar_comisionado($representante);
 		} else {
-			$this->comisionado_model->insertar_comisionado($representante);
+			$id_representante = $this->comisionado_model->insertar_comisionado($representante);
 		}
+
+		$reglamentos['id_representante'] = $id_representante;
 		
 		$this->reglamento_model->editar_reglamento($reglamentos);
 
@@ -101,14 +104,21 @@ class Editar_reglamento extends CI_Controller {
 			$estado = 3;
 		}
 
+		$fecha_estado = strtotime($this->input->post('fecha_resolucion'));
+		if ($fecha_estado < 0) {
+			$fecha_estado = strtotime(date("Y-m-d H:i:s"));
+		}
+
 		$this->expediente_estado_model->insertar_expediente_estado(
 			array(
 			'id_estadort' => $estado,
 			'id_expedientert' => $this->input->post('id_solicitud'),
-			'fecha_exp_est' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_resolucion'))),
-			'fecha_ingresar_exp_est' => date("Y-m-d H:i:s", strtotime($this->input->post('fecha_resolucion'))),
+			'fecha_exp_est' => date("Y-m-d H:i:s", $fecha_estado),
+			'fecha_ingresar_exp_est' => date("Y-m-d H:i:s", $fecha_estado),
 			'etapa_exp_est' => 1
 		));
+
+		echo json_encode("exito");
 
 	}
 

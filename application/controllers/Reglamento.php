@@ -18,7 +18,7 @@ class Reglamento extends CI_Controller {
 	}
 
 	public function tabla_reglamento(){
-		$data['reglamentos'] = $this->reglamento_model->obtener_reglamentos( $this->input->get('nr'), $this->input->get('tipo'), $this->input->get('letra') );
+		$data['reglamentos'] = $this->reglamento_model->obtener_reglamentos( $this->input->get('nr'), $this->input->get('tipo'), $this->input->get('letra'), $this->input->get('filtro') );
 		$this->load->view('reglamento_ajax/tabla_reglamento', $data);
 	}
 
