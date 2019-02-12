@@ -8,6 +8,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 ?>
 <script type="text/javascript">
   var letra = 'A';
+  var filtro = 'abecedario';
 
   function cambiar_editar(id_solicitud, bandera){
 
@@ -220,7 +221,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       url: "<?php echo site_url(); ?>/reglamento/tabla_reglamento",
       type: "get",
       dataType: "html",
-      data: {nr: nr_empleado, tipo: estado_pestana, letra: letra},
+      data: {nr: nr_empleado, tipo: estado_pestana, letra: letra, filtro: filtro},
       
     })
     .done(function (result) {
@@ -661,10 +662,10 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
                 <div class="row">
                   <div class="form-group col-lg-4 col-sm-12 <?php if($navegatorless){ echo " pull-left"; } ?>">
-                    <h5>DUI: <span class="text-danger">*</span></h5>
+                    <h5>DUI: </h5>
                     <div class="controls">
                       <input type="text" placeholder="Documento Unico de Identidad" id="dui_comisionado" name="dui_comisionado"
-                        class="form-control" required="" data-mask="99999999-9">
+                        class="form-control" data-mask="99999999-9">
                       <div class="help-block"></div>
                     </div>
                   </div>
@@ -908,8 +909,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
         <div>
           <div class="pull-left">
             <?php if (obtener_rango($segmentos=1, $permiso=1) > 1) { ?>
-            <div class="form-group" style="width: 400px;">
-              <select id="nr_search" name="nr_search" class="select2" style="width: 100%" required="" onchange="tablaReglamentos();">
+            <div class="form-group" style="width: 700px;">
+              <select id="nr_search" name="nr_search" class="select2" style="width: 400px" required="" onchange="tablaReglamentos();">
                 <option value="">[Todos los colaboradores]</option>
                 <?php
                 if($delegados){
@@ -923,7 +924,18 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                 }
               ?>
               </select>
+
+              <div id="filtro-tabla" class="btn-group">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Filtrar de A la Z
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" data-filter="abecedario" href="#">Filtrar registros de A la Z</a>
+                  <a class="dropdown-item" data-filter="cien" href="#">Filtrar por últimos 100 registros </a>
+                </div>
+              </div>
             </div>
+
             <?php } else { ?>
               <input type="hidden" id="nr_search" name="nr_search" value="<?= $this->session->userdata('nr')?>">
             <?php }?>
@@ -939,8 +951,8 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <?php } ?>
           </div>
         </div>
-        <div class="row" style="width: 100%"></div>
-        <div class="row col-lg-12">
+        <div class="row"></div>
+        <div id="abecedario" class="row col-lg-12">
           <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group mr-2" role="group" aria-label="First group">
               <button type="button" class="change-letter btn btn-info" data-letra="A">A</button>
@@ -1125,6 +1137,20 @@ $('.change-letter').click(function () {
   $(this).addClass('btn-info');
 
   letra = $(this).data('letra');
+
+  tablaReglamentos();
+});
+
+$('#filtro-tabla a.dropdown-item').click(function () {
+  
+  $('#filtro-tabla button').html( $(this).text() );
+  filtro = $(this).data('filter');
+
+  if (filtro == 'cien') {
+    $('#abecedario').hide(300);
+  } else {
+    $('#abecedario').show(300);
+  }
 
   tablaReglamentos();
 });

@@ -56,14 +56,6 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
                   </div>
                 </div>
 
-                <div class="row">
-                  <div class="form-group col-lg-12 col-sm-12 <?php if($navegatorless){ echo "pull-left"; } ?>">
-                      <h5>Nombre del representante: <span class="text-danger">*</span></h5>
-                      <div class="controls">
-                          <input type="text" id="nombre_representante" name="nombre_representante" class="form-control" required>
-                      </div>
-                  </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger waves-effect text-white" data-dismiss="modal">Cerrar</button>

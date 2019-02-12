@@ -30,7 +30,7 @@
         	|| ($("#fecha_inicio").val()!="" && $("#fecha_fin").val()!="" && document.getElementById('radio_periodo').checked==true)
         )){
           
-          	var url = "<?php echo site_url()?>"+"/reportes/estadistico/estadistico_report";
+          	var url = "<?php echo site_url()?>"+"/Reportes/estadistico/estadistico_report";
 
           	if(document.getElementById('radio_pdf').checked==true && tipo==""){
           		var param = { 'anio' : anio, 'tipo' : type, 'value' : value, 'value2' : value2 , 'report_type' : 'pdf' };

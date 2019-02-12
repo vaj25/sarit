@@ -114,7 +114,7 @@ $(function () {
                 format: 'dd-mm-yyyy',
                 autoclose: true,
                 todayHighlight: true,
-                startDate: moment().format("DD-MM-YYYY")
+                // startDate: moment().format("DD-MM-YYYY")
             }).datepicker("setDate", new Date());
         });
     });

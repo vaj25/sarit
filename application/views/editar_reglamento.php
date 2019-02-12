@@ -549,7 +549,16 @@ $(function(){
         if(res == "fracaso"){
           swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
         }else{
-          swal({ title: "¡Reglamento actualizado exitosamente!", type: "success", showConfirmButton: true });
+          swal({ 
+            title: "¡Reglamento actualizado exitosamente!", 
+            type: "success", 
+            showConfirmButton: true},
+            function(isConfirm){
+              setInterval(function () {
+                location.href = "<?= base_url('index.php/reglamento')?>";
+              }, 200);
+            });
+
         }
       });
             

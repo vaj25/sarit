@@ -87,7 +87,7 @@ class Reglamento_model extends CI_Model {
 
     }
 
-    public function obtener_reglamentos($nr = false, $tipo = false, $letra = false) {
+    public function obtener_reglamentos($nr = false, $tipo = false, $letra = false, $filtro = false) {
         
         $this->db->select("
                 a.id_expedientert,
@@ -144,8 +144,12 @@ class Reglamento_model extends CI_Model {
             $this->db->where('d.id_estadort', $tipo);
         }
 
-        if ($letra) {
-            $this->db->like('c.nombre_empresa', $letra, 'after');
+        if ($filtro == 'abecedario') {
+            if ($letra) {
+                $this->db->like('c.nombre_empresa', $letra, 'after');
+            }
+        } else {
+            $this->db->limit(100);
         }
         
         $query=$this->db->get();
@@ -187,7 +191,7 @@ class Reglamento_model extends CI_Model {
                ->join('sge_empresa c', 'c.id_empresa = a.id_empresart')
                ->join('sri_expediente_empleado d', 'd.id_expedientert = b.id_solicitud', 'left')
                ->join('sri_representantert e', 'a.id_representante = e.id_representantert', 'left')
-               ->join('sri_tipo_solicitud f', 'a.tiposolicitud_expedientert = f.id_tipo_solicitud')
+               ->join('sri_tipo_solicitud f', 'b.id_tipo_solicitud = f.id_tipo_solicitud')
                ->join('sir_empleado g', 'g.id_empleado = d.id_empleado', 'left')
                ->where('a.id_expedientert', $numero);
         
