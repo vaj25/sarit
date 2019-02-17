@@ -64,6 +64,10 @@
                     <?php }?>
                     <?= ($fila->id_estadort == 3) ? '<a class="dropdown-item" href="javascript:;" onClick="modal_acciones('.$fila->id_solicitud.')">Agregar Reforma</a>' : 
                                                     '<a class="dropdown-item" href="javascript:;" onClick="desistir('.$fila->id_solicitud.')">Desistir</a>'?>
+                    <?php if ($fila->id_estadort == 4) { ?>
+                        <a class="dropdown-item" href="javascript:;" onClick="cambiar_editar(<?=$fila->id_solicitud?>, 'subsanando_observaciones')">
+                            Subsando Observaciones</a>
+                    <?php }?>
                     <a class="dropdown-item" href="javascript:;" onClick="resolucion(<?=$fila->id_expedientert?>)">Registrar
                         Resolución</a>
                     <?php if ($fila->id_estadort > 1) { ?>

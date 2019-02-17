@@ -89,6 +89,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#band2").val("reforma_parcial");
       $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Reforma Parcial");
       $("#tipo_solicitud").val('2');
+      $('#modal_acciones').modal('hide');
 
     } else if(bandera == "reforma_total") {
 
@@ -97,8 +98,17 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
       $("#band2").val("reforma_total");
       $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Reforma Total");
       $("#tipo_solicitud").val('3');
+      $('#modal_acciones').modal('hide');
 
-    } else if(bandera = "edit_new") {
+    } else if (bandera == "subsanando_observaciones") {
+
+      $("#band").val("subsanando_observaciones");
+      $("#band1").val("subsanando_observaciones");
+      $("#band2").val("subsanando_observaciones");
+      $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Subsanando Observaciones");
+      $("#tipo_solicitud").val('5');
+      
+    } else if(bandera == "edit_new") {
 
       $("#band").val("edit_new");
       $("#band1").val("edit_new");
@@ -1087,6 +1097,9 @@ $(function(){
                   swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
               }else if($("#band2").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+              }else if($("#band2").val() == "subsanando_observaciones" || $("#band2").val() == "reforma_parcial"
+                $("#band2").val() == "reforma_total"){
+                  swal({ title: "¡Registro exitosa!", type: "success", showConfirmButton: true });
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
               }

@@ -134,53 +134,45 @@ class Expediente_estado_model extends CI_Model {
         $this->db->select("'Reglamentos Internos de Trabajo Recibidos (nuevos)',
                     count(*) cantidad")
                 ->from($query_interna);
-                
+
         $sql[] = '('.$this->db->get_compiled_select().')';
 
         /* Reglamentos Internos de Trabajo Recibidos con Correcciones */
 
-        $this->db->select("aaa.id_expedientert, aaa.numexpediente_expedientert, count(*) num_solicitudes")
-                ->from('sri_expedientert aaa')
-                ->join('sri_solicitud aab', 'aaa.id_expedientert = aab.id_expedientert')
-                ->group_by("aaa.id_expedientert")
-                ->having("num_solicitudes > 1");
-
-        $query_interna = '('.$this->db->get_compiled_select().') aa';
-
         $this->db->select("aa.numexpediente_expedientert")
-				->from($query_interna)
+				->from('sri_expedientert aa')
                 ->join('sri_solicitud ab', 'ab.id_expedientert = aa.id_expedientert')
                 ->join('sri_expediente_empleado ad', 'ad.id_expedientert = ab.id_solicitud', 'left')
                 ->join('sir_empleado ae', 'ae.id_empleado = ad.id_empleado', 'left')
-                ->where("ab.id_tipo_solicitud", 1);
+                ->where("ab.id_tipo_solicitud", 5);
 
         if ($empleado) {
-            $this->buscar_empleado('ad', 'ag', $data);
+            $this->buscar_empleado('ad', 'af', $data);
         }
-
+        
         if($data["tipo"] == "mensual"){
-            $this->db->where('YEAR(ab.fechacrea_solicitud)', $data["anio"])
-                    ->where('MONTH(ab.fechacrea_solicitud)', $data["value"]);
+            $this->db->where('YEAR(aa.fechacrea_expedientert)', $data["anio"])
+                    ->where('MONTH(aa.fechacrea_expedientert)', $data["value"]);
         }else if($data["tipo"] == "trimestral"){
             $tmfin = (intval($data["value"])*3);	$tminicio = $tmfin-2;
-            $this->db->where('YEAR(ab.fechacrea_solicitud)', $data["anio"])
-                ->where("MONTH(ab.fechacrea_solicitud) BETWEEN '".$tminicio."' AND '".$tmfin."'");
+            $this->db->where('YEAR(aa.fechacrea_expedientert)', $data["anio"])
+                ->where("MONTH(aa.fechacrea_expedientert) BETWEEN '".$tminicio."' AND '".$tmfin."'");
         }else if($data["tipo"] == "semestral"){
             $smfin = (intval($data["value"])*6);	$sminicio = $smfin-5;
-            $this->db->where('YEAR(ab.fechacrea_solicitud)', $data["anio"])
-                ->where("MONTH(ab.fechacrea_solicitud) BETWEEN '".$sminicio."' AND '".$smfin."'");
+            $this->db->where('YEAR(aa.fechacrea_expedientert)', $data["anio"])
+                ->where("MONTH(aa.fechacrea_expedientert) BETWEEN '".$sminicio."' AND '".$smfin."'");
         }else if($data["tipo"] == "periodo"){
-            $this->db->where("ab.fechacrea_solicitud BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
+            $this->db->where("aa.fechacrea_expedientert BETWEEN '".$data["value"]."' AND '".$data["value2"]."'");
         }else{
-            $this->db->where('YEAR(ab.fechacrea_solicitud)', $data["anio"]);
+            $this->db->where('YEAR(aa.fechacrea_expedientert)', $data["anio"]);
         }
 
         $query_interna = '('.$this->db->get_compiled_select().') a';
         
-        $this->db->select("'Reglamentos Internos de Trabajo Recibidos con Correcciones',
-                count(*) cantidad")
+        $this->db->select("'Reglamentos Internos de Trabajo Recibidos con Correcciones ',
+                    count(*) cantidad")
                 ->from($query_interna);
-
+                
         $sql[] = '('.$this->db->get_compiled_select().')';
 
         /* Reformas a Reglamentos Internos Recibidas */
@@ -507,6 +499,8 @@ class Expediente_estado_model extends CI_Model {
             $this->buscar_empleado('f', 'i', $data);
 
         }
+
+        echo $this->db->get_compiled_select();
 
         $sql = $this->db->get_compiled_select();
 

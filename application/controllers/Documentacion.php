@@ -12,7 +12,8 @@ class Documentacion extends CI_Controller {
 
         if($this->input->post('band2') == "save" 
             || $this->input->post('band2') == "reforma_parcial"
-            || $this->input->post('band2') == "reforma_total"){
+            || $this->input->post('band2') == "reforma_total"
+            || $this->input->post('band2') == "subsanando_observaciones"){
 
 			$data2 = array(
                 'id_expedientert' => $this->input->post('id_solicitud2'), 
