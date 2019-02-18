@@ -14,14 +14,33 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             </div>
 
             <div class="modal-body" id="">
-                <div class='row'>
-                    <div class="col-12">
-                        <div class="card-body">
-                            <a href="#" class="btn btn-info btn-lg active btn-rounded" onClick="cambiar_editar(<?=$id?>, 'reforma_parcial')" role="button" aria-pressed="true" data-dismiss="modal">Reforma Parcial</a>
-                        </div>
 
-                        <div class="card-body">
-                            <a href="#" class="btn btn-success btn-lg active btn-rounded" onClick="cambiar_editar(<?=$id?>, 'reforma_total')" role="button" aria-pressed="true" data-dismiss="modal">Reforma Total</a>
+                <div class="page-wrapper">
+
+                    <div class="">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="message-box contact-box">
+                                    <div class="message-widget contact-widget">
+                                        <!-- Message -->
+                                        <a href="#" onClick="cambiar_editar(<?=$id?>, 'reforma_parcial')">
+                                            <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span>
+                                                <span class="profile-status away pull-right"></span> </div>
+                                            <div class="mail-contnet">
+                                                <h5>Reforma Parcial</h5> <span class="mail-desc"></span>
+                                            </div>
+                                        </a>
+                                        <!-- Message -->
+                                        <a href="#" onClick="cambiar_editar(<?=$id?>, 'reforma_total')">
+                                            <div class="user-img"> <span class="round"><i class="ti-server text-white"></i></span>
+                                                <span class="profile-status offline pull-right"></span> </div>
+                                            <div class="mail-contnet">
+                                                <h5>Reforma Total</h5> <span class="mail-desc"></span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

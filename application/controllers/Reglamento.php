@@ -182,7 +182,8 @@ class Reglamento extends CI_Controller {
 				echo 'fracaso';
 			}
 			
-		} else if($this->input->post('band1') == "reforma_parcial" || $this->input->post('band1') == "reforma_total"){
+		} else if($this->input->post('band1') == "reforma_parcial" || $this->input->post('band1') == "reforma_total"
+			|| $this->input->post('band1') == "subsanando_observaciones"){
 			/** 
 			 * Crea o actualiza al representante de la empresa
 			*/
