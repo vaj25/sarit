@@ -367,7 +367,7 @@ class Expediente_estado_model extends CI_Model {
                         FROM sri_solicitud aa
                         JOIN sri_expediente_estado ab ON ab.id_expedientert = aa.id_solicitud
                         GROUP BY aa.id_expedientert ) d', 'd.id_solicitud = b.id_solicitud AND d.id_expediente_estado = c.id_expediente_estado')
-                ->where('b.id_solicitud', 1)
+                ->where('(b.id_tipo_solicitud = 1 OR b.id_tipo_solicitud = 4 OR b.id_tipo_solicitud = 5)')
                 ->where('c.id_estadort', '3');
                         
             if ($empleado) {
