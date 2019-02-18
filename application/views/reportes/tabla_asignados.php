@@ -28,7 +28,7 @@
                     <td>$expediente->numexpediente_expedientert</td>
                     <td>$expediente->nombre_empresa</td>
                     <td>$expediente->seccion_catalogociiu</td>
-                    <td>".date("d/m/Y", strtotime($expediente->fechacrea_expedientert))."</td>
+                    <td>".date("d/m/Y", strtotime($expediente->fechacrea_solicitud))."</td>
                     <td>$expediente->estado_estadort</td>
                     <td>".date("d/m/Y", strtotime($expediente->fecha_ingresar_exp_est))."</td>
                     <td class='number'>$expediente->servicio</td>
