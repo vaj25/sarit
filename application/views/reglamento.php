@@ -937,7 +937,7 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
 
               <div id="filtro-tabla" class="btn-group">
                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Filtrar de A la Z
+                  Filtrar registros de A la Z
                 </button>
                 <div class="dropdown-menu">
                   <a class="dropdown-item" data-filter="abecedario" href="#">Filtrar registros de A la Z</a>
@@ -1098,7 +1098,7 @@ $(function(){
               }else if($("#band2").val() == "edit"){
                   swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
               }else if($("#band2").val() == "subsanando_observaciones" || $("#band2").val() == "reforma_parcial"
-                $("#band2").val() == "reforma_total"){
+                || $("#band2").val() == "reforma_total"){
                   swal({ title: "¡Registro exitosa!", type: "success", showConfirmButton: true });
               }else{
                   swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
