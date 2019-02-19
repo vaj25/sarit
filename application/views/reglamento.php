@@ -967,7 +967,14 @@ if(floatval($ua['version']) < $this->config->item("last_version")){
             <div class="btn-group mr-2" role="group" aria-label="First group">
               <button type="button" class="change-letter btn btn-info" data-letra="A">A</button>
               <?php
-                foreach (range('B', 'Z') as $letra) {
+                foreach (range('B', 'M') as $letra) {
+                  echo '<button type="button" class="change-letter btn btn-secondary" data-letra="'.$letra.'">'.$letra.'</button>';
+                }
+              ?>
+            </div>
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+              <?php
+                foreach (range('N', 'Z') as $letra) {
                   echo '<button type="button" class="change-letter btn btn-secondary" data-letra="'.$letra.'">'.$letra.'</button>';
                 }
               ?>

@@ -205,66 +205,73 @@ class Reglamento_model extends CI_Model {
     }
 
     public function obtener_reglamentos_documentos($id, $old = FALSE) {
-        
+
         $this->db->select("
-                a.id_expedientert,
-                b.fechanotificacion_solicitud,
-                a.numexpediente_expedientert,
-                a.numeroexpediente_anterior,
-                a.tipopersona_expedientert,
-                a.fechacrea_expedientert,
-                a.archivo_expedientert,
-                b.id_solicitud,
-                b.id_tipo_solicitud tiposolicitud_expedientert,
-                b.resolucion_solicud,
-                b.id_tipo_solicitud,
-                b.obsergenero_solicitud,
-                b.fecharesolucion_solicitud,
-                b.notificacion_solicitud,
-                c.id_representantert,
-                c.nombres_representantert,
-                c.apellidos_representantert,
-                c.dui_representantert,
-                c.nit_representantert,
-                c.telefono_representantert,
-                c.correo_representantert,
-                c.cargo_representantert,
-                c.sexo_representantert,
-                d.docreglamento_documentort,
-                d.escritura_documentort,
-                d.credencial_documentort,
-                d.dui_documentort,
-                d.poder_documentort,
-                d.matricula_documentort,
-                d.estatutos_documentort,
-                d.acuerdoejec_documentort,
-                d.nominayfuncion_documentort,
-                d.leycreacionescritura_documentort,
-                d.acuerdoejecutivo_documentort,
-                e.id_empresa,
-                CASE f.id_empleado
-                    WHEN NULL THEN ''
-                    ELSE f.id_empleado
-                END AS id_empleado
-                ")
-               ->from('sri_expedientert a')
-               ->join('sri_solicitud b', 'b.id_expedientert = a.id_expedientert')
-               ->join('sri_representantert c', 'c.id_representantert = a.id_representante', 'left')
-               ->join('sri_documentort d', 'd.id_expedientert = b.id_solicitud', 'left')
-               ->join('sge_empresa e', 'e.id_empresa = a.id_empresart')
-               ->join('sri_expediente_empleado f', 'f.id_expedientert = b.id_solicitud', 'left')
-               ->join('( SELECT MAX(ba.id_solicitud) id_solicitud, MAX(bb.id_exp_emp) id_exp_emp
-                        FROM sri_solicitud ba
-                        JOIN sri_expediente_empleado bb ON ba.id_solicitud = bb.id_expedientert
-                        GROUP BY ba.id_expedientert ) g',
-                    'g.id_solicitud = b.id_solicitud AND g.id_exp_emp = f.id_exp_emp')
-               ->join('sir_empleado h', 'h.id_empleado = f.id_empleado', 'left')
-               ->where('b.id_solicitud', $id);
+                    a.id_expedientert,
+                    a.numexpediente_expedientert,
+                    a.numeroexpediente_anterior,
+                    a.tipopersona_expedientert,
+                    a.fechacrea_expedientert,
+                    a.archivo_expedientert,
+                    b.id_solicitud,
+                    b.id_tipo_solicitud tiposolicitud_expedientert,
+                    b.resolucion_solicud,
+                    b.id_tipo_solicitud,
+                    b.obsergenero_solicitud,
+                    b.fecharesolucion_solicitud,
+                    b.fechanotificacion_solicitud,
+                    b.notificacion_solicitud,
+                    g.id_representantert,
+                    g.nombres_representantert,
+                    g.apellidos_representantert,
+                    g.dui_representantert,
+                    g.nit_representantert,
+                    g.telefono_representantert,
+                    g.correo_representantert,
+                    g.cargo_representantert,
+                    g.sexo_representantert,
+                    m.docreglamento_documentort,
+                    m.escritura_documentort,
+                    m.credencial_documentort,
+                    m.dui_documentort,
+                    m.poder_documentort,
+                    m.matricula_documentort,
+                    m.estatutos_documentort,
+                    m.acuerdoejec_documentort,
+                    m.nominayfuncion_documentort,
+                    m.leycreacionescritura_documentort,
+                    m.acuerdoejecutivo_documentort,
+                    c.id_empresa,
+                    CASE f.id_empleado
+                        WHEN NULL THEN ''
+                        ELSE f.id_empleado
+                    END AS id_empleado")
+                ->from('sri_expedientert a')
+                ->join('sri_solicitud b ', 'a.id_expedientert = b.id_expedientert')
+                ->join('sge_empresa c', 'c.id_empresa = a.id_empresart')
+                ->join('sri_expediente_estado d', 'd.id_expedientert = b.id_solicitud')
+                ->join('sri_estadort e', 'e.id_estadort = d.id_estadort')
+                ->join('sri_expediente_empleado f', 'f.id_expedientert = b.id_solicitud', 'left')
+                ->join('( SELECT MAX(ba.id_solicitud) id_solicitud, MAX(bb.id_exp_emp) id_exp_emp
+                            FROM sri_solicitud ba
+                            JOIN sri_expediente_empleado bb ON ba.id_solicitud = bb.id_expedientert
+                            GROUP BY ba.id_expedientert ) k', 
+                        'k.id_solicitud = b.id_solicitud AND k.id_exp_emp = f.id_exp_emp')
+                ->join('sri_tipo_solicitud h', 'b.id_tipo_solicitud = h.id_tipo_solicitud')
+                ->join('sir_empleado i', 'i.id_empleado = f.id_empleado', 'left')
+                ->join('( SELECT max(aa.id_solicitud) id_solicitud, max(ab.id_expediente_estado) id_expediente_estado
+                            FROM sri_solicitud aa
+                            JOIN sri_expediente_estado ab ON ab.id_expedientert = aa.id_solicitud
+                            GROUP BY aa.id_expedientert ) j',
+                        'j.id_solicitud = b.id_solicitud AND j.id_expediente_estado = d.id_expediente_estado')
+                ->join('( SELECT MAX(ca.id_empresa) id_empresa, id_representantert
+                            FROM sge_empresa ca
+                            JOIN sri_representantert cb ON cb.id_empresart = ca.id_empresa
+                            GROUP BY ca.id_empresa ) l', 'c.id_empresa = l.id_empresa', 'left')
+                ->join('sri_representantert g', 'l.id_representantert = g.id_representantert', 'left')
+                ->join('sri_documentort m', 'm.id_expedientert = b.id_solicitud', 'left')
+                ->where('b.id_solicitud', $id);
                
-        if ($old) {
-            $this->db->where('c.id_representantert = (SELECT max(ab.id_representantert) FROM sri_representantert ab WHERE ab.id_empresart = e.id_empresa)');
-        }
-        // print $this->db->get_compiled_select();
         $query=$this->db->get();
         if ($query->num_rows() > 0) {
             return  $query;
